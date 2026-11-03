@@ -32,4 +32,14 @@ contract DeployTest is Test {
         assertEq(vm.parseJsonAddress(json, ".CampusFund"), address(d.fund));
         assertEq(vm.parseJsonAddress(json, ".Treasury"), address(d.treasury));
     }
+
+    /// @notice Hors d'anvil, le script refuse de tourner sans propriétaires explicites pour le multisig
+    ///         (sinon les comptes anvil, dont les clés sont publiques, contrôleraient la trésorerie).
+    function test_DeployRefusesWithoutOwnersOutsideAnvil() public {
+        vm.chainId(11155111);
+        vm.setEnv("DEPLOYMENT_PATH", "./deployments/test-deploy.json");
+        Deploy script = new Deploy();
+        vm.expectRevert();
+        script.run();
+    }
 }

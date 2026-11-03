@@ -31,11 +31,16 @@ contract Deploy is Script {
     }
 
     function run() external returns (Deployment memory d) {
-        address[3] memory owners = [
-            vm.envOr("TREASURY_OWNER_1", ANVIL_0),
-            vm.envOr("TREASURY_OWNER_2", ANVIL_1),
-            vm.envOr("TREASURY_OWNER_3", ANVIL_2)
-        ];
+        // Sur anvil, les 3 premiers comptes de test. Ailleurs (Sepolia), les propriétaires DOIVENT être
+        // fournis : les clés des comptes anvil sont publiques, n'importe qui viderait la trésorerie.
+        bool local = block.chainid == 31337;
+        address[3] memory owners = local
+            ? [
+                vm.envOr("TREASURY_OWNER_1", ANVIL_0),
+                vm.envOr("TREASURY_OWNER_2", ANVIL_1),
+                vm.envOr("TREASURY_OWNER_3", ANVIL_2)
+            ]
+            : [vm.envAddress("TREASURY_OWNER_1"), vm.envAddress("TREASURY_OWNER_2"), vm.envAddress("TREASURY_OWNER_3")];
         uint256 votingPeriod = vm.envOr("VOTING_PERIOD", uint256(1 hours));
 
         vm.startBroadcast();
