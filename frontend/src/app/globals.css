@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Direction visuelle : « tableau d'affichage du campus ». Papier chaud, encre bleu nuit,
+   titres à empattements, couleurs réservées au sens (statut, risque, vote). */
+:root {
+  --paper: #f6f3ec;
+  --paper-raised: #fffdf8;
+  --ink: #16213e;
+  --ink-soft: #4a5370;
+  --rule: #e2dccf;
+  --accent: #c2542d; /* terre cuite : actions principales */
+  --ok: #2f7d5b;
+  --warn: #b7791f;
+  --danger: #b42339;
+}
+
+html {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+body {
+  background-image: radial-gradient(rgba(22, 33, 62, 0.035) 1px, transparent 1px);
+  background-size: 18px 18px;
+  font-feature-settings: "tnum" 1; /* chiffres alignés pour les montants */
+}
+
+.font-display {
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+  letter-spacing: -0.01em;
+}
+
+@layer components {
+  .card {
+    @apply rounded-xl border bg-[var(--paper-raised)] shadow-[0_1px_0_rgba(22,33,62,0.04),0_8px_24px_-16px_rgba(22,33,62,0.25)];
+    border-color: var(--rule);
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition
+      focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply btn text-white shadow-sm hover:-translate-y-px active:translate-y-0;
+    background: var(--accent);
+    outline-color: var(--accent);
+  }
+  .btn-primary:hover:not(:disabled) {
+    background: #a8461f;
+  }
+  .btn-ghost {
+    @apply btn border bg-white/60 hover:bg-white;
+    border-color: var(--rule);
+    color: var(--ink);
+  }
+  .input {
+    @apply w-full rounded-lg border bg-white px-3 py-2 text-sm shadow-inner outline-none transition;
+    border-color: var(--rule);
+  }
+  .input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(194, 84, 45, 0.18);
+  }
+  .label {
+    @apply mb-1 block text-xs font-semibold uppercase tracking-wider;
+    color: var(--ink-soft);
+  }
+  .eyebrow {
+    @apply text-[11px] font-bold uppercase tracking-[0.18em];
+    color: var(--accent);
+  }
+}

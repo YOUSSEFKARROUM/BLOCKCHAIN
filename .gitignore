@@ -30,3 +30,5 @@ __pycache__/
 # Divers
 .DS_Store
 Thumbs.db
+frontend/.local-ipfs/
+*.tsbuildinfo
