@@ -13,6 +13,7 @@ lcov.info
 
 # Déploiements locaux (anvil change à chaque redémarrage)
 deployments/31337.json
+deployments/test-deploy.json
 
 # Node / Next.js
 node_modules/

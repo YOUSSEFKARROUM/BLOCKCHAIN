@@ -7,6 +7,7 @@ import {Deploy} from "../../scripts/foundry/Deploy.s.sol";
 /// @notice Exécute le VRAI script de déploiement et vérifie le câblage et la décentralisation des rôles.
 contract DeployTest is Test {
     function test_DeployWiresRolesAndRenouncesAdmin() public {
+        vm.setEnv("DEPLOYMENT_PATH", "./deployments/test-deploy.json");
         Deploy.Deployment memory d = new Deploy().run();
 
         // câblage
@@ -27,7 +28,7 @@ contract DeployTest is Test {
         assertTrue(d.governance.hasRole(d.governance.PARAMS_ROLE(), d.deployer));
 
         // le fichier de déploiement est cohérent
-        string memory json = vm.readFile(string.concat("./deployments/", vm.toString(block.chainid), ".json"));
+        string memory json = vm.readFile("./deployments/test-deploy.json");
         assertEq(vm.parseJsonAddress(json, ".CampusFund"), address(d.fund));
         assertEq(vm.parseJsonAddress(json, ".Treasury"), address(d.treasury));
     }

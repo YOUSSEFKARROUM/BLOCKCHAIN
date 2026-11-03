@@ -1,0 +1,22 @@
+{
+  "seeds": {
+    "calibration": 7,
+    "entrainement": 11,
+    "evaluation": 23
+  },
+  "campaigns": 330,
+  "frauds": 30,
+  "confusion_Eleve_vs_label": {
+    "vrais_positifs": 26,
+    "faux_positifs": 0,
+    "faux_negatifs": 4
+  },
+  "precision": 1.0,
+  "rappel": 0.867,
+  "normales_signalees_Moyen_ou_plus": 17,
+  "detection_par_type": {
+    "sybil": "10/10",
+    "pic": "10/10",
+    "auto-financement": "6/10"
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "generatedAt": "2026-11-03T22:11:41+00:00",
+  "chainId": 31337,
+  "campusFund": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+  "method": {
+    "rulesWeight": 0.6,
+    "forestWeight": 0.4,
+    "ruleWeights": {
+      "repeated": 25,
+      "linked": 30,
+      "fresh": 15,
+      "burst": 20,
+      "top_share": 10
+    },
+    "levels": {
+      "Faible": "< 35",
+      "Moyen": "35 - 50",
+      "Élevé": ">= 50"
+    }
+  },
+  "campaigns": {
+    "0": {
+      "score": 19.4,
+      "level": "Faible",
+      "rulesScore": 4.8,
+      "forestScore": 41.4,
+      "features": {
+        "repeated": 0.25,
+        "linked": 0.0,
+        "fresh": 0.0,
+        "burst": 0.0,
+        "top_share": 0.3333,
+        "log_n": 1.6094,
+        "n": 4,
+        "creator_linked": 0.0
+      },
+      "reasons": []
+    },
+    "1": {
+      "score": 18.4,
+      "level": "Faible",
+      "rulesScore": 7.7,
+      "forestScore": 34.5,
+      "features": {
+        "repeated": 0.6667,
+        "linked": 0.0,
+        "fresh": 0.0,
+        "burst": 0.0,
+        "top_share": 0.375,
+        "log_n": 1.3863,
+        "n": 3,
+        "creator_linked": 0.0
+      },
+      "reasons": [
+        "2 contributions du même montant (1 ETH)"
+      ]
+    },
+    "2": {
+      "score": 8.9,
+      "level": "Faible",
+      "rulesScore": 0.0,
+      "forestScore": 22.3,
+      "features": {
+        "repeated": 0.0,
+        "linked": 0.0,
+        "fresh": 0.0,
+        "burst": 0.0,
+        "top_share": 0.0,
+        "log_n": 1.0986,
+        "n": 2,
+        "creator_linked": 0.0
+      },
+      "reasons": []
+    },
+    "3": {
+      "score": 8.9,
+      "level": "Faible",
+      "rulesScore": 0.0,
+      "forestScore": 22.3,
+      "features": {
+        "repeated": 0.0,
+        "linked": 0.0,
+        "fresh": 0.0,
+        "burst": 0.0,
+        "top_share": 0.0,
+        "log_n": 1.0986,
+        "n": 2,
+        "creator_linked": 0.0
+      },
+      "reasons": []
+    },
+    "4": {
+      "score": 100.0,
+      "level": "Élevé",
+      "rulesScore": 100.0,
+      "forestScore": 100.0,
+      "features": {
+        "repeated": 1.0,
+        "linked": 1.0,
+        "fresh": 1.0,
+        "burst": 1.0,
+        "top_share": 0.125,
+        "log_n": 2.1972,
+        "n": 8,
+        "creator_linked": 1.0
+      },
+      "reasons": [
+        "8 contributions du même montant (0.5 ETH)",
+        "100% des contributeurs financés par une même adresse",
+        "100% des contributions viennent d'adresses neuves",
+        "pic : 100% des contributions en moins de 10 blocs",
+        "le porteur est financé par la même source que ses contributeurs"
+      ]
+    }
+  }
+}

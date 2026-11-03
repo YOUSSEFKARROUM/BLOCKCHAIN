@@ -75,7 +75,9 @@ contract Deploy is Script {
         vm.serializeAddress(key, "CampusFund", fund);
         vm.serializeAddress(key, "Governance", governance);
         string memory json = vm.serializeAddress(key, "Treasury", treasury);
-        string memory path = string.concat("./deployments/", vm.toString(block.chainid), ".json");
+        // DEPLOYMENT_PATH permet aux tests d'écrire ailleurs (sinon ils écraseraient le vrai fichier anvil).
+        string memory path =
+            vm.envOr("DEPLOYMENT_PATH", string.concat("./deployments/", vm.toString(block.chainid), ".json"));
         vm.writeJson(json, path);
 
         console.log("CFDToken   ", token);
