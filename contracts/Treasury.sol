@@ -96,7 +96,7 @@ contract Treasury is ReentrancyGuard {
     }
 
     /// @notice Exécute un retrait si les signatures suffisent. CEI + nonReentrant.
-    function execute(uint256 txId) external onlyOwner nonReentrant pending(txId) {
+    function execute(uint256 txId) external nonReentrant onlyOwner pending(txId) {
         Transaction storage t = _txs[txId];
         uint256 day = block.timestamp / 1 days;
 

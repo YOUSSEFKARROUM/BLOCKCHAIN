@@ -3,13 +3,14 @@ pragma solidity ^0.8.20;
 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {ICampusFund} from "../interfaces/ICampusFund.sol";
+import {IVoting} from "../interfaces/IVoting.sol";
 
 /// @title NaiveGovernance - gouvernance VOLONTAIREMENT vulnérable (démo pédagogique)
 /// @notice NE PAS DÉPLOYER EN PRODUCTION. Le poids d'un vote est le solde de CFD AU MOMENT DU VOTE
 ///         (pas de snapshot). Quelqu'un qui emprunte beaucoup de CFD le temps d'une transaction
 ///         (flash loan) peut donc voter avec un poids énorme puis rendre les jetons :
 ///         c'est le scénario de l'attaque contre Beanstalk (avril 2022, ~182 M$).
-contract NaiveGovernance {
+contract NaiveGovernance is IVoting {
     struct Proposal {
         uint256 campaignId;
         uint256 voteEnd;

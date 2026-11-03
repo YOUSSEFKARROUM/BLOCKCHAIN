@@ -336,8 +336,8 @@ contract CampusFund is ICampusFund, AccessControl, ReentrancyGuard, Pausable {
     function _checkMilestones(uint16[] calldata milestonesBps) private pure {
         uint256 n = milestonesBps.length;
         if (n < MIN_MILESTONES || n > MAX_MILESTONES) revert InvalidMilestones();
-        uint256 sum;
-        for (uint256 i; i < n; ++i) {
+        uint256 sum = 0;
+        for (uint256 i = 0; i < n; ++i) {
             if (milestonesBps[i] == 0) revert InvalidMilestones();
             sum += milestonesBps[i];
         }

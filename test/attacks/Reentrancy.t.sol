@@ -6,7 +6,8 @@ import {BaseTest} from "../utils/BaseTest.sol";
 import {CampusFund} from "../../contracts/CampusFund.sol";
 import {VulnerableVault} from "../../contracts/demo/VulnerableVault.sol";
 import {SecureVault} from "../../contracts/demo/SecureVault.sol";
-import {ReentrancyAttacker, IVault} from "../../contracts/demo/ReentrancyAttacker.sol";
+import {ReentrancyAttacker} from "../../contracts/demo/ReentrancyAttacker.sol";
+import {IVault} from "../../contracts/demo/IVault.sol";
 
 /// @dev Bénéficiaire malveillant : quand il reçoit une tranche, il essaie d'en retirer une autre.
 contract MaliciousBeneficiary {

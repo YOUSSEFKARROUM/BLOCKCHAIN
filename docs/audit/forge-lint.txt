@@ -1,0 +1,212 @@
+warning[unsafe-typecast]: typecast can truncate values
+    ╭▸ contracts/CampusFund.sol:147:22
+    │
+147 │         c.deadline = uint64(block.timestamp + duration);
+    │                      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ├ note: consider disabling this lint if you're certain the cast is safe
+    │       
+    │       // casting to 'uint64' is safe because [explain why]
+    │       // forge-lint: disable-next-line(unsafe-typecast)
+    │       
+    │       
+    ╰ help: https://getfoundry.sh/forge/linting/unsafe-typecast
+
+warning[unsafe-typecast]: typecast can truncate values
+    ╭▸ contracts/CampusFund.sol:149:28
+    │
+149 │         c.milestoneCount = uint8(milestonesBps.length);
+    │                            ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ├ note: consider disabling this lint if you're certain the cast is safe
+    │       
+    │       // casting to 'uint8' is safe because [explain why]
+    │       // forge-lint: disable-next-line(unsafe-typecast)
+    │       
+    │       
+    ╰ help: https://getfoundry.sh/forge/linting/unsafe-typecast
+
+warning[arbitrary-send-eth]: ETH is sent to a user-controlled destination; restrict the destination or the caller
+    ╭▸ contracts/CampusFund.sol:188:9
+    │
+188 │         c.beneficiary.sendValue(amount - fee);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/arbitrary-send-eth
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ contracts/CampusFund.sol:198:13
+    │
+198 │         if (block.timestamp >= c.deadline) revert DeadlinePassed();
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ contracts/CampusFund.sol:215:13
+    │
+215 │         if (block.timestamp < c.deadline) revert DeadlineNotReached();
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[unsafe-typecast]: typecast can truncate values
+    ╭▸ contracts/CampusFund.sol:217:28
+    │
+217 │         c.lastProgressAt = uint64(block.timestamp);
+    │                            ━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ├ note: consider disabling this lint if you're certain the cast is safe
+    │       
+    │       // casting to 'uint64' is safe because [explain why]
+    │       // forge-lint: disable-next-line(unsafe-typecast)
+    │       
+    │       
+    ╰ help: https://getfoundry.sh/forge/linting/unsafe-typecast
+
+warning[reentrancy-no-eth]: external call can be reentered before `_status` is updated
+    ╭▸ contracts/CampusFund.sol:243:9
+    │
+243 │         token.burn(msg.sender, cfd);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-no-eth
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ contracts/CampusFund.sol:253:13
+    │
+253 │         if (block.timestamp < uint256(c.lastProgressAt) + STALE_PERIOD) revert NotStale();
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[unsafe-typecast]: typecast can truncate values
+    ╭▸ contracts/CampusFund.sol:268:28
+    │
+268 │         c.lastProgressAt = uint64(block.timestamp);
+    │                            ━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ├ note: consider disabling this lint if you're certain the cast is safe
+    │       
+    │       // casting to 'uint64' is safe because [explain why]
+    │       // forge-lint: disable-next-line(unsafe-typecast)
+    │       
+    │       
+    ╰ help: https://getfoundry.sh/forge/linting/unsafe-typecast
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ contracts/CampusFund.sol:341:40
+    │
+341 │             if (milestonesBps[i] == 0) revert InvalidMilestones();
+    │                                        ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[unused-return]: return value of an external call is not used
+    ╭▸ contracts/Governance.sol:116:42
+    │
+116 │         (uint8 count, uint8 approved,) = fund.milestoneProgress(campaignId);
+    │                                          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/unused-return
+
+warning[unsafe-typecast]: typecast can truncate values
+    ╭▸ contracts/Governance.sol:136:27
+    │
+136 │         uint64 snapshot = uint64(block.number - 1);
+    │                           ━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ├ note: consider disabling this lint if you're certain the cast is safe
+    │       
+    │       // casting to 'uint64' is safe because [explain why]
+    │       // forge-lint: disable-next-line(unsafe-typecast)
+    │       
+    │       
+    ╰ help: https://getfoundry.sh/forge/linting/unsafe-typecast
+
+warning[unsafe-typecast]: typecast can truncate values
+    ╭▸ contracts/Governance.sol:137:26
+    │
+137 │         uint64 voteEnd = uint64(block.timestamp + votingPeriod);
+    │                          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ├ note: consider disabling this lint if you're certain the cast is safe
+    │       
+    │       // casting to 'uint64' is safe because [explain why]
+    │       // forge-lint: disable-next-line(unsafe-typecast)
+    │       
+    │       
+    ╰ help: https://getfoundry.sh/forge/linting/unsafe-typecast
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ contracts/Governance.sol:158:13
+    │
+158 │         if (block.timestamp > p.voteEnd) revert VotingClosed();
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ contracts/Governance.sol:192:13
+    │
+192 │         if (block.timestamp <= p.voteEnd) return ProposalState.Active;
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[missing-events-access-control]: `approvedBy` is changed without an event but is used for access control
+   ╭▸ contracts/Treasury.sol:78:9
+   │
+78 │         approvedBy[txId][msg.sender] = true;
+   │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/missing-events-access-control
+
+warning[missing-events-access-control]: `approvedBy` is changed without an event but is used for access control
+   ╭▸ contracts/Treasury.sol:85:9
+   │
+85 │         approvedBy[txId][msg.sender] = true;
+   │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/missing-events-access-control
+
+warning[missing-events-access-control]: `approvedBy` is changed without an event but is used for access control
+   ╭▸ contracts/Treasury.sol:93:9
+   │
+93 │         approvedBy[txId][msg.sender] = false;
+   │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/missing-events-access-control
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+   ╭▸ contracts/Treasury.sol:63:48
+   │
+63 │             if (o == address(0) || isOwner[o]) revert InvalidOwners();
+   │                                                ━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[arbitrary-send-eth]: ETH is sent to a user-controlled destination; restrict the destination or the caller
+    ╭▸ contracts/Treasury.sol:116:9
+    │
+116 │         t.to.sendValue(t.value);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/arbitrary-send-eth
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ contracts/Treasury.sol:106:37
+    │
+106 │             if (t.approvals == 0 || spentWithSingleApproval[day] + t.value > DAILY_LIMIT) {
+    │                                     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ contracts/Treasury.sol:138:16
+    │
+138 │         return spentWithSingleApproval[day] + _txs[txId].value <= DAILY_LIMIT ? 1 : REQUIRED_APPROVALS;
+    │                ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+

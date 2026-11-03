@@ -1,11 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
+import {IVault} from "./IVault.sol";
+
 /// @title VulnerableVault - coffre VOLONTAIREMENT vulnérable à la réentrance (démo pédagogique)
 /// @notice NE PAS DÉPLOYER EN PRODUCTION. Ce contrat reproduit l'erreur de The DAO (2016) :
 ///         il envoie les ETH AVANT de mettre le solde à zéro. Un contrat attaquant peut donc
 ///         rappeler withdraw() depuis sa fonction receive() et retirer plusieurs fois le même solde.
-contract VulnerableVault {
+contract VulnerableVault is IVault {
     mapping(address => uint256) public balances;
 
     function deposit() external payable {

@@ -4,11 +4,7 @@ pragma solidity ^0.8.20;
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {IVotes} from "@openzeppelin/contracts/governance/utils/IVotes.sol";
 import {MockFlashLender, IFlashBorrower} from "./MockFlashLender.sol";
-
-/// @notice Seule fonction dont l'attaquant a besoin : NaiveGovernance et Governance l'exposent toutes les deux.
-interface IVoting {
-    function castVote(uint256 id, bool support) external;
-}
+import {IVoting} from "../interfaces/IVoting.sol";
 
 /// @title FlashLoanAttacker - prise de contrôle éclair de la gouvernance (démo pédagogique)
 /// @notice Dans UNE transaction : emprunte des CFD, se délègue les votes, vote, rend les CFD.

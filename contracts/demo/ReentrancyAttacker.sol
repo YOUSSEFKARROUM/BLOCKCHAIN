@@ -1,10 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-interface IVault {
-    function deposit() external payable;
-    function withdraw() external;
-}
+import {IVault} from "./IVault.sol";
 
 /// @title ReentrancyAttacker - contrat d'attaque par réentrance (démo pédagogique)
 /// @notice Dépose 1 ETH puis appelle withdraw(). Quand le coffre lui envoie l'ETH, sa fonction

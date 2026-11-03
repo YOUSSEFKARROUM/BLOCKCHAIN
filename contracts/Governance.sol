@@ -5,6 +5,7 @@ import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 import {Math} from "@openzeppelin/contracts/utils/math/Math.sol";
 import {CFDToken} from "./CFDToken.sol";
 import {ICampusFund} from "./interfaces/ICampusFund.sol";
+import {IVoting} from "./interfaces/IVoting.sol";
 
 /// @title Governance - la DAO de CampusFund
 /// @notice Les détenteurs de CFD votent sur deux types de décisions :
@@ -14,7 +15,7 @@ import {ICampusFund} from "./interfaces/ICampusFund.sol";
 ///      la création de la proposition). Acheter ou emprunter des CFD après coup ne donne aucun poids.
 ///      Quorum = 10 % de l'offre totale au snapshot. Majorité = plus de "pour" que de "contre".
 ///      Exécution possible seulement après la fin du vote, par n'importe qui.
-contract Governance is AccessControl {
+contract Governance is IVoting, AccessControl {
     using Math for uint256;
 
     bytes32 public constant PARAMS_ROLE = keccak256("PARAMS_ROLE");

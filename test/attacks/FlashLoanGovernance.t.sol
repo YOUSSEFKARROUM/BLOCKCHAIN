@@ -6,7 +6,8 @@ import {Governance} from "../../contracts/Governance.sol";
 import {ICampusFund} from "../../contracts/interfaces/ICampusFund.sol";
 import {NaiveGovernance} from "../../contracts/demo/NaiveGovernance.sol";
 import {MockFlashLender} from "../../contracts/demo/MockFlashLender.sol";
-import {FlashLoanAttacker, IVoting} from "../../contracts/demo/FlashLoanAttacker.sol";
+import {FlashLoanAttacker} from "../../contracts/demo/FlashLoanAttacker.sol";
+import {IVoting} from "../../contracts/interfaces/IVoting.sol";
 
 /// @notice Scénario : une campagne honnête est en cours (alice 6 ETH, bob 4 ETH -> 10 000 CFD).
 ///         Un attaquant sans aucun CFD veut la geler. Un prêteur flash dispose de 1 000 000 CFD.
