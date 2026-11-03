@@ -1,0 +1,60 @@
+[
+  {
+    "slug": "robotique",
+    "name": "Coupe de France de robotique 2027",
+    "club": "Club Robotique ENSA Béni Mellal",
+    "category": "Compétition",
+    "description": "Le club robotique conçoit un robot autonome pour la Coupe de France de robotique. Les fonds couvrent les moteurs, les capteurs LiDAR, la carte de contrôle et le déplacement de l'équipe de 6 étudiants.",
+    "milestones": [
+      { "title": "Achat des composants", "description": "Moteurs, capteurs LiDAR, carte de contrôle : factures publiées." },
+      { "title": "Prototype fonctionnel", "description": "Vidéo du robot réalisant le parcours d'homologation." },
+      { "title": "Participation à la compétition", "description": "Inscription, transport et hébergement de l'équipe." }
+    ]
+  },
+  {
+    "slug": "astronomie",
+    "name": "Un télescope pour le club d'astronomie",
+    "club": "Club Astronomie & Sciences",
+    "category": "Matériel",
+    "description": "Achat d'un télescope Dobson 254 mm et d'une caméra planétaire pour organiser des soirées d'observation ouvertes à tous les étudiants du campus.",
+    "milestones": [
+      { "title": "Commande du télescope", "description": "Bon de commande et facture du fournisseur." },
+      { "title": "Première soirée d'observation", "description": "Photos et nombre de participants publiés." }
+    ]
+  },
+  {
+    "slug": "hackathon",
+    "name": "Hackathon IA & Cybersécurité 2027",
+    "club": "Club IT & Sécurité",
+    "category": "Événement",
+    "description": "48 heures de compétition autour de la détection de fraude et de la sécurité des smart contracts. Le budget couvre les prix, la restauration et les serveurs GPU.",
+    "milestones": [
+      { "title": "Réservation des salles et serveurs", "description": "Contrats de location publiés." },
+      { "title": "Communication et inscriptions", "description": "Au moins 80 inscrits confirmés." },
+      { "title": "Jour J", "description": "Restauration et animation des deux jours." },
+      { "title": "Remise des prix", "description": "Prix versés aux trois équipes gagnantes." }
+    ]
+  },
+  {
+    "slug": "theatre",
+    "name": "Tournée inter-écoles du club théâtre",
+    "club": "Club Théâtre",
+    "category": "Culture",
+    "description": "Une tournée de la pièce du club dans trois écoles d'ingénieurs de la région. Les fonds couvrent le transport, les costumes et la sonorisation.",
+    "milestones": [
+      { "title": "Costumes et décors", "description": "Factures publiées." },
+      { "title": "Tournée", "description": "Transport vers les trois écoles." }
+    ]
+  },
+  {
+    "slug": "materiel",
+    "name": "Bourse de matériel informatique",
+    "club": "Association \"TechAid\" (nouvelle)",
+    "category": "Matériel",
+    "description": "Collecte pour offrir des ordinateurs portables à des étudiants. Campagne de démonstration : ses contributions imitent une fraude (adresses liées, montants identiques, pic soudain) pour que le script IA la signale.",
+    "milestones": [
+      { "title": "Achat des ordinateurs", "description": "Factures." },
+      { "title": "Distribution", "description": "Liste des bénéficiaires." }
+    ]
+  }
+]
