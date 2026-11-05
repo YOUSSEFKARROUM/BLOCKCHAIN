@@ -32,3 +32,4 @@ __pycache__/
 Thumbs.db
 frontend/.local-ipfs/
 *.tsbuildinfo
+broadcast/**/*.lock
