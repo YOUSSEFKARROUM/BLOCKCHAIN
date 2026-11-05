@@ -1,0 +1,9 @@
+{
+  "CFDToken": "0x5Ad0412DBd714AaC28F6627324d94Fb01E409Cc1",
+  "CampusFund": "0xf2095C974371D742d27ab75B4B67B284a8095E7D",
+  "Governance": "0x353594F8a5568E3524276D2BE1cF077d624bDa9C",
+  "Treasury": "0xd56346AA32D6b91bb813ED356a10b2d8322acaB3",
+  "chainId": 11155111,
+  "deployBlock": 12072327,
+  "votingPeriod": 3600
+}

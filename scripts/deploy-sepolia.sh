@@ -17,7 +17,12 @@ echo "Solde     : $(cast balance "$(cast wallet address --private-key "$PRIVATE_
 
 forge script scripts/foundry/Deploy.s.sol \
   --rpc-url "$SEPOLIA_RPC_URL" --private-key "$PRIVATE_KEY" \
-  --broadcast --verify --etherscan-api-key "$ETHERSCAN_API_KEY" --slow
+  --broadcast --verify --etherscan-api-key "$ETHERSCAN_API_KEY" --slow || {
+  # Les adresses sont synchronisées même si seule la vérification Etherscan est restée en attente.
+  [ -f deployments/11155111.json ] && node frontend/scripts/sync-contracts.mjs
+  echo "forge a signalé une erreur. Si le journal indique ONCHAIN EXECUTION COMPLETE, les contrats sont déployés : ne relancez pas ce script et contrôlez la vérification sur Etherscan."
+  exit 1
+}
 
 node frontend/scripts/sync-contracts.mjs
 echo

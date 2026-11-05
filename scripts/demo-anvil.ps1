@@ -1,4 +1,4 @@
-# Déploie CampusFund sur anvil et crée les données de démonstration (Windows PowerShell).
+﻿# Déploie CampusFund sur anvil et crée les données de démonstration (Windows PowerShell).
 # Prérequis : `anvil` lancé dans un autre terminal (http://127.0.0.1:8545).
 #   powershell -ExecutionPolicy Bypass -File scripts\demo-anvil.ps1
 $ErrorActionPreference = "Stop"

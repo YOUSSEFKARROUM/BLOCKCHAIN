@@ -1,4 +1,4 @@
-# Déploiement sur Sepolia + vérification Etherscan (Windows PowerShell).
+﻿# Déploiement sur Sepolia + vérification Etherscan (Windows PowerShell).
 # Prérequis : .env rempli (voir .env.example) et ~0,05 SepoliaETH sur le compte de PRIVATE_KEY.
 #   powershell -ExecutionPolicy Bypass -File scripts\deploy-sepolia.ps1
 $ErrorActionPreference = "Stop"
@@ -21,9 +21,14 @@ Write-Host "Solde     : $(cast balance $deployer --rpc-url $env:SEPOLIA_RPC_URL 
 
 forge script scripts/foundry/Deploy.s.sol --rpc-url $env:SEPOLIA_RPC_URL --private-key $env:PRIVATE_KEY `
     --broadcast --verify --etherscan-api-key $env:ETHERSCAN_API_KEY --slow
-if ($LASTEXITCODE -ne 0) { throw "Échec du déploiement" }
+$forgeExit = $LASTEXITCODE
 
-node frontend/scripts/sync-contracts.mjs
+# Les adresses sont synchronisées même si seule la vérification Etherscan est restée en attente.
+if (Test-Path deployments/11155111.json) { node frontend/scripts/sync-contracts.mjs }
+if ($forgeExit -ne 0) {
+    Write-Host "forge a signalé une erreur. Si le journal indique ONCHAIN EXECUTION COMPLETE, les contrats sont déployés : ne relancez pas ce script et contrôlez la vérification sur Etherscan."
+    exit $forgeExit
+}
 Write-Host ""
 Write-Host "Adresses : deployments/11155111.json (à committer). Transactions : broadcast/Deploy.s.sol/11155111/run-latest.json"
 Write-Host "Front : dans frontend/.env.local mettez NEXT_PUBLIC_CHAIN_ID=11155111 et NEXT_PUBLIC_RPC_URL=<RPC Sepolia public>"
