@@ -69,3 +69,13 @@ Les composants de base viennent de shadcn/ui (dossier `frontend/src/components/s
 jauges, onglets, accordéon, champs de formulaire. Leur code est copié dans le projet, donc adapté au site :
 forme pilule, teintes sémantiques, retour visuel dès l'appui. Ils reposent sur Radix UI, qui gère le clavier
 et les lecteurs d'écran. Les listes déroulantes restent des `<select>` natifs.
+
+## Identité
+
+- **Nom** : CampusFund. Il est inscrit dans les contrats déployés et vérifiés sur Sepolia.
+- **Signature** : « Le financement étudiant qui se vote. »
+- **Logo** : un coffre découpé en trois tranches, dont la première est pleine (débloquée) et les deux autres
+  estompées (bloquées). C'est le principe du produit en un signe. Fichier : `docs/brand/logo-campusfund.svg`.
+- **Mot-symbole** : « Campus » en blanc, « Fund » en gris, en Bricolage Grotesque 800.
+- **Déclinaisons** : icône d'onglet (`frontend/src/app/icon.svg`) et image de partage générée par le site
+  (`frontend/src/app/opengraph-image.tsx`, aperçu dans `docs/brand/image-de-partage.png`).

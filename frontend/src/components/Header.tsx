@@ -8,6 +8,7 @@ import { deployment } from "@/lib/contracts";
 import { shortAddress } from "@/lib/format";
 import { useWeb3 } from "@/lib/web3";
 import { DevTimeTravel } from "./DevTimeTravel";
+import { Logo } from "./Logo";
 
 const NAV = [
   { href: "/", label: "Campagnes" },
@@ -76,8 +77,8 @@ export function Header() {
     <header className="chrome sticky top-0 z-30">
       <NetworkBanner />
       <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-8 gap-y-1 px-5 py-2.5">
-        <Link href="/" className="text-[17px] font-semibold tracking-[-0.02em]">
-          CampusFund
+        <Link href="/" aria-label="CampusFund, accueil" className="transition-opacity active:opacity-60">
+          <Logo />
         </Link>
         <nav className="flex gap-1 text-sm" aria-label="Navigation principale">
           {NAV.map((n) => {

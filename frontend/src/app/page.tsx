@@ -28,7 +28,7 @@ export default function HomePage() {
   const { readProvider, refreshKey } = useWeb3();
   const { data: campaigns, error, isLoading } = useCampaigns();
   const { data: proposals } = useProposals();
-  const { scores } = useRiskScores(deployment?.CampusFund);
+  const { scores, isLoaded: scoresLoaded } = useRiskScores(deployment?.CampusFund);
   const now = useChainTime();
   const [filter, setFilter] = useState<Filter>("all");
   const [treasury, setTreasury] = useState<bigint | null>(null);
@@ -43,12 +43,13 @@ export default function HomePage() {
   const active = (campaigns ?? []).filter((c) => c.status === 0);
   // À la une : la campagne en cours la plus avancée, sinon la plus récente
   const featured = useMemo(() => {
-    // On ne met pas en avant une campagne signalée à risque élevé
+    // On ne met pas en avant une campagne signalée à risque élevé : on attend donc les scores
+    if (!scoresLoaded) return null;
     const safe = (c: Campaign) => scores[String(c.id)]?.level !== "Élevé";
     const open = active.filter(safe).sort((a, b) => percent(b.raised, b.goal) - percent(a.raised, a.goal));
     return open[0] ?? [...(campaigns ?? [])].reverse().find(safe) ?? null;
     // eslint-disable-next-line react-hooks/exhaustive-deps -- dérivé de campaigns et scores
-  }, [campaigns, scores]);
+  }, [campaigns, scores, scoresLoaded]);
   const liveVote = proposals?.find((p) => p.state === 0) ?? proposals?.[0] ?? null;
 
   return (
@@ -83,7 +84,7 @@ export default function HomePage() {
 
         <section className="tile lg:col-span-4">
           <p className="tile-label">À la une</p>
-          {featured ? <Featured campaign={featured} risk={scores[String(featured.id)]} now={now} /> : <TileEmpty loading={!campaigns}>Aucune campagne pour l&apos;instant.</TileEmpty>}
+          {featured ? <Featured campaign={featured} risk={scores[String(featured.id)]} now={now} /> : <TileEmpty loading={!campaigns || !scoresLoaded}>Aucune campagne pour l&apos;instant.</TileEmpty>}
         </section>
 
         <section className="tile lg:col-span-4">

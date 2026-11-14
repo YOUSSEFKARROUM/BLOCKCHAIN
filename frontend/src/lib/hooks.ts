@@ -104,15 +104,17 @@ interface RiskFile {
 }
 
 /** Scores produits par scripts/anomaly_detection.py (ignorés s'ils concernent un autre déploiement). */
-export function useRiskScores(campusFund: string | undefined): { scores: Record<string, RiskEntry>; generatedAt: string | null } {
+export function useRiskScores(campusFund: string | undefined): { scores: Record<string, RiskEntry>; generatedAt: string | null; isLoaded: boolean } {
   const [file, setFile] = useState<RiskFile | null>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
     fetch("/risk-scores.json", { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : null))
       .then((f: RiskFile | null) => setFile(f))
-      .catch(() => setFile(null));
+      .catch(() => setFile(null))
+      .finally(() => setIsLoaded(true));
   }, []);
   const valid =
     file && file.chainId === CHAIN_ID && campusFund && file.campusFund.toLowerCase() === campusFund.toLowerCase();
-  return { scores: valid ? file.campaigns : {}, generatedAt: valid ? file.generatedAt : null };
+  return { scores: valid ? file.campaigns : {}, generatedAt: valid ? file.generatedAt : null, isLoaded };
 }
