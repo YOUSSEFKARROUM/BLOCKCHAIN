@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
+import { Bricolage_Grotesque } from "next/font/google";
 import type { ReactNode } from "react";
 import { Header } from "@/components/Header";
 import { Web3Provider } from "@/lib/web3";
 import "./globals.css";
+
+// Police de titre : téléchargée au build et servie par le site (aucun appel à Google à l'exécution)
+const display = Bricolage_Grotesque({ subsets: ["latin"], weight: ["600", "700", "800"], variable: "--font-display", display: "swap" });
 
 export const metadata: Metadata = {
   title: "CampusFund · financement participatif étudiant",
@@ -11,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="fr">
+    <html lang="fr" className={display.variable}>
       <body className="min-h-screen antialiased">
         <Web3Provider>
           <Header />

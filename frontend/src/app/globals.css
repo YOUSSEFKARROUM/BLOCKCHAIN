@@ -18,6 +18,13 @@
   --danger: #ff453a;
   --info: #64d2ff;
 
+  /* Code couleur des 4 étapes, repris par les sections de la page */
+  --give: #6c86ff;
+  --voice: #a58bff;
+  --vote: #ff6b7d;
+  --release: #34d17f;
+  --give-solid: #2340ff;
+
   /* Anciens noms, conservés pour les pages existantes */
   --paper: var(--bg);
   --paper-raised: var(--surface);
@@ -53,22 +60,27 @@ body {
 }
 
 /* Titres : interlettrage négatif qui grandit avec la taille, interlignage serré */
+.font-display,
+.display-xl,
+.display-l {
+  font-family: var(--font-display), -apple-system, "Segoe UI Variable Display", system-ui, sans-serif;
+}
 .font-display {
-  font-weight: 600;
-  letter-spacing: -0.022em;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   line-height: 1.12;
 }
 .display-xl {
-  font-size: clamp(2.6rem, 6.2vw, 5rem);
-  font-weight: 600;
-  letter-spacing: -0.04em;
-  line-height: 1.02;
+  font-size: clamp(2.5rem, 5.4vw, 4.75rem);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
 }
 .display-l {
-  font-size: clamp(1.75rem, 3.2vw, 2.5rem);
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 1.08;
+  font-size: clamp(1.9rem, 3.6vw, 2.9rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.04;
 }
 .two-tone > span {
   display: block;
@@ -106,6 +118,15 @@ body {
   }
   .btn-ghost:hover:not(:disabled) {
     background: rgba(255, 255, 255, 0.1);
+  }
+  /* Bouton secondaire posé sur un fond coloré */
+  .btn-on-color {
+    @apply btn;
+    background: rgba(255, 255, 255, 0.18);
+    color: #fff;
+  }
+  .btn-on-color:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.28);
   }
   .btn-ok {
     @apply btn;

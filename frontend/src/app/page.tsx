@@ -3,13 +3,15 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { CampaignRow } from "@/components/CampaignRow";
+import { CountUp } from "@/components/CountUp";
 import { Faq } from "@/components/Faq";
 import { Story } from "@/components/Story";
 import { EmptyState, ErrorBox, ProgressBar, Spinner, Stat } from "@/components/ui";
 import { CHAIN } from "@/config/chain";
 import { deployment, getContracts } from "@/lib/contracts";
 import { PROPOSAL_STATE_LABELS, type Proposal, STATUS_LABELS, type StatusIndex } from "@/lib/data";
-import { cfd, eth, percent, relative } from "@/lib/format";
+import { formatEther } from "ethers";
+import { cfd, percent, relative } from "@/lib/format";
 import { useCampaigns, useChainTime, useProposals, useRiskScores } from "@/lib/hooks";
 import { useWeb3 } from "@/lib/web3";
 
@@ -43,10 +45,10 @@ export default function HomePage() {
 
       {/* ---------- Chiffres lus sur la blockchain ---------- */}
       <section className="grid grid-cols-2 gap-x-8 gap-y-10 border-t border-[var(--line)] py-12 md:grid-cols-4" aria-label="Chiffres de la plateforme">
-        <Stat label="Campagnes en cours" value={campaigns ? active : "–"} hint={`sur ${campaigns?.length ?? 0} créées`} />
-        <Stat label="ETH collectés" value={campaigns ? eth(totalRaised, 2) : "–"} hint="toutes campagnes" />
-        <Stat label="Propositions" value={proposals ? proposals.length : "–"} hint="soumises au vote" />
-        <Stat label="ETH en trésorerie" value={treasury === null ? "–" : eth(treasury, 3)} hint="2 % des tranches versées" />
+        <Stat label="Campagnes en cours" value={campaigns ? <CountUp value={active} /> : "–"} hint={`sur ${campaigns?.length ?? 0} créées`} />
+        <Stat label="ETH collectés" value={campaigns ? <CountUp value={Number(formatEther(totalRaised))} digits={2} /> : "–"} hint="toutes campagnes" />
+        <Stat label="Propositions" value={proposals ? <CountUp value={proposals.length} /> : "–"} hint="soumises au vote" />
+        <Stat label="ETH en trésorerie" value={treasury === null ? "–" : <CountUp value={Number(formatEther(treasury))} digits={3} />} hint="2 % des tranches versées" />
       </section>
 
       {/* ---------- Campagnes ---------- */}
@@ -54,7 +56,7 @@ export default function HomePage() {
         <div className="md:sticky md:top-24 md:self-start">
           <h2 className="display-l two-tone">
             Campagnes.
-            <span>Chaque tranche se mérite.</span>
+            <span style={{ color: "var(--give)" }}>Chaque tranche se mérite.</span>
           </h2>
           <p className="mt-4 max-w-[34ch] text-[15px] text-[var(--text-2)]">
             Les fonds sont découpés en jalons. Le porteur demande une tranche, la DAO vote, le contrat exécute.
@@ -101,7 +103,7 @@ export default function HomePage() {
         <div className="md:sticky md:top-24 md:self-start">
           <h2 className="display-l two-tone">
             Gouvernance.
-            <span>Une voix par CFD, figée.</span>
+            <span style={{ color: "var(--vote)" }}>Une voix par CFD, figée.</span>
           </h2>
           <p className="mt-4 max-w-[34ch] text-[15px] text-[var(--text-2)]">
             Le poids de vote est photographié à la création de la proposition. Un prêt éclair de jetons ne change rien au
@@ -129,7 +131,7 @@ export default function HomePage() {
         <div className="md:sticky md:top-24 md:self-start">
           <h2 className="display-l two-tone">
             Sécurité.
-            <span>Prouvée par les tests.</span>
+            <span style={{ color: "var(--release)" }}>Prouvée par les tests.</span>
           </h2>
           <p className="mt-4 max-w-[34ch] text-[15px] text-[var(--text-2)]">
             Chaque protection a son test, et chaque attaque a sa démonstration : elle réussit sur une version faible, elle
@@ -176,10 +178,26 @@ export default function HomePage() {
         <div className="md:sticky md:top-24 md:self-start">
           <h2 className="display-l two-tone">
             Questions.
-            <span>Réponses courtes.</span>
+            <span style={{ color: "var(--voice)" }}>Réponses courtes.</span>
           </h2>
         </div>
         <Faq />
+      </section>
+
+      {/* ---------- Dernier appel ---------- */}
+      <section className="mt-8 rounded-[36px] px-7 py-14 md:px-16 md:py-20" style={{ background: "var(--give-solid)" }}>
+        <h2 className="display-xl">Un projet à financer&nbsp;?</h2>
+        <p className="mt-5 max-w-[46ch] text-lg leading-relaxed text-white/85">
+          Décris-le, découpe-le en jalons, et laisse ta communauté débloquer les fonds au fil de tes avancées.
+        </p>
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Link href="/creator" className="btn-primary">
+            Lancer une campagne
+          </Link>
+          <a href="#campagnes" className="btn-on-color">
+            Voir les campagnes
+          </a>
+        </div>
       </section>
     </div>
   );

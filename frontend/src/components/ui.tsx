@@ -129,7 +129,7 @@ export function EmptyState({ title, children }: { title: string; children?: Reac
 export function Stat({ label, value, hint }: { label: string; value: ReactNode; hint?: string }) {
   return (
     <div>
-      <p className="text-[clamp(2rem,4vw,3rem)] font-semibold leading-none tracking-[-0.035em]">{value}</p>
+      <p className="font-display text-[clamp(2.4rem,5vw,3.75rem)] !font-extrabold !leading-none !tracking-[-0.04em]">{value}</p>
       <p className="mt-3 text-sm font-medium">{label}</p>
       {hint && <p className="text-[13px] text-[var(--text-2)]">{hint}</p>}
     </div>

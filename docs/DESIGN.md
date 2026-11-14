@@ -5,8 +5,9 @@ Règles suivies par le front-end, et la raison de chacune. Les valeurs sont déf
 
 ## Direction
 
-Noir, monochrome, typographie système. L'interface gère de l'argent bloqué dans un contrat : elle doit
-paraître calme et précise, pas décorative. La maquette de référence fournie par l'équipe fixe le fond noir,
+Fond noir pour les écrans de travail, grands aplats de couleur pour raconter le produit. L'interface gère
+de l'argent bloqué dans un contrat : les écrans où l'on agit restent calmes et précis, et la couleur sert à
+expliquer. La maquette de référence fournie par l'équipe fixe le fond noir,
 les titres en deux tons et les campagnes présentées en lignes.
 
 ## Couleur
@@ -24,10 +25,15 @@ les titres en deux tons et les campagnes présentées en lignes.
 La couleur ne sert qu'à porter un sens (statut, risque, vote). Tout le reste est en niveaux de gris, pour
 qu'un badge rouge se remarque immédiatement.
 
+Les quatre étapes du produit ont chacune leur teinte, utilisée en fond dans la scène d'ouverture et reprise
+dans les titres des sections : bleu pour donner (campagnes), violet pour les voix, corail pour le vote
+(gouvernance), vert pour le déblocage (sécurité).
+
 ## Typographie
 
-Police système (`-apple-system`, Segoe UI Variable sous Windows) : elle est déjà réglée pour l'écran et se
-charge sans délai. L'interlettrage dépend de la taille : négatif sur les grands titres (`-0.04em`), nul sur le
+Texte courant en police système (`-apple-system`, Segoe UI Variable sous Windows) : elle est déjà réglée pour
+l'écran et se charge sans délai. Titres en Bricolage Grotesque, graisse 800 : la police système donnait des
+titres sans caractère. Elle est téléchargée au build et servie par le site. L'interlettrage dépend de la taille : négatif sur les grands titres (`-0.04em`), nul sur le
 texte courant. Les chiffres sont à largeur fixe pour que les montants s'alignent.
 
 ## Mise en page
