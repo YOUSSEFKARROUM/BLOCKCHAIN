@@ -51,9 +51,9 @@ export default function CampaignPage() {
   const canRefund = (c.status === 2 || c.status === 3) && myContribution > 0n;
 
   return (
-    <div className="space-y-8">
-      <Link href="/" className="text-sm text-[var(--ink-soft)] hover:underline">
-        ← Toutes les campagnes
+    <div className="space-y-8 pt-4">
+      <Link href="/#campagnes" className="text-sm text-[var(--text-2)] transition-colors hover:text-[var(--text)]">
+        Toutes les campagnes
       </Link>
 
       <div className="grid gap-8 lg:grid-cols-[1.6fr_1fr]">
@@ -64,21 +64,21 @@ export default function CampaignPage() {
               <StatusPill status={c.status} />
               <RiskBadge risk={risk} />
             </div>
-            <h1 className="font-display mt-3 text-4xl leading-tight">{metadata?.name ?? `Campagne n°${c.id}`}</h1>
+            <h1 className="display-l mt-4">{metadata?.name ?? `Campagne n°${c.id}`}</h1>
             <p className="mt-1 text-[var(--ink-soft)]">{metadata?.club}</p>
           </header>
 
-          <p className="whitespace-pre-line leading-relaxed">{metadata?.description ?? "Métadonnées IPFS indisponibles."}</p>
+          <p className="max-w-[68ch] whitespace-pre-line text-[17px] leading-relaxed text-[var(--text-2)]">{metadata?.description ?? "Métadonnées IPFS indisponibles."}</p>
 
           {risk && risk.reasons.length > 0 && (
-            <div className="rounded-xl border border-rose-200 bg-rose-50/70 p-4 text-sm">
-              <p className="font-semibold text-rose-900">Signaux détectés par l&apos;analyse IA (hors chaîne)</p>
-              <ul className="mt-2 list-disc space-y-0.5 pl-5 text-rose-900/90">
+            <div className="tone-danger rounded-2xl p-5 text-sm">
+              <p className="font-semibold">Signaux détectés par l&apos;analyse IA (hors chaîne)</p>
+              <ul className="mt-2 list-disc space-y-0.5 pl-5 text-[var(--text)]">
                 {risk.reasons.map((r) => (
                   <li key={r}>{r}</li>
                 ))}
               </ul>
-              <p className="mt-2 text-xs text-rose-900/70">
+              <p className="mt-3 text-xs text-[var(--text-2)]">
                 Score {Math.round(risk.score)}/100 = 60 % règles ({Math.round(risk.rulesScore)}) + 40 % Isolation Forest (
                 {Math.round(risk.forestScore)}). Indicatif : seule la DAO peut geler une campagne.
               </p>
@@ -93,10 +93,10 @@ export default function CampaignPage() {
             <ol className="space-y-2">
               {c.milestonesBps.map((bps, i) => {
                 const state = i < c.withdrawnMilestones ? "Versée" : i < c.approvedMilestones ? "Approuvée, à retirer" : "En attente du vote";
-                const tone = i < c.withdrawnMilestones ? "bg-emerald-600 text-white" : i < c.approvedMilestones ? "bg-emerald-100 text-emerald-900" : "bg-stone-100 text-stone-600";
+                const tone = i < c.withdrawnMilestones ? "tone-ok" : i < c.approvedMilestones ? "tone-info" : "tone-neutral";
                 return (
                   <li key={i} className="card flex items-start gap-4 p-4">
-                    <span className="font-display text-2xl text-[var(--accent)]">{i + 1}</span>
+                    <span className="w-6 text-2xl font-semibold tracking-tight text-[var(--text-3)]">{i + 1}</span>
                     <div className="flex-1">
                       <p className="font-semibold">{metadata?.milestones[i]?.title ?? `Jalon ${i + 1}`}</p>
                       <p className="text-sm text-[var(--ink-soft)]">{metadata?.milestones[i]?.description}</p>
@@ -104,7 +104,7 @@ export default function CampaignPage() {
                     <div className="text-right text-sm">
                       <p className="font-semibold">{bps / 100} %</p>
                       <p className="text-xs text-[var(--ink-soft)]">{c.status === 1 ? `${eth(tranches[i])} ETH` : "—"}</p>
-                      <span className={`mt-1 inline-block rounded px-2 py-0.5 text-[11px] font-semibold ${tone}`}>{state}</span>
+                      <span className={`pill mt-1.5 ${tone}`}>{state}</span>
                     </div>
                   </li>
                 );
@@ -116,7 +116,7 @@ export default function CampaignPage() {
         <aside className="space-y-4 lg:sticky lg:top-28 lg:self-start">
           <div className="card space-y-4 p-5">
             <div>
-              <p className="font-display text-3xl">{eth(c.raised)} ETH</p>
+              <p className="text-4xl font-semibold tracking-[-0.035em]">{eth(c.raised)} ETH</p>
               <p className="text-sm text-[var(--ink-soft)]">collectés sur un objectif de {eth(c.goal)} ETH</p>
             </div>
             <ProgressBar value={progress} tone={progress >= 100 ? "ok" : "accent"} />

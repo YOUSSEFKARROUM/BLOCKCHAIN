@@ -9,18 +9,20 @@ import { useCampaigns, useChainTime, useMetadata, useProposals } from "@/lib/hoo
 import { useTx } from "@/lib/useTx";
 import { useWeb3 } from "@/lib/web3";
 
-const STATE_TONES = ["bg-sky-100 text-sky-900", "bg-stone-200 text-stone-700", "bg-emerald-100 text-emerald-900", "bg-[var(--ink)] text-white"];
+const STATE_TONES = ["tone-info", "tone-neutral", "tone-ok", "tone-solid"];
 
 export default function GovernancePage() {
   const { data: proposals, error, isLoading } = useProposals();
   const { data: campaigns } = useCampaigns();
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-10 pt-6">
       <header className="grid gap-6 md:grid-cols-[1.4fr_1fr] md:items-end">
         <div>
-          <p className="eyebrow">DAO · vote pondéré par les CFD</p>
-          <h1 className="font-display mt-2 text-4xl">Tableau de vote</h1>
+          <h1 className="display-l two-tone">
+            Tableau de vote.
+            <span>Un vote pondéré par les CFD.</span>
+          </h1>
           <p className="mt-3 max-w-xl text-sm text-[var(--ink-soft)]">
             Le poids de votre vote est votre nombre de CFD <strong>délégués au bloc précédant la création</strong> de la
             proposition (snapshot) : acheter ou emprunter des CFD ensuite ne sert à rien. Une proposition est adoptée si
@@ -74,7 +76,7 @@ function VotingPower() {
       </div>
       {info && !selfDelegated && info.balance > 0n && (
         <>
-          <p className="rounded-md bg-amber-50 p-2 text-xs text-amber-900">
+          <p className="tone-warn rounded-xl p-3 text-xs">
             Vos CFD ne sont pas délégués : ils ne comptent pour aucun vote. La délégation s&apos;applique aux
             propositions créées <em>après</em> elle.
           </p>
@@ -160,21 +162,20 @@ function ProposalCard({ proposal: p, cid }: { proposal: Proposal; cid: string | 
   const title = p.ptype === 0 ? `Débloquer le jalon ${p.milestoneIndex + 1}` : "Geler la campagne";
 
   return (
-    <article className="card overflow-hidden">
-      <div className={`h-1 ${p.ptype === 0 ? "bg-[var(--ok)]" : "bg-[var(--danger)]"}`} aria-hidden />
+    <article className="card">
       <div className="grid gap-6 p-5 md:grid-cols-[1.3fr_1fr]">
         <div>
           <div className="flex flex-wrap items-center gap-2 text-xs">
             <span className="font-mono text-[var(--ink-soft)]">#{p.id}</span>
-            <span className={`rounded px-2 py-0.5 font-semibold ${STATE_TONES[p.state]}`}>{PROPOSAL_STATE_LABELS[p.state]}</span>
-            {p.quadratic && <span className="rounded bg-violet-100 px-2 py-0.5 font-semibold text-violet-900">vote quadratique</span>}
+            <span className={`pill ${STATE_TONES[p.state]}`}>{PROPOSAL_STATE_LABELS[p.state]}</span>
+            {p.quadratic && <span className="pill tone-neutral">Vote quadratique</span>}
           </div>
-          <h3 className="font-display mt-2 text-xl">
-            {title} — {metadata?.name ?? `campagne n°${p.campaignId}`}
+          <h3 className="font-display mt-3 text-xl">
+            {title} : {metadata?.name ?? `campagne n°${p.campaignId}`}
           </h3>
-          <p className="mt-1 text-sm text-[var(--ink-soft)]">« {p.description} »</p>
+          <p className="mt-1 text-sm text-[var(--text-2)]">{p.description}</p>
           <p className="mt-3 text-xs text-[var(--ink-soft)]">
-            Proposée par {shortAddress(p.proposer)} · snapshot au bloc {p.snapshotBlock} · fin du vote {dateTime(p.voteEnd)} (
+            Proposée par {shortAddress(p.proposer)}, solde figé au bloc {p.snapshotBlock}, fin du vote {dateTime(p.voteEnd)} (
             {relative(p.voteEnd, now)})
           </p>
         </div>
@@ -185,7 +186,7 @@ function ProposalCard({ proposal: p, cid }: { proposal: Proposal; cid: string | 
               <span className="font-semibold text-[var(--ok)]">Pour {cfd(p.forVotes)}</span>
               <span className="font-semibold text-[var(--danger)]">Contre {cfd(p.againstVotes)}</span>
             </div>
-            <div className="flex h-2.5 overflow-hidden rounded-full bg-stone-200">
+            <div className="track flex h-1.5 overflow-hidden rounded-full">
               <div className="bg-[var(--ok)]" style={{ width: `${cast === 0n ? 0 : forShare}%` }} />
               <div className="bg-[var(--danger)]" style={{ width: `${cast === 0n ? 0 : 100 - forShare}%` }} />
             </div>
@@ -202,10 +203,10 @@ function ProposalCard({ proposal: p, cid }: { proposal: Proposal; cid: string | 
 
           {p.state === 0 && account && mine && !mine.voted && mine.weight > 0n && (
             <div className="flex gap-2">
-              <button type="button" className="btn-primary flex-1 !bg-[var(--ok)]" disabled={busy} onClick={() => void send((s) => getContracts(s).governance.castVote(p.id, true))}>
+              <button type="button" className="btn-ok flex-1" disabled={busy} onClick={() => void send((s) => getContracts(s).governance.castVote(p.id, true))}>
                 Voter pour
               </button>
-              <button type="button" className="btn-primary flex-1 !bg-[var(--danger)]" disabled={busy} onClick={() => void send((s) => getContracts(s).governance.castVote(p.id, false))}>
+              <button type="button" className="btn-danger flex-1" disabled={busy} onClick={() => void send((s) => getContracts(s).governance.castVote(p.id, false))}>
                 Voter contre
               </button>
             </div>

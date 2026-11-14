@@ -33,14 +33,22 @@ export function DevTimeTravel() {
   }
 
   return (
-    <div className="flex items-center gap-1 rounded-lg border border-dashed border-[var(--rule)] bg-white/60 px-2 py-1 text-[11px]" title="Démo anvil : avancer le temps de la blockchain">
-      <span className="font-semibold text-[var(--ink-soft)]">⏱ anvil</span>
-      <button type="button" disabled={busy} onClick={() => advance(3_700)} className="rounded px-1.5 py-0.5 font-semibold hover:bg-stone-100">
-        +1 h
-      </button>
-      <button type="button" disabled={busy} onClick={() => advance(86_400)} className="rounded px-1.5 py-0.5 font-semibold hover:bg-stone-100">
-        +1 j
-      </button>
+    <div className="flex items-center gap-1 rounded-full border border-dashed border-[var(--line)] px-2 py-1 text-xs" title="Démo anvil : avancer le temps de la blockchain">
+      <span className="px-1 text-[var(--text-2)]">Temps anvil</span>
+      {[
+        ["+1 h", 3_700],
+        ["+1 j", 86_400],
+      ].map(([label, seconds]) => (
+        <button
+          key={label}
+          type="button"
+          disabled={busy}
+          onClick={() => advance(seconds as number)}
+          className="rounded-full px-2 py-1 font-semibold transition-colors hover:bg-white/10 active:bg-white/20 disabled:opacity-40"
+        >
+          {label}
+        </button>
+      ))}
     </div>
   );
 }

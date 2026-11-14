@@ -6,78 +6,75 @@ import { STATUS_LABELS, type StatusIndex } from "@/lib/data";
 import type { RiskEntry } from "@/lib/hooks";
 import type { TxStatus } from "@/lib/useTx";
 
-const STATUS_STYLES: Record<StatusIndex, string> = {
-  0: "bg-sky-50 text-sky-800 ring-sky-200",
-  1: "bg-emerald-50 text-emerald-800 ring-emerald-200",
-  2: "bg-stone-100 text-stone-700 ring-stone-300",
-  3: "bg-rose-50 text-rose-800 ring-rose-200",
+const STATUS_TONES: Record<StatusIndex, string> = {
+  0: "tone-info",
+  1: "tone-ok",
+  2: "tone-neutral",
+  3: "tone-danger",
 };
 
 export function StatusPill({ status }: { status: StatusIndex }) {
-  return (
-    <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold ring-1 ${STATUS_STYLES[status]}`}>
-      {STATUS_LABELS[status]}
-    </span>
-  );
+  return <span className={`pill ${STATUS_TONES[status]}`}>{STATUS_LABELS[status]}</span>;
 }
 
-const RISK_STYLES: Record<RiskEntry["level"], { box: string; dot: string }> = {
-  Faible: { box: "bg-emerald-50 text-emerald-800 ring-emerald-200", dot: "bg-emerald-500" },
-  Moyen: { box: "bg-amber-50 text-amber-800 ring-amber-200", dot: "bg-amber-500" },
-  Élevé: { box: "bg-rose-50 text-rose-800 ring-rose-300", dot: "bg-rose-600 animate-pulse" },
+const RISK_TONES: Record<RiskEntry["level"], string> = {
+  Faible: "tone-ok",
+  Moyen: "tone-warn",
+  Élevé: "tone-danger",
 };
 
 /** Badge du score de risque IA (scripts/anomaly_detection.py). */
 export function RiskBadge({ risk }: { risk: RiskEntry | undefined }) {
   if (!risk) {
     return (
-      <span className="inline-flex items-center gap-1.5 rounded-full bg-stone-100 px-2.5 py-0.5 text-xs text-stone-500 ring-1 ring-stone-200" title="Lancez scripts/anomaly_detection.py pour calculer ce score">
-        Risque IA : non calculé
+      <span className="pill tone-neutral" title="Lancez scripts/anomaly_detection.py pour calculer ce score">
+        Risque non calculé
       </span>
     );
   }
-  const s = RISK_STYLES[risk.level];
   return (
-    <span
-      className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold ring-1 ${s.box}`}
-      title={risk.reasons.join(" · ") || "Aucun signal suspect"}
-    >
-      <span className={`h-1.5 w-1.5 rounded-full ${s.dot}`} aria-hidden />
-      Risque {risk.level} · {Math.round(risk.score)}/100
+    <span className={`pill ${RISK_TONES[risk.level]}`} title={risk.reasons.join(", ") || "Aucun signal suspect"}>
+      <span className="h-1.5 w-1.5 rounded-full bg-current" aria-hidden />
+      Risque {risk.level.toLowerCase()} {Math.round(risk.score)}
     </span>
   );
 }
 
 export function ProgressBar({ value, tone = "accent" }: { value: number; tone?: "accent" | "ok" }) {
-  const color = tone === "ok" ? "var(--ok)" : "var(--accent)";
+  const color = tone === "ok" ? "var(--ok)" : "var(--text)";
   return (
-    <div className="h-2 w-full overflow-hidden rounded-full bg-stone-200/80" role="progressbar" aria-valuenow={Math.round(value)} aria-valuemin={0} aria-valuemax={100}>
-      <div className="h-full rounded-full transition-[width] duration-700" style={{ width: `${Math.min(100, value)}%`, background: color }} />
+    <div className="track h-1.5 w-full overflow-hidden rounded-full" role="progressbar" aria-valuenow={Math.round(value)} aria-valuemin={0} aria-valuemax={100}>
+      <div
+        className="h-full origin-left rounded-full"
+        style={{ width: "100%", transform: `scaleX(${Math.min(100, value) / 100})`, background: color, transition: "transform 700ms cubic-bezier(0.32,0.72,0,1)" }}
+      />
     </div>
   );
 }
 
-/** Jalons sous forme de segments proportionnels : retiré / approuvé par la DAO / en attente. */
-export function MilestoneTrack({ bps, approved, withdrawn }: { bps: number[]; approved: number; withdrawn: number }) {
+/** Jalons sous forme de segments proportionnels : versé, approuvé par la DAO, en attente. */
+export function MilestoneTrack({ bps, approved, withdrawn, showCaption = true }: { bps: number[]; approved: number; withdrawn: number; showCaption?: boolean }) {
   return (
     <div>
-      <div className="flex h-2.5 gap-1" aria-label={`${withdrawn} tranche(s) retirée(s), ${approved} jalon(s) approuvé(s) sur ${bps.length}`}>
+      <div className="flex h-1.5 gap-1" aria-label={`${withdrawn} tranche(s) versée(s), ${approved} jalon(s) approuvé(s) sur ${bps.length}`}>
         {bps.map((b, i) => {
-          const tone = i < withdrawn ? "bg-[var(--ok)]" : i < approved ? "bg-emerald-300" : "bg-stone-200";
-          return <div key={i} className={`rounded-sm ${tone}`} style={{ flexGrow: b }} title={`Jalon ${i + 1} : ${b / 100} %`} />;
+          const style = i < withdrawn ? { background: "var(--ok)" } : i < approved ? { background: "rgba(48,209,88,0.4)" } : undefined;
+          return <div key={i} className={`rounded-full ${style ? "" : "track"}`} style={{ flexGrow: b, ...style }} title={`Jalon ${i + 1} : ${b / 100} %`} />;
         })}
       </div>
-      <p className="mt-1.5 text-xs text-[var(--ink-soft)]">
-        {withdrawn}/{bps.length} tranche(s) versée(s) · {approved} approuvée(s) par la DAO
-      </p>
+      {showCaption && (
+        <p className="mt-2 text-xs text-[var(--text-2)]">
+          {withdrawn} tranche{withdrawn > 1 ? "s" : ""} sur {bps.length} versée{withdrawn > 1 ? "s" : ""}, {approved} approuvée{approved > 1 ? "s" : ""} par la DAO
+        </p>
+      )}
     </div>
   );
 }
 
 export function Spinner({ label = "Chargement…" }: { label?: string }) {
   return (
-    <div className="flex items-center gap-3 py-10 text-sm text-[var(--ink-soft)]" role="status">
-      <span className="h-4 w-4 animate-spin rounded-full border-2 border-stone-300 border-t-[var(--accent)]" />
+    <div className="flex items-center gap-3 py-10 text-sm text-[var(--text-2)]" role="status">
+      <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/20 border-t-white" />
       {label}
     </div>
   );
@@ -85,9 +82,9 @@ export function Spinner({ label = "Chargement…" }: { label?: string }) {
 
 export function ErrorBox({ title = "Erreur", children }: { title?: string; children: ReactNode }) {
   return (
-    <div className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-900" role="alert">
+    <div className="tone-danger rounded-2xl px-4 py-3 text-sm" role="alert">
       <p className="font-semibold">{title}</p>
-      <div className="mt-0.5">{children}</div>
+      <div className="mt-0.5 text-[var(--text)]">{children}</div>
     </div>
   );
 }
@@ -102,12 +99,11 @@ export function TxFeedback({ status }: { status: TxStatus }) {
       : status.kind === "mining"
         ? "Transaction envoyée, en attente de confirmation…"
         : "Transaction confirmée.";
-  const tone = status.kind === "success" ? "border-emerald-200 bg-emerald-50 text-emerald-900" : "border-sky-200 bg-sky-50 text-sky-900";
   return (
-    <div className={`rounded-lg border px-4 py-2.5 text-sm ${tone}`} role="status">
+    <div className={`rounded-2xl px-4 py-2.5 text-sm ${status.kind === "success" ? "tone-ok" : "tone-info"}`} role="status">
       {text}
       {"hash" in status && (
-        <span className="ml-2 font-mono text-xs opacity-70">
+        <span className="ml-2 font-mono text-xs opacity-80">
           {link ? (
             <a href={link} target="_blank" rel="noopener noreferrer" className="underline">
               {status.hash.slice(0, 10)}…
@@ -123,9 +119,9 @@ export function TxFeedback({ status }: { status: TxStatus }) {
 
 export function EmptyState({ title, children }: { title: string; children?: ReactNode }) {
   return (
-    <div className="card px-6 py-12 text-center">
-      <p className="font-display text-xl">{title}</p>
-      {children && <div className="mt-2 text-sm text-[var(--ink-soft)]">{children}</div>}
+    <div className="rounded-[20px] border border-dashed border-[var(--line)] px-6 py-12 text-center">
+      <p className="font-display text-lg">{title}</p>
+      {children && <div className="mt-2 text-sm text-[var(--text-2)]">{children}</div>}
     </div>
   );
 }
@@ -133,9 +129,9 @@ export function EmptyState({ title, children }: { title: string; children?: Reac
 export function Stat({ label, value, hint }: { label: string; value: ReactNode; hint?: string }) {
   return (
     <div>
-      <p className="label">{label}</p>
-      <p className="font-display text-2xl leading-tight">{value}</p>
-      {hint && <p className="text-xs text-[var(--ink-soft)]">{hint}</p>}
+      <p className="text-[clamp(2rem,4vw,3rem)] font-semibold leading-none tracking-[-0.035em]">{value}</p>
+      <p className="mt-3 text-sm font-medium">{label}</p>
+      {hint && <p className="text-[13px] text-[var(--text-2)]">{hint}</p>}
     </div>
   );
 }

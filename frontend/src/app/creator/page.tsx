@@ -19,10 +19,12 @@ export default function CreatorPage() {
   );
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-10 pt-6">
       <header>
-        <p className="eyebrow">Espace porteur de projet</p>
-        <h1 className="font-display mt-2 text-4xl">Lancer et piloter une campagne</h1>
+        <h1 className="display-l two-tone">
+          Espace porteur.
+          <span>Lancer et piloter une campagne.</span>
+        </h1>
       </header>
       <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr]">
         <CreateForm />
@@ -164,19 +166,21 @@ function CreateForm() {
       </div>
 
       <fieldset className="space-y-3">
-        <legend className="label">Jalons ({milestones.length}/5) · total {total} %</legend>
+        <legend className="label">
+          {milestones.length} jalons sur 5 possibles, total {total} %
+        </legend>
         {milestones.map((m, i) => (
-          <div key={i} className="grid gap-2 rounded-lg border border-[var(--rule)] bg-white/60 p-3 sm:grid-cols-[1fr_80px_auto]">
+          <div key={i} className="grid gap-2 rounded-2xl border border-[var(--line)] p-3 sm:grid-cols-[1fr_80px_auto]">
             <input className="input" aria-label={`Titre du jalon ${i + 1}`} placeholder={`Jalon ${i + 1} : titre`} value={m.title} onChange={(e) => setMilestone(i, { title: e.target.value })} />
             <input className="input text-right" aria-label={`Pourcentage du jalon ${i + 1}`} inputMode="numeric" value={m.percent} onChange={(e) => setMilestone(i, { percent: e.target.value })} />
             <button type="button" className="btn-ghost !px-3" disabled={milestones.length <= 2} onClick={() => setMilestones((l) => l.filter((_, j) => j !== i))} aria-label={`Supprimer le jalon ${i + 1}`}>
-              ✕
+              Retirer
             </button>
             <input className="input sm:col-span-3" aria-label={`Preuve attendue pour le jalon ${i + 1}`} placeholder="Preuve attendue (facture, vidéo…)" value={m.description} onChange={(e) => setMilestone(i, { description: e.target.value })} />
           </div>
         ))}
         <button type="button" className="btn-ghost" disabled={milestones.length >= 5} onClick={() => setMilestones((l) => [...l, { title: "", description: "", percent: "0" }])}>
-          + Ajouter un jalon
+          Ajouter un jalon
         </button>
       </fieldset>
 
@@ -191,7 +195,7 @@ function CreateForm() {
         {upload.state === "uploading" ? "Envoi des métadonnées sur IPFS…" : busy ? "Transaction en cours…" : "Publier sur IPFS puis créer la campagne"}
       </button>
       {upload.state === "done" && (
-        <p className={`rounded-md p-2 text-xs ${upload.mode === "local" ? "bg-amber-50 text-amber-900" : "bg-emerald-50 text-emerald-900"}`}>
+        <p className={`rounded-xl p-3 text-xs ${upload.mode === "local" ? "tone-warn" : "tone-ok"}`}>
           {upload.mode === "local"
             ? "Mode dev : PINATA_JWT absent, métadonnées stockées localement (non publiées sur IPFS). CID : "
             : "Métadonnées épinglées sur IPFS (Pinata). CID : "}
