@@ -39,14 +39,17 @@ alignés. Sur mobile, tout passe sur une colonne.
 ## Mouvement
 
 - Le retour visuel part à l'appui du bouton, pas au relâchement.
-- La lumière de la sphère suit le pointeur avec un ressort sans rebond. On peut changer de direction à tout
-  moment, et le rendu s'arrête dès que le ressort est au repos.
-- Une seule animation d'entrée : la lumière qui se pose sur la sphère au chargement.
+- L'accueil s'ouvre sur une scène pilotée par le défilement, qui explique le produit en 4 temps : les dons
+  tombent dans le coffre, chaque donateur reçoit ses voix, le vote se remplit, une tranche part vers le club.
+  Chaque étape a sa couleur. La scène suit le défilement avec un ressort sans rebond : on peut s'arrêter,
+  revenir en arrière ou accélérer à tout moment, et le rendu s'arrête dès que le ressort est au repos.
+- Les pièces rebondissent à l'arrivée, parce qu'elles tombent : c'est le seul rebond de l'interface.
 - Les questions s'ouvrent en animant la hauteur depuis sa valeur courante, donc sans à-coup si on clique vite.
 
 ## Accessibilité
 
-- `prefers-reduced-motion` : la sphère est fixe, les transitions deviennent de simples fondus.
+- `prefers-reduced-motion` : la scène saute directement à l'état final de chaque étape, les transitions
+  deviennent de simples fondus.
 - `prefers-reduced-transparency` : la barre du haut devient opaque.
 - `prefers-contrast: more` : bordures et textes secondaires renforcés.
 - Le focus clavier est toujours visible, et chaque statut est écrit en toutes lettres en plus de sa couleur.

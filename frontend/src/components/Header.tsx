@@ -74,7 +74,7 @@ export function Header() {
   return (
     <header className="chrome sticky top-0 z-30">
       <NetworkBanner />
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-8 gap-y-2 px-5 py-2.5">
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-8 gap-y-1 px-5 py-2.5">
         <Link href="/" className="text-[17px] font-semibold tracking-[-0.02em]">
           CampusFund
         </Link>
@@ -94,7 +94,11 @@ export function Header() {
           })}
         </nav>
         <div className="ml-auto flex items-center gap-3">
-          {IS_LOCAL && <DevTimeTravel />}
+          {IS_LOCAL && (
+            <span className="hidden md:block">
+              <DevTimeTravel />
+            </span>
+          )}
           <span className="hidden text-[13px] text-[var(--text-2)] md:inline">{CHAIN.name}</span>
           <WalletButton />
         </div>

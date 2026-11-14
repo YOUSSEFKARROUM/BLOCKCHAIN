@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { CampaignRow } from "@/components/CampaignRow";
-import { DitherSphere } from "@/components/DitherSphere";
 import { Faq } from "@/components/Faq";
+import { Story } from "@/components/Story";
 import { EmptyState, ErrorBox, ProgressBar, Spinner, Stat } from "@/components/ui";
 import { CHAIN } from "@/config/chain";
 import { deployment, getContracts } from "@/lib/contracts";
@@ -27,12 +27,10 @@ export default function HomePage() {
   const now = useChainTime();
   const [filter, setFilter] = useState<Filter>("all");
   const [treasury, setTreasury] = useState<bigint | null>(null);
-  const [block, setBlock] = useState<number | null>(null);
 
   useEffect(() => {
     if (!deployment) return;
     readProvider.getBalance(deployment.Treasury).then(setTreasury).catch(() => setTreasury(null));
-    readProvider.getBlockNumber().then(setBlock).catch(() => setBlock(null));
   }, [readProvider, refreshKey]);
 
   const visible = useMemo(() => (campaigns ?? []).filter((c) => filter === "all" || c.status === filter), [campaigns, filter]);
@@ -41,34 +39,7 @@ export default function HomePage() {
 
   return (
     <div>
-      {/* ---------- Ouverture ---------- */}
-      <section className="grid items-center gap-10 pb-16 pt-10 md:grid-cols-[1.05fr_1fr] md:pb-24 md:pt-16">
-        <div>
-          <h1 className="display-xl two-tone">
-            Finance le campus.
-            <span>Vote chaque déblocage.</span>
-          </h1>
-          <p className="mt-6 max-w-[46ch] text-[17px] leading-relaxed text-[var(--text-2)]">
-            Clubs et étudiants lèvent des fonds en ETH, sans intermédiaire. Chaque contribution donne des jetons CFD, et ce
-            sont leurs détenteurs qui décident, jalon par jalon, quand l&apos;argent est libéré.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <a href="#campagnes" className="btn-primary">
-              Explorer les campagnes
-            </a>
-            <Link href="/creator" className="btn-ghost">
-              Lancer une campagne
-            </Link>
-          </div>
-        </div>
-        <div className="card relative overflow-hidden p-6 md:p-10">
-          <DitherSphere />
-          <p className="mt-4 flex items-center justify-between text-[13px] text-[var(--text-2)]">
-            <span>{CHAIN.name}</span>
-            <span>{block === null ? "Connexion au réseau…" : `Bloc ${block.toLocaleString("fr-FR")}`}</span>
-          </p>
-        </div>
-      </section>
+      <Story />
 
       {/* ---------- Chiffres lus sur la blockchain ---------- */}
       <section className="grid grid-cols-2 gap-x-8 gap-y-10 border-t border-[var(--line)] py-12 md:grid-cols-4" aria-label="Chiffres de la plateforme">

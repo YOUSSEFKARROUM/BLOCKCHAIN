@@ -193,6 +193,15 @@ body {
   }
 }
 
+/* Invitation à défiler : seule animation en boucle de la page */
+.scroll-cue {
+  animation: cue 1.6s cubic-bezier(0.32, 0.72, 0, 1) infinite;
+}
+@keyframes cue {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(5px); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

@@ -15,7 +15,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className="min-h-screen antialiased">
         <Web3Provider>
           <Header />
-          <main className="mx-auto max-w-6xl px-5 pb-24 pt-8">{children}</main>
+          <main className="mx-auto max-w-6xl px-5 pb-24">{children}</main>
           <footer className="border-t border-[var(--line)]">
             <div className="mx-auto flex max-w-6xl flex-wrap items-baseline justify-between gap-x-8 gap-y-2 px-5 py-8 text-[13px] text-[var(--text-2)]">
               <p className="font-semibold text-[var(--text)]">CampusFund</p>
