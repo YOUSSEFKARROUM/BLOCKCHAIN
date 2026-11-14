@@ -5,10 +5,9 @@ Règles suivies par le front-end, et la raison de chacune. Les valeurs sont déf
 
 ## Direction
 
-Fond noir pour les écrans de travail, grands aplats de couleur pour raconter le produit. L'interface gère
-de l'argent bloqué dans un contrat : les écrans où l'on agit restent calmes et précis, et la couleur sert à
-expliquer. La maquette de référence fournie par l'équipe fixe le fond noir,
-les titres en deux tons et les campagnes présentées en lignes.
+Noir, blanc et gris uniquement. L'accueil est une mosaïque de tuiles : tout l'essentiel tient sur un écran,
+sans défilement imposé. L'interface gère de l'argent bloqué dans un contrat : elle doit paraître calme et
+précise.
 
 ## Couleur
 
@@ -25,10 +24,6 @@ les titres en deux tons et les campagnes présentées en lignes.
 La couleur ne sert qu'à porter un sens (statut, risque, vote). Tout le reste est en niveaux de gris, pour
 qu'un badge rouge se remarque immédiatement.
 
-Les quatre étapes du produit ont chacune leur teinte, utilisée en fond dans la scène d'ouverture et reprise
-dans les titres des sections : bleu pour donner (campagnes), violet pour les voix, corail pour le vote
-(gouvernance), vert pour le déblocage (sécurité).
-
 ## Typographie
 
 Texte courant en police système (`-apple-system`, Segoe UI Variable sous Windows) : elle est déjà réglée pour
@@ -38,24 +33,26 @@ texte courant. Les chiffres sont à largeur fixe pour que les montants s'alignen
 
 ## Mise en page
 
-Chaque section de l'accueil a son titre à gauche, qui reste visible pendant le défilement, et son contenu à
-droite. Les campagnes sont des lignes cliquables et non des cartes : on compare plus vite des montants
-alignés. Sur mobile, tout passe sur une colonne.
+L'accueil s'ouvre sur six tuiles : l'accroche, l'animation « Comment ça marche », la campagne à la une, le
+vote en cours, les chiffres lus sur la blockchain et les garanties de sécurité. La liste complète des
+campagnes et les questions suivent. Les campagnes sont des lignes cliquables : on compare plus vite des
+montants alignés. La campagne à la une n'est jamais une campagne signalée à risque élevé. Sur mobile, les
+tuiles passent sur une colonne.
 
 ## Mouvement
 
 - Le retour visuel part à l'appui du bouton, pas au relâchement.
-- L'accueil s'ouvre sur une scène pilotée par le défilement, qui explique le produit en 4 temps : les dons
-  tombent dans le coffre, chaque donateur reçoit ses voix, le vote se remplit, une tranche part vers le club.
-  Chaque étape a sa couleur. La scène suit le défilement avec un ressort sans rebond : on peut s'arrêter,
-  revenir en arrière ou accélérer à tout moment, et le rendu s'arrête dès que le ressort est au repos.
-- Les pièces rebondissent à l'arrivée, parce qu'elles tombent : c'est le seul rebond de l'interface.
+- « Comment ça marche » est une animation de 4 étapes qui joue seule, en boucle : les dons vont au coffre,
+  les donateurs reçoivent leurs voix, le vote se remplit, une tranche part au club. On peut la mettre en
+  pause ou cliquer sur une étape.
+- La trame de points de la tuile d'accroche réagit au pointeur ; une onde la traverse une fois au chargement.
+- Les chiffres montent de zéro à leur valeur quand ils apparaissent.
 - Les questions s'ouvrent en animant la hauteur depuis sa valeur courante, donc sans à-coup si on clique vite.
 
 ## Accessibilité
 
-- `prefers-reduced-motion` : la scène saute directement à l'état final de chaque étape, les transitions
-  deviennent de simples fondus.
+- `prefers-reduced-motion` : l'animation ne joue pas seule et montre l'état final de chaque étape, la trame
+  est fixe, les transitions deviennent de simples fondus.
 - `prefers-reduced-transparency` : la barre du haut devient opaque.
 - `prefers-contrast: more` : bordures et textes secondaires renforcés.
 - Le focus clavier est toujours visible, et chaque statut est écrit en toutes lettres en plus de sa couleur.

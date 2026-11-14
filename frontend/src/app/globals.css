@@ -93,6 +93,20 @@ body {
     background: var(--surface);
     border-color: var(--line);
   }
+  /* Tuile de la mosaïque */
+  .tile {
+    @apply relative overflow-hidden rounded-[28px] border p-6 md:p-7;
+    background: var(--surface);
+    border-color: var(--line);
+    transition: border-color var(--settle);
+  }
+  .tile:hover {
+    border-color: rgba(255, 255, 255, 0.24);
+  }
+  .tile-label {
+    @apply text-[13px] font-medium;
+    color: var(--text-2);
+  }
   .btn {
     @apply inline-flex min-h-[2.75rem] select-none items-center justify-center gap-2 rounded-full px-5 text-sm font-semibold
       disabled:cursor-not-allowed disabled:opacity-40;

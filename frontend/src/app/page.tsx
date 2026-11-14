@@ -1,18 +1,19 @@
 "use client";
 
+import { formatEther } from "ethers";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { CampaignRow } from "@/components/CampaignRow";
 import { CountUp } from "@/components/CountUp";
+import { DotField } from "@/components/DotField";
 import { Faq } from "@/components/Faq";
-import { Story } from "@/components/Story";
-import { EmptyState, ErrorBox, ProgressBar, Spinner, Stat } from "@/components/ui";
+import { HowItWorks } from "@/components/HowItWorks";
+import { EmptyState, ErrorBox, MilestoneTrack, ProgressBar, RiskBadge, Spinner, StatusPill } from "@/components/ui";
 import { CHAIN } from "@/config/chain";
-import { deployment, getContracts } from "@/lib/contracts";
-import { PROPOSAL_STATE_LABELS, type Proposal, STATUS_LABELS, type StatusIndex } from "@/lib/data";
-import { formatEther } from "ethers";
-import { cfd, percent, relative } from "@/lib/format";
-import { useCampaigns, useChainTime, useProposals, useRiskScores } from "@/lib/hooks";
+import { deployment } from "@/lib/contracts";
+import { type Campaign, PROPOSAL_STATE_LABELS, type Proposal, STATUS_LABELS, type StatusIndex } from "@/lib/data";
+import { cfd, eth, percent, relative } from "@/lib/format";
+import { type RiskEntry, useCampaigns, useChainTime, useMetadata, useProposals, useRiskScores } from "@/lib/hooks";
 import { useWeb3 } from "@/lib/web3";
 
 type Filter = "all" | StatusIndex;
@@ -25,7 +26,7 @@ export default function HomePage() {
   const { readProvider, refreshKey } = useWeb3();
   const { data: campaigns, error, isLoading } = useCampaigns();
   const { data: proposals } = useProposals();
-  const { scores, generatedAt } = useRiskScores(deployment?.CampusFund);
+  const { scores } = useRiskScores(deployment?.CampusFund);
   const now = useChainTime();
   const [filter, setFilter] = useState<Filter>("all");
   const [treasury, setTreasury] = useState<bigint | null>(null);
@@ -37,36 +38,94 @@ export default function HomePage() {
 
   const visible = useMemo(() => (campaigns ?? []).filter((c) => filter === "all" || c.status === filter), [campaigns, filter]);
   const totalRaised = (campaigns ?? []).reduce((sum, c) => sum + c.raised, 0n);
-  const active = (campaigns ?? []).filter((c) => c.status === 0).length;
+  const active = (campaigns ?? []).filter((c) => c.status === 0);
+  // À la une : la campagne en cours la plus avancée, sinon la plus récente
+  const featured = useMemo(() => {
+    // On ne met pas en avant une campagne signalée à risque élevé
+    const safe = (c: Campaign) => scores[String(c.id)]?.level !== "Élevé";
+    const open = active.filter(safe).sort((a, b) => percent(b.raised, b.goal) - percent(a.raised, a.goal));
+    return open[0] ?? [...(campaigns ?? [])].reverse().find(safe) ?? null;
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- dérivé de campaigns et scores
+  }, [campaigns, scores]);
+  const liveVote = proposals?.find((p) => p.state === 0) ?? proposals?.[0] ?? null;
 
   return (
-    <div>
-      <Story />
+    <div className="pt-5">
+      {/* ---------- Mosaïque ---------- */}
+      <div className="grid gap-3 lg:grid-cols-12">
+        <section className="tile flex min-h-[25rem] flex-col justify-end lg:col-span-6 lg:min-h-[29rem]">
+          <DotField />
+          <div className="relative">
+            <h1 className="display-xl">
+              Ton argent reste au coffre.
+              <span className="block text-[var(--text-3)]">Jusqu&apos;au vote.</span>
+            </h1>
+            <p className="mt-5 max-w-[46ch] text-[17px] leading-relaxed text-[var(--text-2)]">
+              CampusFund finance les projets des clubs étudiants. Personne ne touche aux fonds sans l&apos;accord de ceux qui
+              ont donné.
+            </p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <a href="#campagnes" className="btn-primary">
+                Explorer les campagnes
+              </a>
+              <Link href="/creator" className="btn-ghost">
+                Lancer une campagne
+              </Link>
+            </div>
+          </div>
+        </section>
 
-      {/* ---------- Chiffres lus sur la blockchain ---------- */}
-      <section className="grid grid-cols-2 gap-x-8 gap-y-10 border-t border-[var(--line)] py-12 md:grid-cols-4" aria-label="Chiffres de la plateforme">
-        <Stat label="Campagnes en cours" value={campaigns ? <CountUp value={active} /> : "–"} hint={`sur ${campaigns?.length ?? 0} créées`} />
-        <Stat label="ETH collectés" value={campaigns ? <CountUp value={Number(formatEther(totalRaised))} digits={2} /> : "–"} hint="toutes campagnes" />
-        <Stat label="Propositions" value={proposals ? <CountUp value={proposals.length} /> : "–"} hint="soumises au vote" />
-        <Stat label="ETH en trésorerie" value={treasury === null ? "–" : <CountUp value={Number(formatEther(treasury))} digits={3} />} hint="2 % des tranches versées" />
-      </section>
+        <section className="tile lg:col-span-6">
+          <HowItWorks />
+        </section>
 
-      {/* ---------- Campagnes ---------- */}
-      <section id="campagnes" className="section">
-        <div className="md:sticky md:top-24 md:self-start">
-          <h2 className="display-l two-tone">
-            Campagnes.
-            <span style={{ color: "var(--give)" }}>Chaque tranche se mérite.</span>
-          </h2>
-          <p className="mt-4 max-w-[34ch] text-[15px] text-[var(--text-2)]">
-            Les fonds sont découpés en jalons. Le porteur demande une tranche, la DAO vote, le contrat exécute.
-          </p>
-          <p className="mt-4 text-[13px] text-[var(--text-3)]">
-            {generatedAt ? `Scores de risque calculés le ${new Date(generatedAt).toLocaleDateString("fr-FR")}` : "Scores de risque non calculés"}
-          </p>
-        </div>
-        <div>
-          <div className="mb-4 flex flex-wrap gap-2 px-4" role="group" aria-label="Filtrer par statut">
+        <section className="tile lg:col-span-4">
+          <p className="tile-label">À la une</p>
+          {featured ? <Featured campaign={featured} risk={scores[String(featured.id)]} now={now} /> : <TileEmpty loading={!campaigns}>Aucune campagne pour l&apos;instant.</TileEmpty>}
+        </section>
+
+        <section className="tile lg:col-span-4">
+          <p className="tile-label">{liveVote?.state === 0 ? "Vote en cours" : "Dernier vote"}</p>
+          {liveVote ? <VoteTile proposal={liveVote} now={now} /> : <TileEmpty loading={!proposals}>Aucune proposition pour l&apos;instant.</TileEmpty>}
+        </section>
+
+        <section className="tile lg:col-span-4" aria-label="Chiffres lus sur la blockchain">
+          <p className="tile-label">En direct sur {CHAIN.name}</p>
+          <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-6">
+            <Figure label="campagnes en cours" value={campaigns ? <CountUp value={active.length} /> : "–"} />
+            <Figure label="ETH collectés" value={campaigns ? <CountUp value={Number(formatEther(totalRaised))} digits={2} /> : "–"} />
+            <Figure label="propositions votées" value={proposals ? <CountUp value={proposals.length} /> : "–"} />
+            <Figure label="ETH en trésorerie" value={treasury === null ? "–" : <CountUp value={Number(formatEther(treasury))} digits={3} />} />
+          </dl>
+        </section>
+
+        <section className="tile lg:col-span-12" aria-label="Sécurité">
+          <dl className="grid gap-x-8 gap-y-5 sm:grid-cols-2 lg:grid-cols-4">
+            {SAFEGUARDS.map((s) => {
+              const url = explorerUrl(s.contract ? deployment?.[s.contract] : undefined);
+              return (
+                <div key={s.name}>
+                  <dt className="font-display text-lg">{s.name}</dt>
+                  <dd className="mt-1 text-sm text-[var(--text-2)]">
+                    {s.detail}
+                    {url && (
+                      <a href={url} target="_blank" rel="noopener noreferrer" className="ml-1.5 underline decoration-white/30 underline-offset-4 hover:decoration-white">
+                        Voir le contrat
+                      </a>
+                    )}
+                  </dd>
+                </div>
+              );
+            })}
+          </dl>
+        </section>
+      </div>
+
+      {/* ---------- Toutes les campagnes ---------- */}
+      <section id="campagnes" className="pt-20">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <h2 className="display-l">Toutes les campagnes</h2>
+          <div className="flex flex-wrap gap-2" role="group" aria-label="Filtrer par statut">
             {(["all", 0, 1, 2, 3] as Filter[]).map((f) => (
               <button
                 key={String(f)}
@@ -79,6 +138,8 @@ export default function HomePage() {
               </button>
             ))}
           </div>
+        </div>
+        <div className="mt-6">
           {isLoading && !campaigns && <Spinner label="Lecture des campagnes sur la blockchain…" />}
           {error && <ErrorBox title="Lecture impossible">{error}</ErrorBox>}
           {campaigns && visible.length === 0 && (
@@ -90,7 +151,7 @@ export default function HomePage() {
               )}
             </EmptyState>
           )}
-          <div className="divide-y divide-[var(--line)]">
+          <div className="divide-y divide-[var(--line)] border-y border-[var(--line)]">
             {visible.map((c) => (
               <CampaignRow key={c.id} campaign={c} risk={scores[String(c.id)]} now={now} />
             ))}
@@ -98,148 +159,90 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ---------- Gouvernance ---------- */}
-      <section className="section">
-        <div className="md:sticky md:top-24 md:self-start">
-          <h2 className="display-l two-tone">
-            Gouvernance.
-            <span style={{ color: "var(--vote)" }}>Une voix par CFD, figée.</span>
-          </h2>
-          <p className="mt-4 max-w-[34ch] text-[15px] text-[var(--text-2)]">
-            Le poids de vote est photographié à la création de la proposition. Un prêt éclair de jetons ne change rien au
-            résultat.
-          </p>
-          <Link href="/governance" className="btn-ghost mt-6">
-            Ouvrir le tableau de vote
-          </Link>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2">
-          {proposals?.slice(0, 2).map((p) => <ProposalPreview key={p.id} proposal={p} now={now} />)}
-          {proposals?.length === 0 && (
-            <div className="sm:col-span-2">
-              <EmptyState title="Aucune proposition pour l'instant">
-                Une proposition apparaît quand un porteur demande le déblocage d&apos;un jalon, ou quand un membre signale une
-                campagne.
-              </EmptyState>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* ---------- Sécurité ---------- */}
-      <section className="section">
-        <div className="md:sticky md:top-24 md:self-start">
-          <h2 className="display-l two-tone">
-            Sécurité.
-            <span style={{ color: "var(--release)" }}>Prouvée par les tests.</span>
-          </h2>
-          <p className="mt-4 max-w-[34ch] text-[15px] text-[var(--text-2)]">
-            Chaque protection a son test, et chaque attaque a sa démonstration : elle réussit sur une version faible, elle
-            échoue sur la nôtre.
-          </p>
-        </div>
-        <div className="grid gap-8">
-          <pre className="card overflow-x-auto p-5 font-mono text-[12.5px] leading-[1.7] text-[var(--text-2)]" aria-label="Extrait de CampusFund.withdrawTranche">
-            <code>
-              <span className="text-[var(--text-3)]">{"// Vérifier, mettre à jour, puis seulement envoyer\n"}</span>
-              {"function "}
-              <span className="text-[var(--text)]">withdrawTranche</span>
-              {"(uint256 id)\n    external nonReentrant whenNotPaused\n{\n"}
-              {"    if (msg.sender != c.beneficiary) revert NotBeneficiary();\n"}
-              {"    if (c.withdrawnMilestones >= c.approvedMilestones)\n        revert NoApprovedTranche();\n\n"}
-              <span className="text-[var(--text)]">{"    c.withdrawnMilestones = index + 1;\n    totalOwed -= amount;\n\n"}</span>
-              {"    treasury.sendValue(fee);\n    c.beneficiary.sendValue(amount - fee);\n}"}
-            </code>
-          </pre>
-          <dl className="grid gap-x-10 text-sm sm:grid-cols-2">
-            {SAFEGUARDS.map((s) => {
-              const url = explorerUrl(s.contract ? deployment?.[s.contract] : undefined);
-              return (
-                <div key={s.name} className="border-t border-[var(--line)] py-4">
-                  <dt className="font-medium">{s.name}</dt>
-                  <dd className="mt-0.5 text-[var(--text-2)]">
-                    {url ? (
-                      <a href={url} target="_blank" rel="noopener noreferrer" className="underline decoration-white/30 underline-offset-4 hover:decoration-white">
-                        {s.detail}
-                      </a>
-                    ) : (
-                      s.detail
-                    )}
-                  </dd>
-                </div>
-              );
-            })}
-          </dl>
-        </div>
-      </section>
-
       {/* ---------- Questions ---------- */}
-      <section className="section">
-        <div className="md:sticky md:top-24 md:self-start">
-          <h2 className="display-l two-tone">
-            Questions.
-            <span style={{ color: "var(--voice)" }}>Réponses courtes.</span>
-          </h2>
-        </div>
+      <section className="mx-auto max-w-3xl pt-20">
+        <h2 className="display-l mb-6">Questions fréquentes</h2>
         <Faq />
-      </section>
-
-      {/* ---------- Dernier appel ---------- */}
-      <section className="mt-8 rounded-[36px] px-7 py-14 md:px-16 md:py-20" style={{ background: "var(--give-solid)" }}>
-        <h2 className="display-xl">Un projet à financer&nbsp;?</h2>
-        <p className="mt-5 max-w-[46ch] text-lg leading-relaxed text-white/85">
-          Décris-le, découpe-le en jalons, et laisse ta communauté débloquer les fonds au fil de tes avancées.
-        </p>
-        <div className="mt-8 flex flex-wrap gap-3">
-          <Link href="/creator" className="btn-primary">
-            Lancer une campagne
-          </Link>
-          <a href="#campagnes" className="btn-on-color">
-            Voir les campagnes
-          </a>
-        </div>
       </section>
     </div>
   );
 }
 
-const SAFEGUARDS: { name: string; detail: string; contract?: "CampusFund" | "Governance" | "Treasury" | "CFDToken" }[] = [
-  { name: "Anti-réentrance", detail: "État mis à jour avant tout envoi", contract: "CampusFund" },
-  { name: "Vote sur solde figé", detail: "Lu au bloc précédant la proposition", contract: "Governance" },
-  { name: "Trésorerie", detail: "Multisig 2 sur 3, plafond de 1 ETH par jour", contract: "Treasury" },
-  { name: "Pause d'urgence", detail: "Suspend contributions et retraits" },
-  { name: "Tests", detail: "145 tests Foundry, fuzzing et invariants" },
-  { name: "Audit Slither", detail: "18 alertes : 5 corrigées, 13 justifiées" },
+const SAFEGUARDS: { name: string; detail: string; contract?: "CampusFund" | "Governance" | "Treasury" }[] = [
+  { name: "145 tests", detail: "Tests Foundry, fuzzing et invariants, tous réussis." },
+  { name: "Vote sur solde figé", detail: "Un prêt éclair de jetons ne change pas le résultat.", contract: "Governance" },
+  { name: "Trésorerie à 3 clés", detail: "2 signatures sur 3 au-delà de 1 ETH par jour.", contract: "Treasury" },
+  { name: "Audit Slither", detail: "18 alertes : 5 corrigées, 13 justifiées.", contract: "CampusFund" },
 ];
 
-/** Aperçu en lecture seule d'une proposition ; le vote se fait sur la page Gouvernance. */
-function ProposalPreview({ proposal: p, now }: { proposal: Proposal; now: number }) {
+function Figure({ label, value }: { label: string; value: React.ReactNode }) {
+  return (
+    <div>
+      <dd className="font-display text-[clamp(2rem,3.4vw,2.9rem)] !font-extrabold !leading-none !tracking-[-0.04em]">{value}</dd>
+      <dt className="mt-1.5 text-[13px] text-[var(--text-2)]">{label}</dt>
+    </div>
+  );
+}
+
+function TileEmpty({ loading, children }: { loading: boolean; children: React.ReactNode }) {
+  return <p className="mt-6 text-sm text-[var(--text-2)]">{loading ? "Lecture sur la blockchain…" : children}</p>;
+}
+
+function Featured({ campaign: c, risk, now }: { campaign: Campaign; risk: RiskEntry | undefined; now: number }) {
+  const { metadata } = useMetadata(c.metadataCID);
+  const progress = percent(c.raised, c.goal);
+  return (
+    <Link href={`/campaign/${c.id}`} className="group mt-3 block">
+      <h3 className="font-display text-2xl leading-tight group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4">
+        {metadata?.name ?? `Campagne n°${c.id}`}
+      </h3>
+      <p className="mt-1 text-sm text-[var(--text-2)]">{metadata?.club ?? "Porteur inconnu"}</p>
+      <p className="mt-5 flex items-baseline gap-2">
+        <span className="font-display text-5xl !font-extrabold !tracking-[-0.04em]">{Math.round(progress)} %</span>
+        <span className="text-sm text-[var(--text-2)]">
+          {eth(c.raised)} sur {eth(c.goal)} ETH
+        </span>
+      </p>
+      <div className="mt-3">
+        <ProgressBar value={progress} tone={progress >= 100 ? "ok" : "accent"} />
+      </div>
+      <div className="mt-4">
+        <MilestoneTrack bps={c.milestonesBps} approved={c.approvedMilestones} withdrawn={c.withdrawnMilestones} />
+      </div>
+      <div className="mt-4 flex flex-wrap items-center gap-1.5">
+        <StatusPill status={c.status} />
+        <RiskBadge risk={risk} />
+        {c.status === 0 && c.deadline > now && <span className="text-[13px] text-[var(--text-2)]">Fin {relative(c.deadline, now)}</span>}
+      </div>
+    </Link>
+  );
+}
+
+function VoteTile({ proposal: p, now }: { proposal: Proposal; now: number }) {
   const cast = p.forVotes + p.againstVotes;
   const forShare = percent(p.forVotes, cast);
   const tone = p.state === 0 ? "tone-info" : p.state === 1 ? "tone-neutral" : p.state === 2 ? "tone-ok" : "tone-solid";
   return (
-    <Link href="/governance" className="card row-link block p-5">
-      <span className={`pill ${tone}`}>{PROPOSAL_STATE_LABELS[p.state]}</span>
-      <h3 className="mt-3 text-[17px] font-semibold tracking-[-0.015em]">
+    <Link href="/governance" className="group mt-3 block">
+      <h3 className="font-display text-2xl leading-tight group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4">
         {p.ptype === 0 ? `Débloquer le jalon ${p.milestoneIndex + 1} de la campagne n°${p.campaignId}` : `Geler la campagne n°${p.campaignId}`}
       </h3>
       <p className="mt-1 line-clamp-2 text-sm text-[var(--text-2)]">{p.description}</p>
-      <div className="mt-5 flex justify-between text-[13px]">
-        <span className="text-[var(--ok)]">Pour {cfd(p.forVotes)}</span>
-        <span className="text-[var(--danger)]">Contre {cfd(p.againstVotes)}</span>
+      <div className="mt-5 flex justify-between text-sm font-semibold">
+        <span>Pour {cfd(p.forVotes)}</span>
+        <span className="text-[var(--text-2)]">Contre {cfd(p.againstVotes)}</span>
       </div>
-      <div className="track mt-2 flex h-1.5 overflow-hidden rounded-full">
-        <div style={{ width: `${cast === 0n ? 0 : forShare}%`, background: "var(--ok)" }} />
-        <div style={{ width: `${cast === 0n ? 0 : 100 - forShare}%`, background: "var(--danger)" }} />
+      <div className="track mt-2 flex h-2 overflow-hidden rounded-full">
+        <div className="bg-white" style={{ width: `${cast === 0n ? 0 : forShare}%` }} />
+        <div className="ml-auto bg-[var(--text-3)]" style={{ width: `${cast === 0n ? 0 : 100 - forShare}%` }} />
       </div>
-      <div className="mt-4 mb-2 flex justify-between text-[13px] text-[var(--text-2)]">
-        <span>Quorum</span>
-        <span>
-          {cfd(p.participation)} sur {cfd(p.quorum)} CFD
-        </span>
+      <p className="mt-4 text-[13px] text-[var(--text-2)]">
+        Quorum : {cfd(p.participation)} sur {cfd(p.quorum)} CFD
+      </p>
+      <div className="mt-4 flex flex-wrap items-center gap-2">
+        <span className={`pill ${tone}`}>{PROPOSAL_STATE_LABELS[p.state]}</span>
+        {p.state === 0 && <span className="text-[13px] text-[var(--text-2)]">Fin {relative(p.voteEnd, now)}</span>}
       </div>
-      <ProgressBar value={percent(p.participation, p.quorum === 0n ? 1n : p.quorum)} />
-      <p className="mt-4 text-[13px] text-[var(--text-3)]">Fin du vote {relative(p.voteEnd, now)}</p>
     </Link>
   );
 }
