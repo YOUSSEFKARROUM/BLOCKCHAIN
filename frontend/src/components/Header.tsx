@@ -1,5 +1,6 @@
 "use client";
 
+import { Button, buttonVariants } from "@/components/shadcn/button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CHAIN, CHAIN_ID, IS_LOCAL } from "@/config/chain";
@@ -18,7 +19,7 @@ function WalletButton() {
   const { hasWallet, account, connecting, connect } = useWeb3();
   if (!hasWallet) {
     return (
-      <a href="https://metamask.io/download/" target="_blank" rel="noopener noreferrer" className="btn-primary">
+      <a href="https://metamask.io/download/" target="_blank" rel="noopener noreferrer" className={buttonVariants()}>
         Installer MetaMask
       </a>
     );
@@ -32,9 +33,9 @@ function WalletButton() {
     );
   }
   return (
-    <button type="button" className="btn-primary" onClick={connect} disabled={connecting}>
+    <Button type="button" onClick={connect} disabled={connecting}>
       {connecting ? "Connexion…" : "Connecter MetaMask"}
-    </button>
+    </Button>
   );
 }
 

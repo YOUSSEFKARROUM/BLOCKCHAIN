@@ -62,3 +62,10 @@ tuiles passent sur une colonne.
 Aucun chiffre n'est inventé. Les compteurs de l'accueil sont lus sur la blockchain, les badges de risque
 viennent du script d'analyse, et la section Sécurité cite les résultats réels des tests et de l'audit. Quand
 il n'y a pas de données, l'écran le dit et propose l'action suivante.
+
+## Composants
+
+Les composants de base viennent de shadcn/ui (dossier `frontend/src/components/shadcn/`) : boutons, badges,
+jauges, onglets, accordéon, champs de formulaire. Leur code est copié dans le projet, donc adapté au site :
+forme pilule, teintes sémantiques, retour visuel dès l'appui. Ils reposent sur Radix UI, qui gère le clavier
+et les lecteurs d'écran. Les listes déroulantes restent des `<select>` natifs.

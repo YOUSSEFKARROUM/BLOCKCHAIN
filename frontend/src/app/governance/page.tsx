@@ -1,5 +1,8 @@
 "use client";
 
+import { Button } from "@/components/shadcn/button";
+import { Input } from "@/components/shadcn/input";
+import { Label } from "@/components/shadcn/label";
 import { useEffect, useState } from "react";
 import { EmptyState, ErrorBox, ProgressBar, Spinner, TxFeedback } from "@/components/ui";
 import { getContracts } from "@/lib/contracts";
@@ -80,9 +83,9 @@ function VotingPower() {
             Vos CFD ne sont pas délégués : ils ne comptent pour aucun vote. La délégation s&apos;applique aux
             propositions créées <em>après</em> elle.
           </p>
-          <button type="button" className="btn-primary w-full" disabled={busy} onClick={() => void send((s) => getContracts(s).token.delegate(account))}>
+          <Button type="button" className="w-full" disabled={busy} onClick={() => void send((s) => getContracts(s).token.delegate(account))}>
             Activer mon pouvoir de vote (me déléguer)
-          </button>
+          </Button>
         </>
       )}
       <TxFeedback status={status} />
@@ -97,9 +100,9 @@ function FreezeForm({ campaignIds }: { campaignIds: number[] }) {
   const { status, send, busy } = useTx();
   if (!open) {
     return (
-      <button type="button" className="btn-ghost" onClick={() => setOpen(true)}>
+      <Button type="button" variant="outline" onClick={() => setOpen(true)}>
         Signaler une campagne suspecte (proposer un gel)
-      </button>
+      </Button>
     );
   }
   return (
@@ -112,9 +115,9 @@ function FreezeForm({ campaignIds }: { campaignIds: number[] }) {
       }}
     >
       <div>
-        <label className="label" htmlFor="fc">
+        <Label htmlFor="fc">
           Campagne
-        </label>
+        </Label>
         <select id="fc" className="input" value={campaignId} onChange={(e) => setCampaignId(e.target.value === "" ? "" : Number(e.target.value))}>
           <option value="">Choisir…</option>
           {campaignIds.map((id) => (
@@ -125,14 +128,14 @@ function FreezeForm({ campaignIds }: { campaignIds: number[] }) {
         </select>
       </div>
       <div>
-        <label className="label" htmlFor="fr">
+        <Label htmlFor="fr">
           Motif (visible par tous)
-        </label>
-        <input id="fr" className="input" value={reason} maxLength={200} onChange={(e) => setReason(e.target.value)} placeholder="Ex. : adresses toutes financées par le même compte" />
+        </Label>
+        <Input id="fr" value={reason} maxLength={200} onChange={(e) => setReason(e.target.value)} placeholder="Ex. : adresses toutes financées par le même compte" />
       </div>
-      <button type="submit" className="btn-primary" disabled={busy || campaignId === "" || reason.trim().length < 5}>
+      <Button type="submit" disabled={busy || campaignId === "" || reason.trim().length < 5}>
         Proposer le gel
-      </button>
+      </Button>
       <p className="text-xs text-[var(--ink-soft)] md:col-span-3">Il faut au moins 100 CFD délégués avant ce bloc (anti-spam).</p>
       <div className="md:col-span-3">
         <TxFeedback status={status} />
@@ -203,12 +206,12 @@ function ProposalCard({ proposal: p, cid }: { proposal: Proposal; cid: string | 
 
           {p.state === 0 && account && mine && !mine.voted && mine.weight > 0n && (
             <div className="flex gap-2">
-              <button type="button" className="btn-ok flex-1" disabled={busy} onClick={() => void send((s) => getContracts(s).governance.castVote(p.id, true))}>
+              <Button type="button" variant="success" className="flex-1" disabled={busy} onClick={() => void send((s) => getContracts(s).governance.castVote(p.id, true))}>
                 Voter pour
-              </button>
-              <button type="button" className="btn-danger flex-1" disabled={busy} onClick={() => void send((s) => getContracts(s).governance.castVote(p.id, false))}>
+              </Button>
+              <Button type="button" variant="destructive" className="flex-1" disabled={busy} onClick={() => void send((s) => getContracts(s).governance.castVote(p.id, false))}>
                 Voter contre
-              </button>
+              </Button>
             </div>
           )}
           {p.state === 0 && mine?.voted && <p className="text-xs font-semibold text-[var(--ok)]">Vous avez voté sur cette proposition.</p>}
@@ -218,9 +221,9 @@ function ProposalCard({ proposal: p, cid }: { proposal: Proposal; cid: string | 
             </p>
           )}
           {p.state === 2 && (
-            <button type="button" className="btn-primary w-full" disabled={busy} onClick={() => void send((s) => getContracts(s).governance.execute(p.id))}>
+            <Button type="button" className="w-full" disabled={busy} onClick={() => void send((s) => getContracts(s).governance.execute(p.id))}>
               Exécuter la décision
-            </button>
+            </Button>
           )}
           <TxFeedback status={status} />
         </div>

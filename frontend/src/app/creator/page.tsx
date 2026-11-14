@@ -1,5 +1,9 @@
 "use client";
 
+import { Button } from "@/components/shadcn/button";
+import { Input } from "@/components/shadcn/input";
+import { Label } from "@/components/shadcn/label";
+import { Textarea } from "@/components/shadcn/textarea";
 import { isAddress, parseEther } from "ethers";
 import Link from "next/link";
 import { useState } from "react";
@@ -127,15 +131,15 @@ function CreateForm() {
       <h2 className="font-display text-2xl">Nouvelle campagne</h2>
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="sm:col-span-2">
-          <label className="label" htmlFor="name">Titre du projet</label>
-          <input id="name" className="input" maxLength={120} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Ex. : Drone de cartographie du club aéro" />
+          <Label htmlFor="name">Titre du projet</Label>
+          <Input id="name" maxLength={120} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Ex. : Drone de cartographie du club aéro" />
         </div>
         <div>
-          <label className="label" htmlFor="club">Club / association</label>
-          <input id="club" className="input" maxLength={120} value={form.club} onChange={(e) => setForm({ ...form, club: e.target.value })} />
+          <Label htmlFor="club">Club / association</Label>
+          <Input id="club" maxLength={120} value={form.club} onChange={(e) => setForm({ ...form, club: e.target.value })} />
         </div>
         <div>
-          <label className="label" htmlFor="cat">Catégorie</label>
+          <Label htmlFor="cat">Catégorie</Label>
           <select id="cat" className="input" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
             {CATEGORIES.map((c) => (
               <option key={c}>{c}</option>
@@ -143,15 +147,15 @@ function CreateForm() {
           </select>
         </div>
         <div className="sm:col-span-2">
-          <label className="label" htmlFor="desc">Description</label>
-          <textarea id="desc" className="input min-h-28" maxLength={4000} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+          <Label htmlFor="desc">Description</Label>
+          <Textarea id="desc" className="min-h-28" maxLength={4000} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
         </div>
         <div>
-          <label className="label" htmlFor="goal">Objectif (ETH)</label>
-          <input id="goal" className="input" inputMode="decimal" value={form.goal} onChange={(e) => setForm({ ...form, goal: e.target.value.replace(",", ".") })} />
+          <Label htmlFor="goal">Objectif (ETH)</Label>
+          <Input id="goal" inputMode="decimal" value={form.goal} onChange={(e) => setForm({ ...form, goal: e.target.value.replace(",", ".") })} />
         </div>
         <div>
-          <label className="label" htmlFor="dur">Durée de la collecte</label>
+          <Label htmlFor="dur">Durée de la collecte</Label>
           <select id="dur" className="input" value={form.duration} onChange={(e) => setForm({ ...form, duration: Number(e.target.value) })}>
             {DURATIONS.map((d) => (
               <option key={d.seconds} value={d.seconds}>{d.label}</option>
@@ -159,8 +163,8 @@ function CreateForm() {
           </select>
         </div>
         <div className="sm:col-span-2">
-          <label className="label" htmlFor="ben">Bénéficiaire (wallet du club)</label>
-          <input id="ben" className="input font-mono text-xs" value={form.beneficiary} onChange={(e) => setForm({ ...form, beneficiary: e.target.value })} placeholder={account ?? "0x…"} />
+          <Label htmlFor="ben">Bénéficiaire (wallet du club)</Label>
+          <Input id="ben" className="font-mono text-xs" value={form.beneficiary} onChange={(e) => setForm({ ...form, beneficiary: e.target.value })} placeholder={account ?? "0x…"} />
           <p className="mt-1 text-xs text-[var(--ink-soft)]">Vide = votre adresse connectée.</p>
         </div>
       </div>
@@ -171,17 +175,17 @@ function CreateForm() {
         </legend>
         {milestones.map((m, i) => (
           <div key={i} className="grid gap-2 rounded-2xl border border-[var(--line)] p-3 sm:grid-cols-[1fr_80px_auto]">
-            <input className="input" aria-label={`Titre du jalon ${i + 1}`} placeholder={`Jalon ${i + 1} : titre`} value={m.title} onChange={(e) => setMilestone(i, { title: e.target.value })} />
-            <input className="input text-right" aria-label={`Pourcentage du jalon ${i + 1}`} inputMode="numeric" value={m.percent} onChange={(e) => setMilestone(i, { percent: e.target.value })} />
-            <button type="button" className="btn-ghost !px-3" disabled={milestones.length <= 2} onClick={() => setMilestones((l) => l.filter((_, j) => j !== i))} aria-label={`Supprimer le jalon ${i + 1}`}>
+            <Input aria-label={`Titre du jalon ${i + 1}`} placeholder={`Jalon ${i + 1} : titre`} value={m.title} onChange={(e) => setMilestone(i, { title: e.target.value })} />
+            <Input className="text-right" aria-label={`Pourcentage du jalon ${i + 1}`} inputMode="numeric" value={m.percent} onChange={(e) => setMilestone(i, { percent: e.target.value })} />
+            <Button type="button" variant="outline" className="!px-3" disabled={milestones.length <= 2} onClick={() => setMilestones((l) => l.filter((_, j) => j !== i))} aria-label={`Supprimer le jalon ${i + 1}`}>
               Retirer
-            </button>
-            <input className="input sm:col-span-3" aria-label={`Preuve attendue pour le jalon ${i + 1}`} placeholder="Preuve attendue (facture, vidéo…)" value={m.description} onChange={(e) => setMilestone(i, { description: e.target.value })} />
+            </Button>
+            <Input className="sm:col-span-3" aria-label={`Preuve attendue pour le jalon ${i + 1}`} placeholder="Preuve attendue (facture, vidéo…)" value={m.description} onChange={(e) => setMilestone(i, { description: e.target.value })} />
           </div>
         ))}
-        <button type="button" className="btn-ghost" disabled={milestones.length >= 5} onClick={() => setMilestones((l) => [...l, { title: "", description: "", percent: "0" }])}>
+        <Button type="button" variant="outline" disabled={milestones.length >= 5} onClick={() => setMilestones((l) => [...l, { title: "", description: "", percent: "0" }])}>
           Ajouter un jalon
-        </button>
+        </Button>
       </fieldset>
 
       {problems.length > 0 && (
@@ -191,9 +195,9 @@ function CreateForm() {
           ))}
         </ul>
       )}
-      <button type="submit" className="btn-primary w-full" disabled={problems.length > 0 || busy || upload.state === "uploading"}>
+      <Button type="submit" className="w-full" disabled={problems.length > 0 || busy || upload.state === "uploading"}>
         {upload.state === "uploading" ? "Envoi des métadonnées sur IPFS…" : busy ? "Transaction en cours…" : "Publier sur IPFS puis créer la campagne"}
-      </button>
+      </Button>
       {upload.state === "done" && (
         <p className={`rounded-xl p-3 text-xs ${upload.mode === "local" ? "tone-warn" : "tone-ok"}`}>
           {upload.mode === "local"
@@ -231,9 +235,9 @@ function MyCampaign({ campaign: c }: { campaign: Campaign }) {
       <MilestoneTrack bps={c.milestonesBps} approved={c.approvedMilestones} withdrawn={c.withdrawnMilestones} />
       <div className="flex flex-wrap gap-2">
         {canRequest && (
-          <button
+          <Button
             type="button"
-            className="btn-ghost"
+            variant="outline"
             disabled={busy}
             onClick={() =>
               void send((s) =>
@@ -242,17 +246,17 @@ function MyCampaign({ campaign: c }: { campaign: Campaign }) {
             }
           >
             Demander le déblocage du jalon {c.approvedMilestones + 1}
-          </button>
+          </Button>
         )}
         {canWithdraw && (
-          <button type="button" className="btn-primary" disabled={busy} onClick={() => void send((s) => getContracts(s).fund.withdrawTranche(c.id))}>
+          <Button type="button" disabled={busy} onClick={() => void send((s) => getContracts(s).fund.withdrawTranche(c.id))}>
             Retirer la tranche {next + 1} ({eth((tranches[next] * 98n) / 100n)} ETH nets)
-          </button>
+          </Button>
         )}
         {canCancel && (
-          <button type="button" className="btn-ghost" disabled={busy} onClick={() => void send((s) => getContracts(s).fund.cancelCampaign(c.id))}>
+          <Button type="button" variant="outline" disabled={busy} onClick={() => void send((s) => getContracts(s).fund.cancelCampaign(c.id))}>
             Annuler (aucune contribution)
-          </button>
+          </Button>
         )}
       </div>
       {c.status === 1 && !isBeneficiary && c.withdrawnMilestones < c.approvedMilestones && (

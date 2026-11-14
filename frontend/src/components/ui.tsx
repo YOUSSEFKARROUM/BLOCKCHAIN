@@ -1,55 +1,38 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { Badge, type BadgeProps } from "@/components/shadcn/badge";
+import { Progress } from "@/components/shadcn/progress";
 import { txUrl } from "@/config/chain";
 import { STATUS_LABELS, type StatusIndex } from "@/lib/data";
 import type { RiskEntry } from "@/lib/hooks";
 import type { TxStatus } from "@/lib/useTx";
 
-const STATUS_TONES: Record<StatusIndex, string> = {
-  0: "tone-info",
-  1: "tone-ok",
-  2: "tone-neutral",
-  3: "tone-danger",
-};
+const STATUS_TONES: Record<StatusIndex, BadgeProps["variant"]> = { 0: "info", 1: "ok", 2: "neutral", 3: "danger" };
 
 export function StatusPill({ status }: { status: StatusIndex }) {
-  return <span className={`pill ${STATUS_TONES[status]}`}>{STATUS_LABELS[status]}</span>;
+  return <Badge variant={STATUS_TONES[status]}>{STATUS_LABELS[status]}</Badge>;
 }
 
-const RISK_TONES: Record<RiskEntry["level"], string> = {
-  Faible: "tone-ok",
-  Moyen: "tone-warn",
-  Élevé: "tone-danger",
-};
+const RISK_TONES: Record<RiskEntry["level"], BadgeProps["variant"]> = { Faible: "ok", Moyen: "warn", Élevé: "danger" };
 
 /** Badge du score de risque IA (scripts/anomaly_detection.py). */
 export function RiskBadge({ risk }: { risk: RiskEntry | undefined }) {
   if (!risk) {
     return (
-      <span className="pill tone-neutral" title="Lancez scripts/anomaly_detection.py pour calculer ce score">
-        Risque non calculé
-      </span>
+      <Badge title="Lancez scripts/anomaly_detection.py pour calculer ce score">Risque non calculé</Badge>
     );
   }
   return (
-    <span className={`pill ${RISK_TONES[risk.level]}`} title={risk.reasons.join(", ") || "Aucun signal suspect"}>
+    <Badge variant={RISK_TONES[risk.level]} title={risk.reasons.join(", ") || "Aucun signal suspect"}>
       <span className="h-1.5 w-1.5 rounded-full bg-current" aria-hidden />
       Risque {risk.level.toLowerCase()} {Math.round(risk.score)}
-    </span>
+    </Badge>
   );
 }
 
 export function ProgressBar({ value, tone = "accent" }: { value: number; tone?: "accent" | "ok" }) {
-  const color = tone === "ok" ? "var(--ok)" : "var(--text)";
-  return (
-    <div className="track h-1.5 w-full overflow-hidden rounded-full" role="progressbar" aria-valuenow={Math.round(value)} aria-valuemin={0} aria-valuemax={100}>
-      <div
-        className="h-full origin-left rounded-full"
-        style={{ width: "100%", transform: `scaleX(${Math.min(100, value) / 100})`, background: color, transition: "transform 700ms cubic-bezier(0.32,0.72,0,1)" }}
-      />
-    </div>
-  );
+  return <Progress value={Math.min(100, value)} className={tone === "ok" ? "[&>div]:bg-[var(--ok)]" : undefined} />;
 }
 
 /** Jalons sous forme de segments proportionnels : versé, approuvé par la DAO, en attente. */

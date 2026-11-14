@@ -18,12 +18,28 @@
   --danger: #ff453a;
   --info: #64d2ff;
 
-  /* Code couleur des 4 étapes, repris par les sections de la page */
-  --give: #6c86ff;
-  --voice: #a58bff;
-  --vote: #ff6b7d;
-  --release: #34d17f;
-  --give-solid: #2340ff;
+  /* Jetons de shadcn/ui (HSL), alignés sur la palette ci-dessus */
+  --background: 0 0% 0%;
+  --foreground: 240 6% 96%;
+  --card: 240 4% 8%;
+  --card-foreground: 240 6% 96%;
+  --popover: 240 3% 11%;
+  --popover-foreground: 240 6% 96%;
+  --primary: 240 6% 96%;
+  --primary-foreground: 0 0% 0%;
+  --secondary: 240 3% 13%;
+  --secondary-foreground: 240 6% 96%;
+  --muted: 240 3% 13%;
+  --muted-foreground: 240 3% 64%;
+  --accent: 240 3% 17%;
+  --accent-foreground: 240 6% 96%;
+  --destructive: 4 100% 61%;
+  --destructive-foreground: 0 0% 0%;
+  --border: 0 0% 100% / 0.1;
+  --input: 0 0% 100% / 0.14;
+  --ring: 0 0% 100%;
+  --radius: 0.85rem;
+
 
   /* Anciens noms, conservés pour les pages existantes */
   --paper: var(--bg);
@@ -35,6 +51,10 @@
 
   --press: 100ms ease-out;
   --settle: 260ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+* {
+  border-color: hsl(var(--border));
 }
 
 html {
@@ -133,15 +153,6 @@ body {
   .btn-ghost:hover:not(:disabled) {
     background: rgba(255, 255, 255, 0.1);
   }
-  /* Bouton secondaire posé sur un fond coloré */
-  .btn-on-color {
-    @apply btn;
-    background: rgba(255, 255, 255, 0.18);
-    color: #fff;
-  }
-  .btn-on-color:hover:not(:disabled) {
-    background: rgba(255, 255, 255, 0.28);
-  }
   .btn-ok {
     @apply btn;
     background: var(--ok);
@@ -226,15 +237,6 @@ body {
     transform: scale(0.995);
     background: rgba(255, 255, 255, 0.07);
   }
-}
-
-/* Invitation à défiler : seule animation en boucle de la page */
-.scroll-cue {
-  animation: cue 1.6s cubic-bezier(0.32, 0.72, 0, 1) infinite;
-}
-@keyframes cue {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(5px); }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,5 +1,6 @@
 "use client";
 
+import { buttonVariants } from "@/components/shadcn/button";
 import { formatEther } from "ethers";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -8,6 +9,7 @@ import { CountUp } from "@/components/CountUp";
 import { DotField } from "@/components/DotField";
 import { Faq } from "@/components/Faq";
 import { HowItWorks } from "@/components/HowItWorks";
+import { Tabs, TabsList, TabsTrigger } from "@/components/shadcn/tabs";
 import { EmptyState, ErrorBox, MilestoneTrack, ProgressBar, RiskBadge, Spinner, StatusPill } from "@/components/ui";
 import { CHAIN } from "@/config/chain";
 import { deployment } from "@/lib/contracts";
@@ -65,10 +67,10 @@ export default function HomePage() {
               ont donné.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
-              <a href="#campagnes" className="btn-primary">
+              <a href="#campagnes" className={buttonVariants()}>
                 Explorer les campagnes
               </a>
-              <Link href="/creator" className="btn-ghost">
+              <Link href="/creator" className={buttonVariants({ variant: "outline" })}>
                 Lancer une campagne
               </Link>
             </div>
@@ -125,19 +127,15 @@ export default function HomePage() {
       <section id="campagnes" className="pt-20">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <h2 className="display-l">Toutes les campagnes</h2>
-          <div className="flex flex-wrap gap-2" role="group" aria-label="Filtrer par statut">
-            {(["all", 0, 1, 2, 3] as Filter[]).map((f) => (
-              <button
-                key={String(f)}
-                type="button"
-                aria-pressed={filter === f}
-                onClick={() => setFilter(f)}
-                className={`pill !px-3.5 !py-2 transition-colors active:opacity-70 ${filter === f ? "tone-solid" : "tone-neutral hover:text-[var(--text)]"}`}
-              >
-                {f === "all" ? "Toutes" : STATUS_LABELS[f]}
-              </button>
-            ))}
-          </div>
+          <Tabs value={String(filter)} onValueChange={(v) => setFilter(v === "all" ? "all" : (Number(v) as StatusIndex))}>
+            <TabsList aria-label="Filtrer par statut">
+              {(["all", 0, 1, 2, 3] as Filter[]).map((f) => (
+                <TabsTrigger key={String(f)} value={String(f)}>
+                  {f === "all" ? "Toutes" : STATUS_LABELS[f]}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
         </div>
         <div className="mt-6">
           {isLoading && !campaigns && <Spinner label="Lecture des campagnes sur la blockchain…" />}
@@ -145,7 +143,7 @@ export default function HomePage() {
           {campaigns && visible.length === 0 && (
             <EmptyState title={campaigns.length === 0 ? "Aucune campagne pour l'instant" : "Aucune campagne avec ce statut"}>
               {campaigns.length === 0 && (
-                <Link href="/creator" className="btn-primary mt-3">
+                <Link href="/creator" className={buttonVariants({ className: "mt-3" })}>
                   Créer la première campagne
                 </Link>
               )}

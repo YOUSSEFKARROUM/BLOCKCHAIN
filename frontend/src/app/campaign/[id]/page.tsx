@@ -1,5 +1,8 @@
 "use client";
 
+import { Button } from "@/components/shadcn/button";
+import { Input } from "@/components/shadcn/input";
+import { Label } from "@/components/shadcn/label";
 import { parseEther } from "ethers";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -177,17 +180,17 @@ function ContributeForm({ campaignId }: { campaignId: number }) {
         }
       }}
     >
-      <label className="label" htmlFor="amount">
+      <Label htmlFor="amount">
         Contribuer (ETH)
-      </label>
-      <input id="amount" className="input" inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value.replace(",", "."))} />
+      </Label>
+      <Input id="amount" inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value.replace(",", "."))} />
       <p className="text-xs text-[var(--ink-soft)]">
         {valid && wei !== null ? `Vous recevrez ${cfd(wei * 1000n)} CFD de gouvernance.` : "Montant invalide."} Pensez à
         déléguer vos CFD (page Gouvernance) pour pouvoir voter.
       </p>
-      <button type="submit" className="btn-primary w-full" disabled={!valid || busy}>
+      <Button type="submit" className="w-full" disabled={!valid || busy}>
         {busy ? "Transaction en cours…" : "Contribuer"}
-      </button>
+      </Button>
       <TxFeedback status={status} />
     </form>
   );
@@ -201,9 +204,9 @@ function FinalizeBox({ campaignId, reached }: { campaignId: number; reached: boo
         L&apos;échéance est passée. N&apos;importe qui peut clôturer la campagne : elle deviendra{" "}
         <strong>{reached ? "Réussie" : "Échouée (remboursements ouverts)"}</strong>.
       </p>
-      <button type="button" className="btn-primary w-full" disabled={busy} onClick={() => void send((s) => getContracts(s).fund.finalize(campaignId))}>
+      <Button type="button" className="w-full" disabled={busy} onClick={() => void send((s) => getContracts(s).fund.finalize(campaignId))}>
         Clôturer la campagne
-      </button>
+      </Button>
       <TxFeedback status={status} />
     </div>
   );
@@ -218,9 +221,9 @@ function RefundBox({ campaign, contribution }: { campaign: Campaign; contributio
         Campagne {campaign.status === 2 ? "échouée" : "annulée"} : vous pouvez récupérer <strong>{eth(amount)} ETH</strong>
         {campaign.released > 0n && " (au prorata des fonds restants)"}. Vos {cfd(contribution * 1000n)} CFD seront brûlés.
       </p>
-      <button type="button" className="btn-primary w-full" disabled={busy} onClick={() => void send((s) => getContracts(s).fund.refund(campaign.id))}>
+      <Button type="button" className="w-full" disabled={busy} onClick={() => void send((s) => getContracts(s).fund.refund(campaign.id))}>
         Me faire rembourser
-      </button>
+      </Button>
       <TxFeedback status={status} />
     </div>
   );
