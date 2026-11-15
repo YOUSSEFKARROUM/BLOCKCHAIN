@@ -55,9 +55,8 @@ function NetworkBanner() {
       </div>
     );
   }
-  if (!hasWallet) {
-    return <div className={`${BANNER} bg-tile-2 font-normal text-gray`}>Lecture seule : installez MetaMask pour contribuer ou voter.</div>;
-  }
+  // Sans MetaMask : pas de bandeau, le bouton « Installer MetaMask » de l'en-tête suffit.
+  if (!hasWallet) return null;
   if (wrongNetwork) {
     return (
       <div role="alert" className={`${BANNER} on-amber bg-amber text-night`}>

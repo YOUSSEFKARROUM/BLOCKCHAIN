@@ -1,7 +1,7 @@
 "use client";
 
 import { formatEther, parseEther } from "ethers";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FlapText } from "@/components/board/Flap";
 import { TxStrip } from "@/components/board/Feedback";
 import { getContracts } from "@/lib/contracts";
@@ -41,7 +41,7 @@ function AmountFlaps({ wei, rate }: { wei: bigint | null; rate: number }) {
 }
 
 function ContributeForm({ campaignId, rate }: { campaignId: number; rate: number }) {
-  const { account } = useWeb3();
+  const { account, hasWallet } = useWeb3();
   const [amount, setAmount] = useState("0.5");
   const { status, send, busy } = useTx();
   const wei = parseAmount(amount);
@@ -106,9 +106,10 @@ function ContributeForm({ campaignId, rate }: { campaignId: number; rate: number
         {busy ? "Transaction en cours…" : wei ? `Contribuer ${eth(wei, 4)} ETH` : "Montant invalide"}
       </button>
       <p className="m-0 text-[14px] font-medium">
-        {!account && "MetaMask vous demandera d'abord de connecter un compte. "}
-        Vos CFD sont vos droits de vote sur chaque tranche : déléguez-les à la tour de contrôle pour voter. Si la campagne échoue ou est gelée, vous
-        récupérez 100 % de votre mise.
+        {!hasWallet && "Lecture seule : installez MetaMask pour contribuer. "}
+        {hasWallet && !account && "MetaMask vous demandera d'abord de connecter un compte. "}
+        Vous votez sur chaque tranche de cette campagne avec votre mise. Si elle échoue ou est gelée, vous récupérez votre mise :{" "}
+        <strong>gardez vos CFD</strong>, ils sont repris au remboursement.
       </p>
       <TxStrip status={status} />
     </form>
@@ -131,16 +132,43 @@ function FinalizeBox({ campaignId, isReached }: { campaignId: number; isReached:
   );
 }
 
+/** CFD détenus par le compte : il faut rendre TOUS les CFD reçus pour être remboursé. */
+function useCfdBalance(): bigint | null {
+  const { readProvider, account, refreshKey } = useWeb3();
+  const [balance, setBalance] = useState<bigint | null>(null);
+  useEffect(() => {
+    if (!account) return;
+    let cancelled = false;
+    getContracts(readProvider)
+      .token.balanceOf(account)
+      .then((b: bigint) => !cancelled && setBalance(b))
+      .catch(() => !cancelled && setBalance(null));
+    return () => {
+      cancelled = true;
+    };
+  }, [readProvider, account, refreshKey]);
+  return balance;
+}
+
 function RefundBox({ campaign: c, contribution, rate }: { campaign: Campaign; contribution: bigint; rate: number }) {
   const { status, send, busy } = useTx();
+  const balance = useCfdBalance();
+  const needed = contribution * BigInt(rate);
+  const isMissingCfd = balance !== null && balance < needed;
   const amount = c.raised === 0n ? 0n : (contribution * (c.raised - c.released)) / c.raised;
   return (
     <div className="flex flex-col gap-4">
+      {isMissingCfd && (
+        <p role="alert" className="m-0 rounded-md bg-night px-4 py-3 text-[15px] text-ticket">
+          Il vous manque {cfd(needed - balance)} CFD : le remboursement brûle les {cfd(needed)} CFD reçus pour cette mise. Récupérez-les
+          (ils ont été transférés) avant de demander le remboursement.
+        </p>
+      )}
       <p className="m-0 text-[16px] font-medium">
-        Vol {c.status === 2 ? "annulé : objectif manqué" : "annulé par la DAO"}. Vous pouvez récupérer <strong>{eth(amount, 4)} ETH</strong>
+        Campagne {c.status === 2 ? "échouée : objectif manqué" : "gelée par la DAO"}. Vous pouvez récupérer <strong>{eth(amount, 4)} ETH</strong>
         {c.released > 0n && " (au prorata des fonds restants)"}. Vos {cfd(contribution * BigInt(rate))} CFD seront brûlés.
       </p>
-      <button type="button" disabled={busy} onClick={() => void send((s) => getContracts(s).fund.refund(c.id))} className="btn btn-dark">
+      <button type="button" disabled={busy || isMissingCfd} onClick={() => void send((s) => getContracts(s).fund.refund(c.id))} className="btn btn-dark">
         Me faire rembourser
       </button>
       <TxStrip status={status} />
