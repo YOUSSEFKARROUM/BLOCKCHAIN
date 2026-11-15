@@ -93,7 +93,7 @@ export function Header() {
             return (
               <Link key={n.href} href={n.href} aria-current={isActive ? "page" : undefined} className="nav-link flex flex-col leading-tight">
                 <span>{n.label}</span>
-                <span className="text-[10px] tracking-[.12em] text-gray">{n.real}</span>
+                <span className="font-display text-[12px] normal-case tracking-normal text-gray">{n.real}</span>
               </Link>
             );
           })}

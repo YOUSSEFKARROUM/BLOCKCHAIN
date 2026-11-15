@@ -114,7 +114,7 @@ export function DeparturesBoard() {
           {campaigns?.length ? "Changez de filtre pour voir les autres campagnes." : "Aucune campagne n'a encore été créée sur ce réseau."}
         </EmptyPanel>
       )}
-      <p className="tag m-0" style={{ letterSpacing: ".1em" }}>
+      <p className="tag m-0">
         Vol = campagne · Escale = jalon
       </p>
     </section>

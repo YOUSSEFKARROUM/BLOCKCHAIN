@@ -13,7 +13,7 @@ const INK_OK = "#0B6B2A";
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="min-w-0">
-      <div className="mono text-[11px] tracking-[.14em]" style={{ color: INK_SOFT }}>
+      <div className="font-display text-[13px] font-medium" style={{ color: INK_SOFT }}>
         {label}
       </div>
       <div className="break-words uppercase">{children}</div>
@@ -97,7 +97,7 @@ export function BoardingPass({ campaign: c, proposals, metadata, risk, now, feeP
         <div className="flex flex-col gap-[26px] px-7 pb-[30px] pt-[26px]">
           <div className="flex items-center gap-[18px]">
             <div>
-              <div className="mono text-[11px] tracking-[.14em]" style={{ color: INK_SOFT }}>COLLECTÉ</div>
+              <div className="font-display text-[13px] font-medium" style={{ color: INK_SOFT }}>Collecté</div>
               <div className="display" style={{ fontSize: "clamp(40px, 6vw, 84px)", fontStretch: "70%", lineHeight: 0.85 }}>{eth(c.raised, 2)}</div>
             </div>
             <div aria-hidden="true" className="flex min-w-[60px] flex-1 items-center gap-2">
@@ -106,26 +106,26 @@ export function BoardingPass({ campaign: c, proposals, metadata, risk, now, feeP
               <span className="flex-1 border-t-2 border-dashed border-night" />
             </div>
             <div className="text-right">
-              <div className="mono text-[11px] tracking-[.14em]" style={{ color: INK_SOFT }}>OBJECTIF</div>
+              <div className="font-display text-[13px] font-medium" style={{ color: INK_SOFT }}>Objectif</div>
               <div className="display" style={{ fontSize: "clamp(40px, 6vw, 84px)", fontStretch: "70%", lineHeight: 0.85 }}>{eth(c.goal, 2)} ETH</div>
             </div>
           </div>
           <div className="mono grid gap-x-4 gap-y-[18px] text-[16px] font-bold" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(130px, 100%), 1fr))" }}>
-            <Field label="CLUB">{metadata?.club ?? "—"}</Field>
-            <Field label="STATUT">{status.label}</Field>
-            <Field label="VERSÉ AU CLUB">{eth(toClub, 3)} ETH</Field>
-            <Field label="EN SÉQUESTRE">{eth(escrow > 0n ? escrow : 0n, 3)} ETH</Field>
-            <Field label="ÉCHÉANCE">
+            <Field label="Club">{metadata?.club ?? "—"}</Field>
+            <Field label="Statut">{status.label}</Field>
+            <Field label="Versé au club">{eth(toClub, 3)} ETH</Field>
+            <Field label="En séquestre">{eth(escrow > 0n ? escrow : 0n, 3)} ETH</Field>
+            <Field label="Échéance">
               <span title={dateTime(c.deadline)}>{relative(c.deadline, now)}</span>
             </Field>
-            <Field label="BÉNÉFICIAIRE">{shortAddress(c.beneficiary)}</Field>
+            <Field label="Bénéficiaire">{shortAddress(c.beneficiary)}</Field>
           </div>
           <Itinerary campaign={c} states={states} metadata={metadata} />
         </div>
       </div>
       <div className="flex flex-[1_1_190px] flex-col justify-between gap-4 border-l-[3px] border-dashed border-night px-6 py-[26px]">
         <div>
-          <div className="mono text-[11px] tracking-[.14em]" style={{ color: INK_SOFT }}>SCANNER IA</div>
+          <div className="font-display text-[13px] font-medium" style={{ color: INK_SOFT }}>Scanner IA</div>
           {risk ? (
             <div className="flex flex-wrap items-baseline gap-x-2.5">
               <span className="display whitespace-nowrap text-[96px]" style={{ fontStretch: "70%", lineHeight: 0.85, overflowWrap: "normal" }}>{Math.round(risk.score)}</span>
@@ -145,7 +145,7 @@ export function BoardingPass({ campaign: c, proposals, metadata, risk, now, feeP
               "repeating-linear-gradient(90deg, #09090A 0, #09090A 3px, transparent 3px, transparent 5px, #09090A 5px, #09090A 6px, transparent 6px, transparent 10px, #09090A 10px, #09090A 14px, transparent 14px, transparent 16px)",
           }}
         />
-        <div className="mono text-[11px] tracking-[.08em]" style={{ color: INK_SOFT }}>
+        <div className="mono text-[12px]" style={{ color: INK_SOFT }}>
           CONTRAT {deployment ? shortAddress(deployment.CampusFund) : "—"}
           <br />
           STATUT ON-CHAIN : {ONCHAIN_STATUS[c.status].toUpperCase()}

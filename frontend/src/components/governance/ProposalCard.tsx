@@ -201,7 +201,7 @@ export function ProposalCard({ proposal: p, campaign, now, quorumPercent, feePer
         <h3 className="display display-s">{title}</h3>
         <p className="m-0 text-[16px] text-soft">{p.description}</p>
         {p.proof && <ProofLink proof={p.proof} />}
-        <div className="tag mt-auto flex flex-wrap gap-x-5 gap-y-1.5 pt-2" style={{ letterSpacing: ".06em" }}>
+        <div className="tag mt-auto flex flex-wrap gap-x-5 gap-y-1.5 pt-2">
           <span>{p.ptype === 0 ? `CFD de la campagne : ${cfd(supply)}` : `Offre au snapshot : ${cfd(supply)} CFD`}</span>
           <span>Bloc {p.snapshotBlock}</span>
           <span>{timing}</span>

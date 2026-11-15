@@ -30,7 +30,7 @@ export function TerminalSection({ rules }: { rules: ProtocolRules }) {
           Terminal <span className="text-amber">{CHAIN.name}.</span>
         </h2>
         {deployment && (
-          <span className="tag" style={{ letterSpacing: ".1em" }}>
+          <span className="tag">
             Déployé au bloc {deployment.deployBlock}
           </span>
         )}

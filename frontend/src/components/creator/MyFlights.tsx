@@ -17,7 +17,7 @@ const INK_SOFT = "#55554F";
 function Cell({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <div className="mono text-[11px] font-normal tracking-[.14em]" style={{ color: INK_SOFT }}>
+      <div className="font-display text-[13px] font-medium" style={{ color: INK_SOFT }}>
         {label}
       </div>
       {children}
@@ -67,10 +67,10 @@ function FlightTicket({ campaign: c, proposals, now, feePercent }: FlightTicketP
           ))}
         </div>
         <div className="mono grid grid-cols-2 gap-3 text-[15px] font-bold">
-          <Cell label="COLLECTÉ">{eth(c.raised, 3)} ETH</Cell>
-          <Cell label="REÇU">{eth(net(c.released), 3)} ETH</Cell>
+          <Cell label="Collecté">{eth(c.raised, 3)} ETH</Cell>
+          <Cell label="Reçu par le club">{eth(net(c.released), 3)} ETH</Cell>
           {states.map((s, i) => (
-            <Cell key={i} label={`ESCALE ${i + 1} · ${c.milestonesBps[i] / 100} %`}>
+            <Cell key={i} label={`Escale ${i + 1} · ${c.milestonesBps[i] / 100} %`}>
               <span className="uppercase">{ESCALE_LABELS[s]}</span>
             </Cell>
           ))}

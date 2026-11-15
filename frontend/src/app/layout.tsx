@@ -26,7 +26,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <Web3Provider>
           <Header />
           {children}
-          <footer className="wrap tag flex flex-wrap justify-between gap-3 pb-10 pt-7" style={{ letterSpacing: ".1em" }}>
+          <footer className="wrap tag flex flex-wrap justify-between gap-3 pb-10 pt-7">
             <span>CampusFund · Mini-projet Blockchain · ENSA Béni Mellal, filière IA et Cybersécurité</span>
             <span>Foundry · Next.js 14 · Ethers v6</span>
           </footer>

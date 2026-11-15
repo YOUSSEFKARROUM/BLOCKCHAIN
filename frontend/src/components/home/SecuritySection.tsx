@@ -40,7 +40,7 @@ export function SecuritySection() {
           <br />
           <span className="text-amber">de sécurité.</span>
         </h2>
-        <span className="tag" style={{ letterSpacing: ".1em" }}>
+        <span className="tag">
           Solidity 0.8.24 · Foundry · OpenZeppelin v5.4
         </span>
       </div>

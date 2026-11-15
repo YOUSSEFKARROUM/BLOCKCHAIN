@@ -19,7 +19,7 @@ import { useWeb3 } from "@/lib/web3";
 
 function BackLink() {
   return (
-    <Link href="/#departs" className="tag inline-flex min-h-[44px] items-center gap-2.5 self-start no-underline hover:text-amber" style={{ fontSize: 13, letterSpacing: ".1em" }}>
+    <Link href="/#departs" className="tag inline-flex min-h-[44px] items-center gap-2.5 self-start no-underline hover:text-amber">
       <ArrowIcon size={16} back />
       Tous les départs
     </Link>

@@ -40,7 +40,7 @@ export function ScannerSection() {
             <div className="mt-4 text-[14px] text-soft">de rappel</div>
           </div>
         </div>
-        <p className="tag m-0" style={{ letterSpacing: ".06em" }}>
+        <p className="tag m-0">
           Jeu de démo : 300 campagnes, 30 fraudes.
         </p>
       </div>

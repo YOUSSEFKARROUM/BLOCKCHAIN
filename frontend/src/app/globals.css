@@ -69,17 +69,16 @@ input[type="number"]::-webkit-inner-spin-button {
   .mono {
     font-family: var(--font-mono), ui-monospace, monospace;
   }
-  /* Étiquette de signalétique : petite, espacée (tracking positif sur petit corps) */
+  /* Étiquettes : Archivo, casse normale, 13 px minimum. La police monospace est réservée aux données
+     (montants, adresses, codes de vol) et à la signalétique (boutons, navigation). */
   .tag {
-    font: 400 12px/1.4 var(--font-mono), ui-monospace, monospace;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+    font: 500 13px/1.4 var(--font-display), system-ui, sans-serif;
+    letter-spacing: 0.01em;
     color: var(--gray);
   }
   .tag-b {
-    font: 700 12px/1.4 var(--font-mono), ui-monospace, monospace;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+    font: 650 13px/1.4 var(--font-display), system-ui, sans-serif;
+    letter-spacing: 0.01em;
   }
   /* Grands titres condensés : interlignage serré, largeur réduite */
   .display {

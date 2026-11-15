@@ -195,15 +195,15 @@ export function TicketOffice({ campaign: c, myContribution, now, rate }: TicketO
 /** Informations techniques sous le guichet (porteur, bénéficiaire, CID IPFS). */
 export function FlightInfo({ campaign: c }: { campaign: Campaign }) {
   const rows = [
-    { label: "PORTEUR", value: shortAddress(c.creator), title: c.creator },
-    { label: "BÉNÉFICIAIRE", value: shortAddress(c.beneficiary), title: c.beneficiary },
-    { label: "MÉTADONNÉES", value: `IPFS · ${c.metadataCID.slice(0, 10)}…`, title: c.metadataCID },
+    { label: "Porteur", value: shortAddress(c.creator), title: c.creator },
+    { label: "Bénéficiaire", value: shortAddress(c.beneficiary), title: c.beneficiary },
+    { label: "Métadonnées", value: `IPFS · ${c.metadataCID.slice(0, 10)}…`, title: c.metadataCID },
   ];
   return (
     <dl className="mono m-0 flex flex-col gap-[5px] text-[13px] tracking-[.04em]">
       {rows.map((r) => (
         <div key={r.label} className="db-tile flex justify-between gap-3 rounded-md px-[18px] py-3.5">
-          <dt className="text-gray">{r.label}</dt>
+          <dt className="font-display text-[14px] text-gray">{r.label}</dt>
           <dd className="m-0 truncate" title={r.title}>
             {r.value}
           </dd>

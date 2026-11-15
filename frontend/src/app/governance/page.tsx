@@ -67,7 +67,7 @@ export default function GovernancePage() {
             <h2 id="approche-title" className="display display-l">
               Demandes <span className="text-amber">en approche</span>
             </h2>
-            <span className="tag" style={{ letterSpacing: ".1em" }}>
+            <span className="tag">
               Propositions de la DAO, les plus récentes d&apos;abord
             </span>
           </div>
