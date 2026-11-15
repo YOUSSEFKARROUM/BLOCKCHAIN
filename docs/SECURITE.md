@@ -2,7 +2,7 @@
 
 Pour chaque exigence du sujet (§5) : **la notion**, **le code** qui l'implémente, **le test** qui la prouve et
 **le résultat réel**. Toutes les sorties de test sont dans [`tests/forge-test-output.txt`](tests/forge-test-output.txt)
-(145 tests, 0 échec).
+(157 tests, 0 échec).
 
 ---
 
@@ -51,8 +51,8 @@ publique. On utilise `AccessControl` d'OpenZeppelin : des **rôles** nommés, v�
 | `MINTER_ROLE`, `BURNER_ROLE` (CFDToken) | CampusFund **uniquement** | `mint`, `burn` |
 | `GOVERNANCE_ROLE` (CampusFund) | Governance **uniquement** | `approveMilestone`, `freezeCampaign` |
 | `PAUSER_ROLE` (CampusFund) | déployeur | `pause`, `unpause` |
-| `PARAMS_ROLE` (Governance) | déployeur | durée de vote (bornée), seuil de proposition, mode quadratique |
-| `DEFAULT_ADMIN_ROLE` jeton et CampusFund | **personne** : abandonné au déploiement | aucun |
+| `PARAMS_ROLE` (Governance) | **personne** : abandonné au déploiement | durée de vote, seuil de proposition, mode quadratique : **figés** |
+| `DEFAULT_ADMIN_ROLE` jeton, CampusFund et Governance | **personne** : abandonné au déploiement | aucun |
 | propriétaires (Treasury) | 3 adresses | `submit`, `approve`, `revoke`, `execute` |
 | bénéficiaire de la campagne | 1 adresse | `withdrawTranche` |
 
@@ -112,9 +112,11 @@ pour le protocole : environ **182 millions de dollars**. Le vote comptait les je
 l'exécution, pas à un instant figé.
 
 **Code.**
-- `Governance._createProposal` (l. 136) : `snapshot = block.number - 1`.
-- `Governance.castVote` (l. 161) : `raw = token.getPastVotes(msg.sender, p.snapshotBlock)`, sinon revert `NoVotingPower`.
-- Quorum (l. 147) : `getPastTotalSupply(snapshot)`.
+- `Governance._createProposal` (l. 157) : `snapshot = block.number - 1`.
+- `Governance.castVote` (l. 186) → `_votingPower` : pour un **gel**, `token.getPastVotes(votant, snapshotBlock)` ;
+  pour un **déblocage**, la contribution du votant à la campagne × 1000, **figée** (on ne contribue plus à une
+  campagne réussie). Aucun jeton emprunté ne compte dans les deux cas. Poids nul → revert `NoVotingPower`.
+- Quorum (l. 172) : 10 % de `getPastTotalSupply(snapshot)` (gel) ou des CFD émis par la campagne (déblocage).
 - Démo de la version faible : `contracts/demo/NaiveGovernance.sol` (`balanceOf` au moment du vote),
   `MockFlashLender.sol`, `FlashLoanAttacker.sol`.
 
@@ -150,7 +152,7 @@ Rapports bruts : `audit/slither-report-initial.txt` et `audit/slither-report-fin
 | Le déployeur ne garde aucun pouvoir sur les fonds | `Deploy.s.sol` | `test_DeployWiresRolesAndRenouncesAdmin` |
 | Pas de clés anvil publiques comme propriétaires sur Sepolia | `Deploy.s.sol` | `test_DeployRefusesWithoutOwnersOutsideAnvil` |
 | Front : secret Pinata côté serveur, CID filtré (anti path traversal), taille et débit limités, en-têtes HTTP | `frontend/src/app/api/ipfs` | requêtes réelles : `..%2F..%2Fpackage.json` → 400 |
-| Détection de fraude (bonus IA) | `scripts/anomaly_detection.py` | campagne sybil : 100/100 ; évaluation : précision 1,0, rappel 0,867 |
+| Détection de fraude (bonus IA) | `scripts/anomaly_detection.py` | campagne sybil : 100/100 ; sur données simulées (10 tirages) : rappel 0,88 (fraudes connues) et 0,38 (fraudes déguisées), précision ≈ 1 |
 
 ## 8. Limites connues (honnêteté)
 
@@ -161,3 +163,17 @@ Rapports bruts : `audit/slither-report-initial.txt` et `audit/slither-report-fin
 - **Pauseur et paramètres** gardés par le déployeur. Amélioration : les confier au multisig ou à un timelock.
 - **Script IA** : un fraudeur patient (montants variés, financement par des sources différentes) peut passer
   sous les seuils. Le score est une aide, pas une preuve.
+
+## Ajouts du 15/11/2026
+
+| Protection | Code | Test |
+|---|---|---|
+| Seuls les contributeurs d'une campagne votent ses tranches, avec un poids = leur mise | `Governance._votingPower` | `test_ReleaseVote_RevertsForNonContributor`, `test_ReleaseVote_WorksWithoutDelegation` |
+| Quorum d'un déblocage = 10 % des CFD de la campagne, pas de toute la plateforme | `Governance._createProposal` | `test_ReleaseQuorum_IsTenPercentOfCampaign` |
+| Une seule proposition ouverte par campagne et par type (pas de relance jusqu'à un vote creux) | `_lastProposal`, `ProposalAlreadyOpen` | `test_Release_RevertsWhileAnotherIsOpen`, `test_Release_RevertsWhileSucceededNotExecuted`, `test_Release_AllowedAgainAfterDefeat`, `test_Freeze_RevertsWhileAnotherIsOpen` |
+| Preuve obligatoire pour demander un déblocage | `proposeMilestoneRelease(…, proof)`, `MissingProof` | `test_Release_RevertsWithoutProof`, `test_Release_StoresProof` |
+| Paramètres de vote figés, plus d'admin de gouvernance | `Deploy.s.sol` | `test_DeployWiresRolesAndRenouncesAdmin` |
+| Lien de preuve affiché seulement s'il est sûr (`https:` ou IPFS) | `frontend/src/lib/proof.ts` | `campaignView.test.ts` (« refuse tout schéma dangereux ») |
+
+Slither relancé après ces changements : mêmes 13 résultats, aucun High ni Medium
+([TRAITEMENT_FINDINGS §5](audit/TRAITEMENT_FINDINGS.md)).

@@ -6,9 +6,9 @@ montrer à l'écran si on vous le demande.
 ## Gouvernance
 
 **1. Pourquoi un quorum de 10 % ?**
-Assez haut pour qu'un petit groupe ne décide pas seul de l'argent de tous ; assez bas pour être atteignable
-dans une communauté étudiante où beaucoup ne votent pas. Il est calculé sur l'offre **au snapshot**
-(`getPastTotalSupply`), donc impossible à manipuler pendant le vote. Testé exactement à la limite :
+Assez haut pour qu'un petit groupe ne décide pas seul ; assez bas pour être atteignable dans une communauté
+étudiante où beaucoup ne votent pas. Pour un déblocage, c'est 10 % des CFD **de la campagne** ; pour un gel,
+10 % de l'offre **au snapshot** (`getPastTotalSupply`). Dans les deux cas, impossible à manipuler pendant le vote. Testé exactement à la limite :
 `test_State_QuorumReachedExactly` et `testFuzz_QuorumRule`.
 
 **2. Que se passe-t-il sans snapshot ?**
@@ -22,7 +22,8 @@ de 0 (`NoVotingPower`). C'est l'attaque Beanstalk (avril 2022, environ 182 M$).
 proposition, y compris dans la même transaction (`test_FlashLoan_FailsEvenInProposalBlock`).
 
 **4. Pourquoi faut-il déléguer pour voter ?**
-C'est le standard ERC20Votes : l'historique des votes (checkpoints) coûte du gaz à chaque transfert, donc il
+Seulement pour les **gels**. Pour une tranche, on vote avec sa contribution à la campagne, sans rien faire de
+plus. Pour un gel, c'est le standard ERC20Votes : l'historique des votes (checkpoints) coûte du gaz à chaque transfert, donc il
 n'est tenu que pour ceux qui l'activent. Un contributeur qui ne vote jamais ne paie pas ce surcoût. On peut se
 déléguer à soi-même ou à quelqu'un de confiance (procuration).
 
@@ -40,9 +41,9 @@ N'importe qui, et seulement après la fin du vote. Personne n'a de privilège d'
 fait pas, un contributeur peut le faire.
 
 **8. Un contributeur de la campagne A peut voter sur la campagne B. Est-ce normal ?**
-Oui, c'est un choix : le CFD est une part de la communauté CampusFund, et tout membre doit pouvoir signaler une
-fraude n'importe où. Contrepartie : un gros contributeur pèse sur toutes les campagnes. Une alternative serait
-un jeton par campagne ; nous l'avons écartée pour garder une seule DAO lisible.
+Plus pour les tranches : seuls les contributeurs de B votent les déblocages de B, avec un poids égal à leur
+mise (`test_ReleaseVote_RevertsForNonContributor`). Pour un **gel**, oui, c'est voulu : tout membre de la
+communauté doit pouvoir signaler une fraude n'importe où, avec ses CFD délégués au snapshot.
 
 **9. Et si personne ne vote jamais ? Les fonds sont bloqués ?**
 Non, grâce à `cancelStale` : après 90 jours sans jalon approuvé, n'importe qui annule la campagne et les
@@ -134,7 +135,10 @@ Avec des canaris : des invariants volontairement faux (« aucune tranche n'est j
 **28. Comment marche le badge de risque IA ?**
 Un script Python lit les events et calcule 5 indicateurs : montants répétés, adresses financées par la même
 source, adresses neuves, pic de contributions, concentration. Il les combine à 60 % par des règles et à 40 %
-par un Isolation Forest. Sur un jeu de test jamais vu : précision 100 %, rappel 87 %. Il est indicatif :
+par un Isolation Forest. Sur des données **simulées par notre script** (10 tirages) : rappel 0,88 sur les fraudes
+connues, mais seulement 0,38 sur des fraudes déguisées (montants variés, contributions étalées, plusieurs
+sources), pour une précision proche de 1. Les règles seules ou la forêt seule font nettement moins bien que la
+combinaison. Aucune vraie fraude n'a servi de test. Il est indicatif :
 seule la DAO peut geler.
 
 **29. Pourquoi ne pas mettre le modèle d'IA dans le smart contract ?**
@@ -150,7 +154,7 @@ dizaines d'octets. Le JWT Pinata reste côté serveur, sinon n'importe qui pourr
 
 ### Bonus : questions pièges
 
-- **« Votre contrat est-il sûr à 100 % ? »** Non, et personne ne peut le garantir. Il est testé (145 tests,
+- **« Votre contrat est-il sûr à 100 % ? »** Non, et personne ne peut le garantir. Il est testé (157 tests,
   invariants, fuzzing), analysé (Slither) et ses limites sont documentées (SECURITE.md §8). Pour de vrais
   fonds, il faudrait un audit professionnel.
 - **« Avez-vous écrit le code vous-même ? »** La logique métier (jalons, machine d'états, multisig, snapshot,
@@ -159,3 +163,23 @@ dizaines d'octets. Le JWT Pinata reste côté serveur, sinon n'importe qui pourr
 - **« On peut quand même acheter du pouvoir de vote ? »** Oui, *avant* une proposition (le jeton est
   transférable). Le snapshot empêche seulement l'achat *après*. Une amélioration serait un délai entre la
   création et l'ouverture du vote.
+
+## Questions ajoutées après la revue du 15/11/2026
+
+**31. Un porteur peut-il relancer un vote rejeté jusqu'à ce qu'il passe ?**
+Pas tant qu'un vote du même type est en cours ou adopté sans être exécuté (`ProposalAlreadyOpen`). Après un
+rejet, il peut proposer à nouveau : c'est un nouveau vote, avec un nouveau quorum.
+
+**32. Que prouve la preuve d'un jalon ?**
+Le contrat vérifie seulement qu'un lien ou un CID est fourni (`MissingProof` sinon). C'est aux votants de
+l'ouvrir et de juger. Le front n'en fait un lien que s'il est en `https:` ou IPFS, pour éviter un lien piégé.
+
+**33. Le déployeur garde-t-il un pouvoir ?**
+Seulement `PAUSER_ROLE` : il peut mettre la plateforme en pause (y compris les remboursements) pendant un
+incident, mais aucune fonction ne lui permet de prendre des fonds. Les paramètres de vote et tous les rôles
+d'administration sont abandonnés au déploiement.
+
+**34. Pourquoi la couverture des branches n'est-elle pas de 100 % ?**
+Sur les 4 contrats, elle est de 97 % (75/77). Les deux branches restantes sont des refus dans un modificateur
+(`exists`, `pending`) : les tests y passent, mais `forge coverage` ne les attribue pas. Le total global (85 %)
+inclut les contrats de démonstration volontairement vulnérables.

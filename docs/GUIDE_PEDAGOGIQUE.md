@@ -16,7 +16,7 @@ correspondent à la version du dépôt (branche `youssef`).
 | **`msg.sender` / `msg.value`** | L'adresse qui appelle la fonction / les ETH envoyés avec l'appel. | « Qui frappe à la porte » et « combien il tend ». |
 | **ERC-20** | Standard de jeton : `balanceOf`, `transfer`, `approve`… | Le format standard d'une carte de fidélité : tous les magasins (portefeuilles, échanges) savent la lire. |
 | **Jeton de gouvernance (CFD)** | Un ERC-20 qui donne un droit de vote proportionnel à la détention. | Les parts d'une coopérative : plus vous avez apporté, plus votre voix pèse à l'assemblée. |
-| **Délégation** | Pour voter, on doit « activer » ses voix en les déléguant (à soi-même ou à quelqu'un). | S'inscrire sur la liste électorale : avoir l'âge de voter ne suffit pas, il faut être inscrit. On peut aussi donner procuration. |
+| **Délégation** | Pour voter sur un **gel**, on doit « activer » ses voix en les déléguant (à soi-même ou à quelqu'un). Pour une tranche, inutile : on vote avec sa contribution. | S'inscrire sur la liste électorale : avoir l'âge de voter ne suffit pas, il faut être inscrit. On peut aussi donner procuration. |
 | **Snapshot** | Le pouvoir de vote est lu à un bloc **passé**, figé à la création du vote. | La liste électorale est arrêtée à une date : quelqu'un qui s'installe dans la ville après cette date ne vote pas. |
 | **Quorum** | Participation minimale pour qu'un vote soit valable (ici 10 % des CFD). | Une assemblée générale ne peut pas décider si seulement 3 personnes sur 300 sont présentes. |
 | **Majorité** | Plus de « pour » que de « contre » parmi les votes exprimés. | Le vote à main levée : l'égalité ne suffit pas pour adopter. |
@@ -100,13 +100,14 @@ CampusFund. L'enum `Status` y est défini : `Active` (0, En cours), `Successful`
 | 21-26 | constantes | Quorum 10 % (`QUORUM_BPS = 1000`), durée de vote entre 1 h et 14 jours. |
 | 28-38 | enums | Deux types de proposition (déblocage, gel) et quatre états (Active, Rejetée, Adoptée, Exécutée). |
 | 40-54 | `struct Proposal` | Le **snapshotBlock** et le **quorum** sont figés à la création. `quadratic` aussi : changer le mode pendant un vote n'a aucun effet. `participation` compte les CFD bruts (pour le quorum). `forVotes`/`againstVotes` comptent les poids (pour la majorité). |
-| 109-119 | `proposeMilestoneRelease` | Seul le porteur ou le bénéficiaire, campagne Réussie, il reste un jalon à approuver. Le jalon visé est le prochain (`approved`). |
-| 122-128 | `proposeFreeze` | Tout détenteur d'au moins 100 CFD délégués **au bloc précédent** peut proposer un gel (anti-spam). |
-| 132-150 | `_createProposal` | **Le cœur anti-flash-loan** : `snapshot = block.number - 1` (l. 136). Le quorum est calculé sur l'offre de ce bloc (l. 147). La fin du vote = maintenant + durée. |
-| 155-171 | `castVote` | Checks : la proposition existe, le vote est ouvert, pas de double vote. **Poids = `getPastVotes(votant, snapshotBlock)`** (l. 161). S'il est nul, revert `NoVotingPower`. En mode quadratique, poids = √CFD. On marque `hasVoted` puis on additionne. |
-| 176-184 | `execute` | Appelable par **n'importe qui**, seulement si l'état est Adoptée (donc vote terminé). `executed = true` **avant** l'appel externe (CEI). Puis l'appel à `approveMilestone` ou `freezeCampaign`. |
-| 188-197 | `state` | Exécutée ? Sinon vote en cours tant que `now <= voteEnd`. Sinon Adoptée si **participation ≥ quorum** et **pour > contre**, sinon Rejetée. |
-| 206-226 | paramètres | Durée de vote (bornée), seuil de proposition, mode quadratique : réservés à `PARAMS_ROLE`. |
+| 119-131 | `proposeMilestoneRelease` | Seul le porteur ou le bénéficiaire, campagne Réussie, il reste un jalon à approuver, et une **preuve** (CID ou lien) est obligatoire (`MissingProof`, l. 123). Le jalon visé est le prochain (`approved`). |
+| 134-140 | `proposeFreeze` | Tout détenteur d'au moins 100 CFD délégués **au bloc précédent** peut proposer un gel (anti-spam). |
+| 146-175 | `_createProposal` | D'abord, **une seule proposition ouverte** par campagne et par type (l. 150-155, `ProposalAlreadyOpen`). Puis **le cœur anti-flash-loan** : `snapshot = block.number - 1` (l. 157). Le quorum (l. 172) vaut 10 % des CFD de la campagne pour un déblocage, 10 % de l'offre au snapshot pour un gel. La fin du vote = maintenant + durée. |
+| 180-196 | `castVote` | Checks : la proposition existe, le vote est ouvert, pas de double vote. **Poids = `_votingPower`** (l. 186) : contribution à la campagne × 1000 pour un déblocage, CFD délégués au snapshot pour un gel. S'il est nul, revert `NoVotingPower`. En mode quadratique, poids = √CFD. On marque `hasVoted` puis on additionne. |
+| 201-209 | `execute` | Appelable par **n'importe qui**, seulement si l'état est Adoptée (donc vote terminé). `executed = true` **avant** l'appel externe (CEI). Puis l'appel à `approveMilestone` ou `freezeCampaign`. |
+| 213-222 | `state` | Exécutée ? Sinon vote en cours tant que `now <= voteEnd`. Sinon Adoptée si **participation ≥ quorum** et **pour > contre**, sinon Rejetée. |
+| 225-236 | `votingPower`, `_votingPower` | Lecture du poids qu'aurait un votant (utilisée par le front) et règle du poids : contribution figée pour un déblocage, `getPastVotes` au snapshot pour un gel. |
+| 245-265 | paramètres | Durée de vote (bornée), seuil de proposition, mode quadratique : réservés à `PARAMS_ROLE`, **abandonné au déploiement** : ces paramètres sont donc figés. |
 
 ## 2.5 `contracts/Treasury.sol` — le multisig 2-sur-3
 
@@ -162,7 +163,7 @@ CampusFund. L'enum `Status` y est défini : `Active` (0, En cours), `Successful`
 3. **Règles** (`rule_score`) : somme pondérée sur 100, atténuée s'il y a moins de 8 contributions (peu de preuves = prudence). Plus 10 si le porteur a la même source que ses contributeurs.
 4. **Isolation Forest** (`ForestScorer`) : entraîné sur un jeu de référence synthétique. Le score est la part des campagnes de référence « plus normales » que celle-ci.
 5. **Score final** = 60 % règles + 40 % forêt. Faible < 35 ≤ Moyen < 50 ≤ Élevé.
-6. **Mode `--demo`** : 330 campagnes synthétiques dont 30 fraudes (sybil, pic coordonné, auto-financement). On utilise **trois graines différentes** pour calibrer, entraîner et évaluer, afin de ne pas tricher. Résultat réel : précision 1,0, rappel 0,867. Les auto-financements ne sont détectés que 6 fois sur 10 : c'est la limite connue.
+6. **Mode `--demo`** : 330 campagnes synthétiques dont 30 fraudes (sybil, pic coordonné, auto-financement). On utilise **trois graines différentes** pour calibrer, entraîner et évaluer, afin de ne pas tricher. Sur 10 tirages : rappel 0,88 ± 0,02 pour une précision de 1,00. Le mode compare aussi des **fraudes déguisées** (montants variés, contributions étalées, plusieurs sources) : le rappel tombe à 0,38 ± 0,11. Les règles seules et la forêt seule font nettement moins bien que la combinaison. Ce sont des données simulées : c'est la limite à dire au jury.
 
 ## 2.10 Le front-end (`frontend/src/`)
 
@@ -176,10 +177,12 @@ CampusFund. L'enum `Status` y est défini : `Active` (0, En cours), `Successful`
 | `lib/hooks.ts` | Chargement des campagnes, propositions, métadonnées IPFS et scores IA. Rechargement après chaque transaction. |
 | `app/api/ipfs/route.ts` | Envoi des métadonnées sur Pinata **côté serveur** (le JWT n'atteint jamais le navigateur), avec validation, limite de taille et limite de débit. |
 | `app/api/ipfs/[cid]/route.ts` | Lecture d'un CID (cache local puis passerelle IPFS). Le CID est validé par une expression régulière, ce qui empêche `../` (path traversal). |
-| `app/page.tsx` | Écran 1 : liste, badge de risque, progression, jalons. |
+| `app/page.tsx` | Écran 1 : tableau des départs (cartes sous 768 px), fonctionnement en quatre portes. |
 | `app/campaign/[id]/page.tsx` | Écran 2 : détail, contribution, clôture, remboursement. |
-| `app/governance/page.tsx` | Écran 3 : pouvoir de vote, délégation, propositions, quorum, vote, exécution, gel. |
-| `app/creator/page.tsx` | Écran 4 : création (IPFS puis transaction), demande de déblocage, retrait. |
+| `app/governance/page.tsx` | Écran 3 : pouvoir de vote, délégation (gels), propositions avec preuve, quorum, vote, exécution, gel. |
+| `app/creator/page.tsx` | Écran 4 : création (IPFS puis transaction), demande de déblocage avec preuve, retrait. |
+| `app/securite/page.tsx` | Écran 5 : tests, attaques rejouées, scanner IA, contrats déployés (avec date de mesure). |
+| `lib/campaignView.ts`, `lib/proof.ts` | Logique d'affichage pure (statuts, jalons, liens de preuve sûrs), testée par Vitest. |
 | `components/DevTimeTravel.tsx` | Sur anvil uniquement : boutons « +1 h / +1 j » pour la démo (impossible sur un vrai réseau). |
 
 ---
@@ -187,10 +190,10 @@ CampusFund. L'enum `Status` y est défini : `Active` (0, En cours), `Successful`
 # Partie 3 — Parcours complet d'un euro… pardon, d'un ETH
 
 1. Le Club Robotique crée sa campagne. Les métadonnées partent sur IPFS et seul le CID est stocké on-chain.
-2. Alice envoie 1,5 ETH avec `contribute`. Elle reçoit 1500 CFD, puis se délègue ses voix.
+2. Alice envoie 1,5 ETH avec `contribute`. Elle reçoit 1500 CFD (et se les délègue, pour pouvoir voter les gels).
 3. L'échéance passe et quelqu'un appelle `finalize` : 4,5 ETH ≥ 4 ETH, la campagne est Réussie.
-4. Le porteur appelle `proposeMilestoneRelease`. Le snapshot est pris au bloc précédent.
-5. Alice vote « pour » avec 1500 CFD. Le quorum de 10 % est atteint et le vote se termine.
+4. Le porteur appelle `proposeMilestoneRelease` avec la preuve du jalon (facture en IPFS).
+5. Alice vote « pour » avec le poids de sa mise, 1500 CFD. Le quorum (10 % des 4500 CFD de la campagne) est atteint.
 6. N'importe qui appelle `execute`. Governance appelle `approveMilestone`.
 7. Le bénéficiaire appelle `withdrawTranche` : 40 % de 4,5 ETH = 1,8 ETH, dont 0,036 ETH vers la
    trésorerie et 1,764 ETH vers le club.
