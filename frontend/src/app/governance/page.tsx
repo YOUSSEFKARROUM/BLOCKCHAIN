@@ -1,233 +1,99 @@
 "use client";
 
-import { Button } from "@/components/shadcn/button";
-import { Input } from "@/components/shadcn/input";
-import { Label } from "@/components/shadcn/label";
-import { useEffect, useState } from "react";
-import { EmptyState, ErrorBox, ProgressBar, Spinner, TxFeedback } from "@/components/ui";
-import { getContracts } from "@/lib/contracts";
-import { PROPOSAL_STATE_LABELS, type Proposal } from "@/lib/data";
-import { cfd, dateTime, percent, relative, shortAddress } from "@/lib/format";
-import { useCampaigns, useChainTime, useMetadata, useProposals } from "@/lib/hooks";
-import { useTx } from "@/lib/useTx";
-import { useWeb3 } from "@/lib/web3";
+import { EmptyPanel, ErrorPanel, LoadingFlaps } from "@/components/board/Feedback";
+import { SignPanel } from "@/components/board/SignPanel";
+import { FreezeForm } from "@/components/governance/FreezeForm";
+import { ProposalCard } from "@/components/governance/ProposalCard";
+import { Radar } from "@/components/governance/Radar";
+import { VotingPower } from "@/components/governance/VotingPower";
+import { CHAIN } from "@/config/chain";
+import { useCampaigns, useChainTime, useProposals } from "@/lib/hooks";
+import { formatPeriod, useProtocol } from "@/lib/useProtocol";
 
-const STATE_TONES = ["tone-info", "tone-neutral", "tone-ok", "tone-solid"];
-
+/** Tour de contrôle = gouvernance de la DAO (maquette Governance). */
 export default function GovernancePage() {
   const { data: proposals, error, isLoading } = useProposals();
   const { data: campaigns } = useCampaigns();
-
-  return (
-    <div className="space-y-10 pt-6">
-      <header className="grid gap-6 md:grid-cols-[1.4fr_1fr] md:items-end">
-        <div>
-          <h1 className="display-l two-tone">
-            Tableau de vote.
-            <span>Un vote pondéré par les CFD.</span>
-          </h1>
-          <p className="mt-3 max-w-xl text-sm text-[var(--ink-soft)]">
-            Le poids de votre vote est votre nombre de CFD <strong>délégués au bloc précédant la création</strong> de la
-            proposition (snapshot) : acheter ou emprunter des CFD ensuite ne sert à rien. Une proposition est adoptée si
-            au moins <strong>10 % des CFD</strong> ont voté (quorum) et s&apos;il y a <strong>plus de « pour » que de « contre »</strong>.
-          </p>
-        </div>
-        <VotingPower />
-      </header>
-
-      <FreezeForm campaignIds={(campaigns ?? []).filter((c) => c.status <= 1).map((c) => c.id)} />
-
-      {isLoading && !proposals && <Spinner label="Lecture des propositions…" />}
-      {error && <ErrorBox>{error}</ErrorBox>}
-      {proposals?.length === 0 && <EmptyState title="Aucune proposition pour l'instant" />}
-      <div className="space-y-4">
-        {proposals?.map((p) => (
-          <ProposalCard key={p.id} proposal={p} cid={campaigns?.[p.campaignId]?.metadataCID} />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-/** Solde CFD, pouvoir de vote actuel et bouton de délégation. */
-function VotingPower() {
-  const { readProvider, account, refreshKey } = useWeb3();
-  const [info, setInfo] = useState<{ balance: bigint; votes: bigint; delegatee: string } | null>(null);
-  const { status, send, busy } = useTx();
-
-  useEffect(() => {
-    if (!account) return;
-    const { token } = getContracts(readProvider);
-    Promise.all([token.balanceOf(account), token.getVotes(account), token.delegates(account)])
-      .then(([balance, votes, delegatee]) => setInfo({ balance, votes, delegatee }))
-      .catch(() => setInfo(null));
-  }, [readProvider, account, refreshKey]);
-
-  if (!account) {
-    return <div className="card p-5 text-sm text-[var(--ink-soft)]">Connectez MetaMask pour voir votre pouvoir de vote.</div>;
-  }
-  const selfDelegated = info?.delegatee.toLowerCase() === account.toLowerCase();
-  return (
-    <div className="card space-y-3 p-5 text-sm">
-      <div className="flex justify-between">
-        <span className="text-[var(--ink-soft)]">Solde</span>
-        <strong>{info ? cfd(info.balance) : "…"} CFD</strong>
-      </div>
-      <div className="flex justify-between">
-        <span className="text-[var(--ink-soft)]">Pouvoir de vote actuel</span>
-        <strong>{info ? cfd(info.votes) : "…"} CFD</strong>
-      </div>
-      {info && !selfDelegated && info.balance > 0n && (
-        <>
-          <p className="tone-warn rounded-xl p-3 text-xs">
-            Vos CFD ne sont pas délégués : ils ne comptent pour aucun vote. La délégation s&apos;applique aux
-            propositions créées <em>après</em> elle.
-          </p>
-          <Button type="button" className="w-full" disabled={busy} onClick={() => void send((s) => getContracts(s).token.delegate(account))}>
-            Activer mon pouvoir de vote (me déléguer)
-          </Button>
-        </>
-      )}
-      <TxFeedback status={status} />
-    </div>
-  );
-}
-
-function FreezeForm({ campaignIds }: { campaignIds: number[] }) {
-  const [open, setOpen] = useState(false);
-  const [campaignId, setCampaignId] = useState<number | "">("");
-  const [reason, setReason] = useState("");
-  const { status, send, busy } = useTx();
-  if (!open) {
-    return (
-      <Button type="button" variant="outline" onClick={() => setOpen(true)}>
-        Signaler une campagne suspecte (proposer un gel)
-      </Button>
-    );
-  }
-  return (
-    <form
-      className="card grid gap-3 p-5 md:grid-cols-[180px_1fr_auto] md:items-end"
-      onSubmit={(e) => {
-        e.preventDefault();
-        if (campaignId === "" || reason.trim().length < 5) return;
-        void send((s) => getContracts(s).governance.proposeFreeze(campaignId, reason.trim()));
-      }}
-    >
-      <div>
-        <Label htmlFor="fc">
-          Campagne
-        </Label>
-        <select id="fc" className="input" value={campaignId} onChange={(e) => setCampaignId(e.target.value === "" ? "" : Number(e.target.value))}>
-          <option value="">Choisir…</option>
-          {campaignIds.map((id) => (
-            <option key={id} value={id}>
-              n°{id}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div>
-        <Label htmlFor="fr">
-          Motif (visible par tous)
-        </Label>
-        <Input id="fr" value={reason} maxLength={200} onChange={(e) => setReason(e.target.value)} placeholder="Ex. : adresses toutes financées par le même compte" />
-      </div>
-      <Button type="submit" disabled={busy || campaignId === "" || reason.trim().length < 5}>
-        Proposer le gel
-      </Button>
-      <p className="text-xs text-[var(--ink-soft)] md:col-span-3">Il faut au moins 100 CFD délégués avant ce bloc (anti-spam).</p>
-      <div className="md:col-span-3">
-        <TxFeedback status={status} />
-      </div>
-    </form>
-  );
-}
-
-function ProposalCard({ proposal: p, cid }: { proposal: Proposal; cid: string | undefined }) {
-  const { readProvider, account, refreshKey } = useWeb3();
   const now = useChainTime();
-  const { metadata } = useMetadata(cid);
-  const { status, send, busy } = useTx();
-  const [mine, setMine] = useState<{ voted: boolean; weight: bigint } | null>(null);
+  const rules = useProtocol();
+  const list = proposals ?? [];
 
-  useEffect(() => {
-    if (!account) return;
-    const { governance, token } = getContracts(readProvider);
-    Promise.all([governance.hasVoted(p.id, account), token.getPastVotes(account, p.snapshotBlock)])
-      .then(([voted, weight]) => setMine({ voted, weight }))
-      .catch(() => setMine(null));
-  }, [readProvider, account, p.id, p.snapshotBlock, refreshKey]);
-
-  const cast = p.forVotes + p.againstVotes;
-  const forShare = percent(p.forVotes, cast);
-  const quorumProgress = percent(p.participation, p.quorum === 0n ? 1n : p.quorum);
-  const title = p.ptype === 0 ? `Débloquer le jalon ${p.milestoneIndex + 1}` : "Geler la campagne";
+  const signs = [
+    { big: `${rules.quorumPercent} %`, text: "de quorum, sur l'offre au snapshot" },
+    { big: "POUR > CONTRE", text: "majorité stricte, l'égalité vaut rejet" },
+    { big: formatPeriod(rules.votingPeriodSeconds).toUpperCase(), text: `de vote sur ce déploiement ${CHAIN.name} (1 h à 14 j possibles)` },
+    { big: `${rules.proposalThresholdCfd} CFD`, text: "minimum pour proposer un gel" },
+  ];
 
   return (
-    <article className="card">
-      <div className="grid gap-6 p-5 md:grid-cols-[1.3fr_1fr]">
-        <div>
-          <div className="flex flex-wrap items-center gap-2 text-xs">
-            <span className="font-mono text-[var(--ink-soft)]">#{p.id}</span>
-            <span className={`pill ${STATE_TONES[p.state]}`}>{PROPOSAL_STATE_LABELS[p.state]}</span>
-            {p.quadratic && <span className="pill tone-neutral">Vote quadratique</span>}
-          </div>
-          <h3 className="font-display mt-3 text-xl">
-            {title} : {metadata?.name ?? `campagne n°${p.campaignId}`}
-          </h3>
-          <p className="mt-1 text-sm text-[var(--text-2)]">{p.description}</p>
-          <p className="mt-3 text-xs text-[var(--ink-soft)]">
-            Proposée par {shortAddress(p.proposer)}, solde figé au bloc {p.snapshotBlock}, fin du vote {dateTime(p.voteEnd)} (
-            {relative(p.voteEnd, now)})
+    <main>
+      <section className="wrap flex flex-wrap items-center gap-12 pb-[72px] pt-7">
+        <div className="flex min-w-0 flex-[999_1_560px] flex-col gap-[26px]">
+          <span className="tag text-amber" style={{ fontSize: 13 }}>
+            Gouvernance · DAO à snapshot
+          </span>
+          <h1 className="display display-hero">
+            Tour de
+            <br />
+            <span className="text-amber">contrôle.</span>
+          </h1>
+          <p className="m-0 max-w-[560px] text-[20px] text-soft" style={{ textWrap: "pretty" }}>
+            Aucune tranche ne décolle sans votre autorisation. Vous votez avec les CFD que vous déteniez au bloc qui précède la proposition : des
+            jetons achetés ou empruntés après coup ne comptent pas.
           </p>
+          <VotingPower rate={rules.rate} />
         </div>
+        <Radar proposals={list} />
+      </section>
 
-        <div className="space-y-3 text-sm">
-          <div>
-            <div className="mb-1 flex justify-between text-xs">
-              <span className="font-semibold text-[var(--ok)]">Pour {cfd(p.forVotes)}</span>
-              <span className="font-semibold text-[var(--danger)]">Contre {cfd(p.againstVotes)}</span>
+      <SignPanel variant="band" aria-labelledby="rules-title">
+        <h2 id="rules-title" className="sr-only">
+          Règles du vote
+        </h2>
+        <div className="wrap grid gap-x-8 gap-y-[22px] py-[30px]" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(240px, 100%), 1fr))" }}>
+          {signs.map((s) => (
+            <div key={s.text}>
+              <div className="display text-[52px]" style={{ lineHeight: 0.9, fontStretch: "70%" }}>
+                {s.big}
+              </div>
+              <div className="text-[15px] font-semibold">{s.text}</div>
             </div>
-            <div className="track flex h-1.5 overflow-hidden rounded-full">
-              <div className="bg-[var(--ok)]" style={{ width: `${cast === 0n ? 0 : forShare}%` }} />
-              <div className="bg-[var(--danger)]" style={{ width: `${cast === 0n ? 0 : 100 - forShare}%` }} />
-            </div>
-          </div>
-          <div>
-            <div className="mb-1 flex justify-between text-xs text-[var(--ink-soft)]">
-              <span>Quorum (10 % des CFD au snapshot)</span>
-              <span>
-                {cfd(p.participation)} / {cfd(p.quorum)} CFD
-              </span>
-            </div>
-            <ProgressBar value={quorumProgress} tone={quorumProgress >= 100 ? "ok" : "accent"} />
-          </div>
+          ))}
+        </div>
+      </SignPanel>
 
-          {p.state === 0 && account && mine && !mine.voted && mine.weight > 0n && (
-            <div className="flex gap-2">
-              <Button type="button" variant="success" className="flex-1" disabled={busy} onClick={() => void send((s) => getContracts(s).governance.castVote(p.id, true))}>
-                Voter pour
-              </Button>
-              <Button type="button" variant="destructive" className="flex-1" disabled={busy} onClick={() => void send((s) => getContracts(s).governance.castVote(p.id, false))}>
-                Voter contre
-              </Button>
-            </div>
+      <div className="wrap flex flex-col gap-16 pb-28 pt-[88px]">
+        <section aria-labelledby="approche-title" className="flex flex-col gap-6">
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <h2 id="approche-title" className="display display-l">
+              Demandes <span className="text-amber">en approche</span>
+            </h2>
+            <span className="tag" style={{ letterSpacing: ".1em" }}>
+              Propositions de la DAO, les plus récentes d&apos;abord
+            </span>
+          </div>
+          <FreezeForm campaigns={(campaigns ?? []).filter((c) => c.status <= 1)} thresholdCfd={rules.proposalThresholdCfd} />
+          {isLoading && !proposals && <LoadingFlaps label="Lecture des propositions" />}
+          {error && <ErrorPanel title="Propositions indisponibles">{error}</ErrorPanel>}
+          {proposals?.length === 0 && (
+            <EmptyPanel title="Ciel dégagé">Aucune proposition pour l&apos;instant. Un porteur ouvre un vote depuis son plan de vol.</EmptyPanel>
           )}
-          {p.state === 0 && mine?.voted && <p className="text-xs font-semibold text-[var(--ok)]">Vous avez voté sur cette proposition.</p>}
-          {p.state === 0 && mine && !mine.voted && mine.weight === 0n && (
-            <p className="text-xs text-[var(--ink-soft)]">
-              Vous n&apos;aviez aucun CFD délégué au bloc {p.snapshotBlock} : pas de pouvoir de vote sur cette proposition.
+          {list.map((p) => (
+            <ProposalCard key={p.id} proposal={p} campaign={campaigns?.[p.campaignId]} now={now} quorumPercent={rules.quorumPercent} feePercent={rules.feePercent} />
+          ))}
+        </section>
+
+        <SignPanel className="flex flex-col gap-3.5" aria-labelledby="snapshot-title">
+          <div className="flex flex-col gap-3.5" style={{ padding: "clamp(28px, 4vw, 52px)" }}>
+            <h2 id="snapshot-title" className="display" style={{ fontSize: "clamp(40px, 5.4vw, 80px)" }}>
+              Pourquoi un snapshot ?
+            </h2>
+            <p className="m-0 max-w-[760px] text-[19px] font-medium">
+              Un attaquant qui emprunte des CFD par flash loan les obtient dans le bloc courant. Le vote lit le bloc précédent : son poids est nul.
             </p>
-          )}
-          {p.state === 2 && (
-            <Button type="button" className="w-full" disabled={busy} onClick={() => void send((s) => getContracts(s).governance.execute(p.id))}>
-              Exécuter la décision
-            </Button>
-          )}
-          <TxFeedback status={status} />
-        </div>
+          </div>
+        </SignPanel>
       </div>
-    </article>
+    </main>
   );
 }
