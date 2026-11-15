@@ -1,16 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { Clock } from "@/components/board/Clock";
 import { Flap } from "@/components/board/Flap";
 import { ArrowIcon } from "@/components/board/Icons";
 import { CHAIN } from "@/config/chain";
-import { useReducedMotion } from "@/lib/useReducedMotion";
 
-const FIXED_ROWS = ["LES FONDS", "DÉCOLLENT"];
-const THIRD_ROW = ["SUR VOTE.", "PAR JALON"];
-const ALTERNATE_MS = 4000;
+/** Le titre se retourne une seule fois à l'arrivée : une boucle détournerait l'attention de la lecture. */
+const HEADLINE = [
+  { text: "LES FONDS", color: "var(--ticket)" },
+  { text: "DÉCOLLENT", color: "var(--ticket)" },
+  { text: "SUR VOTE.", color: "var(--amber)" },
+];
 
 function HeroRow({ text, color, delayOf }: { text: string; color: string; delayOf: (i: number) => number }) {
   return (
@@ -22,24 +23,12 @@ function HeroRow({ text, color, delayOf }: { text: string; color: string; delayO
   );
 }
 
-/** Titre en palettes : la troisième ligne alterne toutes les 4 s (sauf mouvement réduit). */
 function FlapHeadline() {
-  const isReduced = useReducedMotion();
-  const [tick, setTick] = useState(0);
-
-  useEffect(() => {
-    if (isReduced) return;
-    const id = setInterval(() => setTick((t) => t + 1), ALTERNATE_MS);
-    return () => clearInterval(id);
-  }, [isReduced]);
-
-  const third = THIRD_ROW[tick % THIRD_ROW.length];
   return (
-    <h1 aria-label="Les fonds décollent sur vote, par jalon." className="m-0 flex flex-col gap-2" style={{ perspective: 900 }}>
-      {FIXED_ROWS.map((row, ri) => (
-        <HeroRow key={row} text={row} color="var(--ticket)" delayOf={(ci) => 0.15 + ri * 0.28 + ci * 0.07} />
+    <h1 aria-label="Les fonds décollent sur vote." className="m-0 flex flex-col gap-2" style={{ perspective: 900 }}>
+      {HEADLINE.map((row, ri) => (
+        <HeroRow key={row.text} text={row.text} color={row.color} delayOf={(ci) => 0.15 + ri * 0.28 + ci * 0.07} />
       ))}
-      <HeroRow text={third} color="var(--amber)" delayOf={(ci) => (tick === 0 ? 0.71 + ci * 0.07 : ci * 0.06)} />
     </h1>
   );
 }

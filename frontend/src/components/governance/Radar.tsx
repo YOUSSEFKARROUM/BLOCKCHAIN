@@ -29,11 +29,13 @@ const RADAR_BG = {
 /** Radar animé : un écho par proposition ouverte ou adoptée en attente d'exécution. */
 export function Radar({ proposals }: { proposals: Proposal[] }) {
   const blips = proposals.filter((p) => p.state === 0 || p.state === 2);
-  const label =
-    blips.length === 0 ? "Radar : aucune proposition en approche" : `Radar : ${blips.length} proposition${blips.length > 1 ? "s" : ""} en approche`;
+  const open = proposals.filter((p) => p.state === 0).length;
+  const toExecute = proposals.filter((p) => p.state === 2).length;
+  const plural = (n: number, word: string) => `${n} ${word}${n > 1 ? "s" : ""}`;
+  const summary = `${plural(open, "vote")} ouvert${open > 1 ? "s" : ""} · ${toExecute} à exécuter`;
   return (
-    <div className="flex flex-[1_1_360px] justify-center">
-      <div role="img" aria-label={label} className="relative aspect-square overflow-hidden rounded-full" style={{ width: "min(420px, 82vw)", ...RADAR_BG }}>
+    <div className="flex flex-[1_1_360px] flex-col items-center gap-4">
+      <div role="img" aria-label={`Radar : ${summary}`} className="relative aspect-square overflow-hidden rounded-full" style={{ width: "min(420px, 82vw)", ...RADAR_BG }}>
         <div
           aria-hidden="true"
           className="db-sweep absolute inset-0 rounded-full"
@@ -55,6 +57,9 @@ export function Radar({ proposals }: { proposals: Proposal[] }) {
           );
         })}
       </div>
+      <p className="mono m-0 text-[15px] font-bold text-ticket" aria-hidden="true">
+        <span className="text-amber">{plural(open, "vote")} ouvert{open > 1 ? "s" : ""}</span> · <span className="text-ok">{toExecute} à exécuter</span>
+      </p>
     </div>
   );
 }

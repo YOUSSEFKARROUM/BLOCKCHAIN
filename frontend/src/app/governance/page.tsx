@@ -37,8 +37,8 @@ export default function GovernancePage() {
             <span className="text-amber">contrôle.</span>
           </h1>
           <p className="m-0 max-w-[560px] text-[20px] text-soft" style={{ textWrap: "pretty" }}>
-            Aucune tranche ne décolle sans votre autorisation. Vous votez avec les CFD que vous déteniez au bloc qui précède la proposition : des
-            jetons achetés ou empruntés après coup ne comptent pas.
+            Les contributeurs d&apos;une campagne votent ses tranches. Toute la communauté vote les gels, avec les CFD délégués avant la
+            proposition : des jetons achetés ou empruntés après coup ne comptent pas.
           </p>
           <VotingPower rate={rules.rate} />
         </div>
