@@ -42,20 +42,46 @@ export function useProposals(): Loadable<Proposal[]> {
   return useChainData(() => loadProposals(getContracts(readProvider).governance), [readProvider]);
 }
 
-/** Heure de la blockchain (≠ heure du PC sur anvil après un saut dans le temps). */
+const CHAIN_TIME_SYNC_MS = 30_000; // relecture du dernier bloc
+const CHAIN_TIME_TICK_MS = 15_000; // avancée locale entre deux relectures
+
+/**
+ * Heure de la blockchain (≠ heure du PC sur anvil après un saut dans le temps).
+ * On mesure l'écart avec l'horloge du PC au dernier bloc, puis on avance localement : les comptes à
+ * rebours et les statuts (« vote en cours » → « adoptée ») évoluent sans attendre une transaction.
+ */
 export function useChainTime(): number {
   const { readProvider, refreshKey } = useWeb3();
+  const [offset, setOffset] = useState(0); // secondes : heure de la chaîne - heure du PC
   const [now, setNow] = useState(() => Math.floor(Date.now() / 1000));
+
   useEffect(() => {
     let cancelled = false;
-    readProvider
-      .getBlock("latest")
-      .then((b) => !cancelled && b && setNow(Number(b.timestamp)))
-      .catch(() => undefined);
+    const sync = () =>
+      readProvider
+        .getBlock("latest")
+        .then((b) => {
+          if (cancelled || !b) return;
+          const local = Date.now() / 1000;
+          // sur anvil le temps peut être en avance (saut) ; on ne recule jamais sous le dernier bloc
+          setOffset(Math.max(0, Number(b.timestamp) - local));
+        })
+        .catch(() => undefined);
+    void sync();
+    const id = setInterval(sync, CHAIN_TIME_SYNC_MS);
     return () => {
       cancelled = true;
+      clearInterval(id);
     };
   }, [readProvider, refreshKey]);
+
+  useEffect(() => {
+    const update = () => setNow(Math.floor(Date.now() / 1000 + offset));
+    update();
+    const id = setInterval(update, CHAIN_TIME_TICK_MS);
+    return () => clearInterval(id);
+  }, [offset]);
+
   return now;
 }
 
