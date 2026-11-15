@@ -184,7 +184,8 @@ contract GovernanceTest is GovernanceBase {
         governance.castVote(pid, true);
     }
 
-    function test_Vote_RevertsWithoutDelegation() public {
+    /// @dev Déblocage : le poids vient de la contribution à la campagne, la délégation n'est pas nécessaire.
+    function test_ReleaseVote_WorksWithoutDelegation() public {
         uint256 id = _createCampaign();
         address dave = makeAddr("dave");
         vm.deal(dave, 10 ether);
@@ -193,9 +194,56 @@ contract GovernanceTest is GovernanceBase {
         vm.warp(block.timestamp + DURATION);
         fund.finalize(id);
         uint256 pid = _proposeRelease(id);
+        vm.prank(dave);
+        governance.castVote(pid, true);
+        assertEq(governance.getProposal(pid).forVotes, 10_000 ether);
+    }
+
+    /// @dev Gel : vote de toute la communauté, il faut des CFD délégués au snapshot.
+    function test_FreezeVote_RevertsWithoutDelegation() public {
+        uint256 id = _createCampaign();
+        address dave = makeAddr("dave");
+        vm.deal(dave, 1 ether);
+        vm.prank(dave);
+        fund.contribute{value: 1 ether}(id); // 1000 CFD, non délégués
+        vm.prank(alice);
+        fund.contribute{value: 1 ether}(id);
+        _nextBlock();
+        vm.prank(alice);
+        uint256 pid = governance.proposeFreeze(id, "Campagne suspecte");
         vm.expectRevert(Governance.NoVotingPower.selector);
         vm.prank(dave);
         governance.castVote(pid, true);
+    }
+
+    /// @dev Un détenteur de CFD qui n'a rien versé à CETTE campagne ne vote pas sur ses tranches.
+    function test_ReleaseVote_RevertsForNonContributor() public {
+        uint256 id = _successfulCampaign(); // alice 6 ETH + bob 4 ETH
+        uint256 other = _createCampaign();
+        vm.prank(carol);
+        fund.contribute{value: 5 ether}(other); // carol : 5000 CFD délégués, mais pas dans la campagne `id`
+        uint256 pid = _proposeRelease(id);
+        assertEq(governance.votingPower(pid, carol), 0);
+        vm.expectRevert(Governance.NoVotingPower.selector);
+        vm.prank(carol);
+        governance.castVote(pid, true);
+    }
+
+    /// @dev Quorum d'un déblocage = 10 % des CFD de la campagne, pas de toute la plateforme.
+    function test_ReleaseQuorum_IsTenPercentOfCampaign() public {
+        uint256 id = _successfulCampaign(); // 10 ETH => 10 000 CFD
+        uint256 other = _createCampaign();
+        vm.prank(carol);
+        fund.contribute{value: 5 ether}(other); // l'offre totale grossit, le quorum de `id` ne bouge pas
+        uint256 pid = _proposeRelease(id);
+        assertEq(governance.getProposal(pid).quorum, 1_000 ether);
+        assertEq(governance.votingPower(pid, alice), 6_000 ether);
+        assertEq(governance.votingPower(pid, bob), 4_000 ether);
+    }
+
+    function test_VotingPower_RevertsForUnknownProposal() public {
+        vm.expectRevert(Governance.ProposalNotFound.selector);
+        governance.votingPower(42, alice);
     }
 
     function test_Vote_RevertsTwice() public {

@@ -318,6 +318,11 @@ contract CampusFund is ICampusFund, AccessControl, ReentrancyGuard, Pausable {
         return (c.milestoneCount, c.approvedMilestones, c.withdrawnMilestones);
     }
 
+    /// @notice ETH collectés par une campagne (base du quorum des votes de déblocage).
+    function raisedOf(uint256 id) external view exists(id) returns (uint256) {
+        return _campaigns[id].raised;
+    }
+
     /// @notice Montant (frais inclus) de la tranche `index` d'une campagne.
     function trancheAmount(uint256 id, uint8 index) external view exists(id) returns (uint256) {
         Campaign storage c = _campaigns[id];

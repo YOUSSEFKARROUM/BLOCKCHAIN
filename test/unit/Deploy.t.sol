@@ -38,6 +38,10 @@ contract DeployTest is Test {
     function test_DeployRefusesWithoutOwnersOutsideAnvil() public {
         vm.chainId(11155111);
         vm.setEnv("DEPLOYMENT_PATH", "./deployments/test-deploy.json");
+        // forge charge le .env local : on efface les propriétaires pour que le test ne dépende pas de la machine
+        vm.setEnv("TREASURY_OWNER_1", "");
+        vm.setEnv("TREASURY_OWNER_2", "");
+        vm.setEnv("TREASURY_OWNER_3", "");
         Deploy script = new Deploy();
         vm.expectRevert();
         script.run();

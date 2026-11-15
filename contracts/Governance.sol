@@ -8,13 +8,17 @@ import {ICampusFund} from "./interfaces/ICampusFund.sol";
 import {IVoting} from "./interfaces/IVoting.sol";
 
 /// @title Governance - la DAO de CampusFund
-/// @notice Les détenteurs de CFD votent sur deux types de décisions :
-///         - MilestoneRelease : débloquer la prochaine tranche d'une campagne réussie ;
-///         - FreezeCampaign   : geler une campagne suspecte (elle passe en Annulée, remboursements ouverts).
-/// @dev Anti-manipulation : le poids d'un vote = CFD délégués AU BLOC DU SNAPSHOT (bloc précédant
-///      la création de la proposition). Acheter ou emprunter des CFD après coup ne donne aucun poids.
-///      Quorum = 10 % de l'offre totale au snapshot. Majorité = plus de "pour" que de "contre".
-///      Exécution possible seulement après la fin du vote, par n'importe qui.
+/// @notice Deux types de décisions :
+///         - MilestoneRelease : débloquer la prochaine tranche d'une campagne réussie. Seuls les
+///           contributeurs de CETTE campagne votent, avec un poids = leur contribution x 1000.
+///           Quorum = 10 % des CFD émis par la campagne.
+///         - FreezeCampaign : geler une campagne suspecte (elle passe en Annulée, remboursements ouverts).
+///           Toute la communauté vote, avec ses CFD délégués au snapshot. Quorum = 10 % de l'offre au snapshot.
+/// @dev Anti-manipulation :
+///      - déblocage : les contributions d'une campagne réussie sont figées (on ne contribue plus après
+///        l'échéance), donc ni achat ni prêt de jetons ne change le poids ;
+///      - gel : poids = CFD délégués au bloc PRÉCÉDANT la création (snapshot), insensible aux prêts flash.
+///      Majorité = plus de "pour" que de "contre". Exécution après la fin du vote, par n'importe qui.
 contract Governance is IVoting, AccessControl {
     using Math for uint256;
 
@@ -144,7 +148,10 @@ contract Governance is IVoting, AccessControl {
         p.snapshotBlock = snapshot;
         p.voteEnd = voteEnd;
         p.quadratic = quadraticVoting;
-        p.quorum = (token.getPastTotalSupply(snapshot) * QUORUM_BPS) / BPS;
+        uint256 base = ptype == ProposalType.MilestoneRelease
+            ? fund.raisedOf(campaignId) * token.RATE() // CFD émis par la campagne
+            : token.getPastTotalSupply(snapshot); // offre totale au snapshot
+        p.quorum = (base * QUORUM_BPS) / BPS;
         p.description = description;
         emit ProposalCreated(id, ptype, campaignId, milestoneIndex, msg.sender, snapshot, voteEnd, description);
     }
@@ -158,7 +165,7 @@ contract Governance is IVoting, AccessControl {
         if (block.timestamp > p.voteEnd) revert VotingClosed();
         if (hasVoted[id][msg.sender]) revert AlreadyVoted();
 
-        uint256 raw = token.getPastVotes(msg.sender, p.snapshotBlock);
+        uint256 raw = _votingPower(p, msg.sender);
         if (raw == 0) revert NoVotingPower();
         uint256 weight = p.quadratic ? raw.sqrt() : raw;
 
@@ -194,6 +201,20 @@ contract Governance is IVoting, AccessControl {
             return ProposalState.Succeeded;
         }
         return ProposalState.Defeated;
+    }
+
+    /// @notice Poids brut (avant racine carrée éventuelle) qu'aurait `voter` sur la proposition `id`.
+    function votingPower(uint256 id, address voter) external view returns (uint256) {
+        if (id >= proposalCount) revert ProposalNotFound();
+        return _votingPower(_proposals[id], voter);
+    }
+
+    /// @dev Déblocage : contribution figée à la campagne x taux. Gel : CFD délégués au snapshot.
+    function _votingPower(Proposal storage p, address voter) private view returns (uint256) {
+        if (p.ptype == ProposalType.MilestoneRelease) {
+            return fund.contributionOf(p.campaignId, voter) * token.RATE();
+        }
+        return token.getPastVotes(voter, p.snapshotBlock);
     }
 
     function getProposal(uint256 id) external view returns (Proposal memory) {
