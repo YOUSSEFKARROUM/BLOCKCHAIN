@@ -2,278 +2,550 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Direction : noir, monochrome, typographie système. La couleur est réservée au sens
-   (statut, risque, vote). Voir docs/DESIGN.md pour les règles et leurs raisons. */
+/* Design « Tableau des départs » : un tableau d'aéroport à palettes.
+   Nuit + ambre pour la signalétique, billet clair pour les cartes d'embarquement. */
 :root {
   color-scheme: dark;
-  --bg: #000000;
-  --surface: #131315;
-  --surface-2: #1c1c1e;
-  --line: rgba(255, 255, 255, 0.1);
-  --text: #f5f5f7;
-  --text-2: #a1a1a6;
-  --text-3: #6e6e73;
-  --ok: #30d158;
-  --warn: #ffd60a;
-  --danger: #ff453a;
-  --info: #64d2ff;
-
-  /* Jetons de shadcn/ui (HSL), alignés sur la palette ci-dessus */
-  --background: 0 0% 0%;
-  --foreground: 240 6% 96%;
-  --card: 240 4% 8%;
-  --card-foreground: 240 6% 96%;
-  --popover: 240 3% 11%;
-  --popover-foreground: 240 6% 96%;
-  --primary: 240 6% 96%;
-  --primary-foreground: 0 0% 0%;
-  --secondary: 240 3% 13%;
-  --secondary-foreground: 240 6% 96%;
-  --muted: 240 3% 13%;
-  --muted-foreground: 240 3% 64%;
-  --accent: 240 3% 17%;
-  --accent-foreground: 240 6% 96%;
-  --destructive: 4 100% 61%;
-  --destructive-foreground: 0 0% 0%;
-  --border: 0 0% 100% / 0.1;
-  --input: 0 0% 100% / 0.14;
-  --ring: 0 0% 100%;
-  --radius: 0.85rem;
-
-
-  /* Anciens noms, conservés pour les pages existantes */
-  --paper: var(--bg);
-  --paper-raised: var(--surface);
-  --ink: var(--text);
-  --ink-soft: var(--text-2);
-  --rule: var(--line);
-  --accent: var(--text);
-
+  --night: #09090a;
+  --amber: #ffb800;
+  --amber-hi: #ffd04a;
+  --ticket: #f2f0e8;
+  --tile: #232326;
+  --tile-2: #1c1c1f;
+  --gray: #a9a9b2;
+  --soft: #d9d7cf;
+  --ok: #4cd964;
+  --alert: #ff6a3d;
+  --line: #5a5a62;
+  --panel: #0e0e10;
+  --panel-line: #3a3a40;
   --press: 100ms ease-out;
-  --settle: 260ms cubic-bezier(0.32, 0.72, 0, 1);
-}
-
-* {
-  border-color: hsl(var(--border));
 }
 
 html {
-  background: var(--bg);
-  color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
-  font-size: 100%;
+  background-color: var(--night);
+  color: var(--ticket);
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: 17px;
   line-height: 1.5;
-  font-optical-sizing: auto;
   -webkit-font-smoothing: antialiased;
   scroll-behavior: smooth;
-  scroll-padding-top: 5rem;
+  scroll-padding-top: 1.5rem;
 }
 
 body {
-  font-feature-settings: "tnum" 1; /* chiffres alignés pour les montants */
+  margin: 0;
+  background-color: var(--night);
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 14px 14px;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
 }
 
 :focus-visible {
-  outline: 2px solid var(--text);
+  outline: 3px solid var(--amber);
   outline-offset: 2px;
-  border-radius: 6px;
+}
+.on-amber :focus-visible,
+.on-ticket :focus-visible {
+  outline-color: var(--night);
 }
 
-/* Titres : interlettrage négatif qui grandit avec la taille, interlignage serré */
-.font-display,
-.display-xl,
-.display-l {
-  font-family: var(--font-display), -apple-system, "Segoe UI Variable Display", system-ui, sans-serif;
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
 }
-.font-display {
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.12;
-}
-.display-xl {
-  font-size: clamp(2.5rem, 5.4vw, 4.75rem);
-  font-weight: 800;
-  letter-spacing: -0.045em;
-  line-height: 0.98;
-}
-.display-l {
-  font-size: clamp(1.9rem, 3.6vw, 2.9rem);
-  font-weight: 800;
-  letter-spacing: -0.035em;
-  line-height: 1.04;
-}
-.two-tone > span {
-  display: block;
-  color: var(--text-3);
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 @layer components {
-  .card {
-    @apply rounded-[20px] border;
-    background: var(--surface);
-    border-color: var(--line);
+  /* ---------- Typographie ---------- */
+  .mono {
+    font-family: var(--font-mono), ui-monospace, monospace;
   }
-  /* Tuile de la mosaïque */
-  .tile {
-    @apply relative overflow-hidden rounded-[28px] border p-6 md:p-7;
-    background: var(--surface);
-    border-color: var(--line);
-    transition: border-color var(--settle);
+  /* Étiquette de signalétique : petite, espacée (tracking positif sur petit corps) */
+  .tag {
+    font: 400 12px/1.4 var(--font-mono), ui-monospace, monospace;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gray);
   }
-  .tile:hover {
-    border-color: rgba(255, 255, 255, 0.24);
+  .tag-b {
+    font: 700 12px/1.4 var(--font-mono), ui-monospace, monospace;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
   }
-  .tile-label {
-    @apply text-[13px] font-medium;
-    color: var(--text-2);
+  /* Grands titres condensés : interlignage serré, largeur réduite */
+  .display {
+    margin: 0;
+    font-family: var(--font-display), system-ui, sans-serif;
+    font-weight: 900;
+    font-stretch: 68%;
+    line-height: 0.86;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
   }
+  .display-hero {
+    font-size: clamp(56px, 10.4vw, 170px);
+    font-stretch: 64%;
+    line-height: 0.8;
+  }
+  .display-xl {
+    font-size: clamp(48px, 7.6vw, 120px);
+  }
+  .display-l {
+    font-size: clamp(44px, 6.4vw, 100px);
+  }
+  .display-m {
+    font-size: clamp(40px, 5.4vw, 76px);
+    font-stretch: 70%;
+    line-height: 0.9;
+  }
+  .display-s {
+    font-size: clamp(30px, 3.4vw, 46px);
+    font-stretch: 72%;
+    line-height: 0.95;
+  }
+  .wrap {
+    max-width: 1328px;
+    margin: 0 auto;
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+  @media (max-width: 480px) {
+    .wrap {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+  }
+
+  /* ---------- Palettes ---------- */
+  .db-tile {
+    background: linear-gradient(#2a2a2e 0, #232326 48.5%, #050506 48.5%, #050506 51.5%, #1c1c1f 51.5%, #17171a 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 6px 14px rgba(0, 0, 0, 0.6);
+  }
+  .db-flap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-weight: 700;
+    animation: dbflipA 0.7s cubic-bezier(0.3, 0.9, 0.3, 1) both;
+    backface-visibility: hidden;
+  }
+  .db-flap-b {
+    animation-name: dbflipB;
+  }
+  .db-flap-still {
+    animation: none;
+  }
+  /* Palettes vides qui tournent en attendant la donnée */
+  .db-flap-loading {
+    animation: dbflipLoop 1.4s cubic-bezier(0.3, 0.9, 0.3, 1) infinite;
+  }
+  .db-row {
+    animation: dbflipA 0.6s cubic-bezier(0.3, 0.9, 0.3, 1) both;
+    transform-origin: 50% 0;
+    transition: filter 0.15s ease, transform var(--press);
+  }
+  .db-row:hover {
+    filter: brightness(1.5);
+  }
+  .db-row:active {
+    transform: scale(0.995);
+    filter: brightness(1.7);
+  }
+  .db-blink {
+    animation: dbblink 1s steps(2, jump-none) infinite;
+  }
+  .db-plane {
+    animation: dbplane 7s linear infinite;
+  }
+  .db-bob {
+    animation: dbbob 2.4s ease-in-out infinite;
+  }
+  .db-pass {
+    animation: dbpass 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+  .db-sweep {
+    animation: dbsweep 4s linear infinite;
+  }
+  .db-ping {
+    animation: dbping 4s ease-out infinite;
+  }
+  .db-bar {
+    transition: width 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .db-seg {
+    transition: flex-grow 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .lg-flip {
+    animation: lgflip 6s ease-in-out infinite;
+  }
+
+  /* ---------- Boutons : le retour visuel part à l'appui ---------- */
   .btn {
-    @apply inline-flex min-h-[2.75rem] select-none items-center justify-center gap-2 rounded-full px-5 text-sm font-semibold
-      disabled:cursor-not-allowed disabled:opacity-40;
-    transition: transform var(--press), background-color var(--settle), opacity var(--settle);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 60px;
+    padding: 0 28px;
+    border: 0;
+    border-radius: 6px;
+    font: 700 14px/1.2 var(--font-mono), ui-monospace, monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, filter 0.15s ease;
   }
-  /* Le retour visuel part à l'appui, pas au relâchement */
+  .btn:hover:not(:disabled) {
+    transform: translateY(-3px);
+  }
   .btn:active:not(:disabled) {
     transform: scale(0.97);
+    transition-duration: 100ms;
   }
-  .btn-primary {
-    @apply btn;
-    background: var(--text);
-    color: #000;
+  .btn:disabled {
+    background: #2a2a2e;
+    color: var(--gray);
+    border-color: transparent;
+    cursor: not-allowed;
   }
-  .btn-primary:hover:not(:disabled) {
-    background: #ffffff;
+  .btn-sm {
+    min-height: 48px;
+    padding: 0 20px;
+    font-size: 13px;
+    letter-spacing: 0.1em;
   }
-  .btn-ghost {
-    @apply btn border;
-    border-color: var(--line);
-    background: rgba(255, 255, 255, 0.04);
-    color: var(--text);
+  .btn-amber {
+    background: var(--amber);
+    color: var(--night);
   }
-  .btn-ghost:hover:not(:disabled) {
-    background: rgba(255, 255, 255, 0.1);
+  .btn-amber:hover:not(:disabled) {
+    background: var(--amber-hi);
+  }
+  .btn-dark {
+    background: var(--night);
+    color: var(--ticket);
+  }
+  .btn-dark:hover:not(:disabled) {
+    background: #2a2a2e;
   }
   .btn-ok {
-    @apply btn;
     background: var(--ok);
-    color: #000;
+    color: var(--night);
   }
-  .btn-danger {
-    @apply btn;
-    background: var(--danger);
-    color: #000;
+  .btn-ok:hover:not(:disabled) {
+    filter: brightness(1.15);
   }
-  .input {
-    @apply w-full rounded-xl border px-3.5 py-2.5 text-sm outline-none;
-    background: var(--surface-2);
-    border-color: var(--line);
-    color: var(--text);
-    transition: border-color var(--settle), box-shadow var(--settle);
+  .btn-tile {
+    background: var(--tile-2);
+    color: var(--ticket);
+    border: 1.5px solid var(--line);
   }
-  .input::placeholder {
-    color: var(--text-3);
+  .btn-tile:hover:not(:disabled) {
+    filter: brightness(1.3);
   }
-  .input:focus {
-    border-color: rgba(255, 255, 255, 0.55);
-    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
+  .btn-ghost {
+    background: transparent;
+    color: var(--ticket);
+    border: 1.5px solid var(--line);
   }
-  .label {
-    @apply mb-1.5 block text-[13px] font-medium;
-    color: var(--text-2);
+  .btn-ghost:hover:not(:disabled) {
+    border-color: var(--amber);
+    color: var(--amber);
+    transform: none;
   }
-  .eyebrow {
-    @apply text-[13px] font-medium;
-    color: var(--text-2);
+  .btn-outline-dark {
+    background: transparent;
+    color: var(--night);
+    border: 2px solid var(--night);
   }
-  .pill {
-    @apply inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-semibold;
+  .btn-outline-dark:hover:not(:disabled) {
+    background: rgba(9, 9, 10, 0.1);
   }
-  /* Teintes sémantiques : fond à 16 %, texte dans la couleur */
-  .tone-ok {
-    background: rgba(48, 209, 88, 0.16);
-    color: var(--ok);
+  .db-chip {
+    min-height: 46px;
+    border-radius: 6px;
+    border: 2px solid var(--night);
+    font: 700 15px var(--font-mono), ui-monospace, monospace;
+    cursor: pointer;
+    transition: filter 0.15s ease, transform var(--press);
   }
-  .tone-warn {
-    background: rgba(255, 214, 10, 0.14);
-    color: var(--warn);
+  .db-chip:hover {
+    filter: brightness(1.3);
   }
-  .tone-danger {
-    background: rgba(255, 69, 58, 0.16);
-    color: var(--danger);
+  .db-chip:active {
+    transform: scale(0.96);
   }
-  .tone-info {
-    background: rgba(100, 210, 255, 0.14);
-    color: var(--info);
+  .db-step {
+    width: 46px;
+    height: 46px;
+    flex: none;
+    border-radius: 6px;
+    border: 1.5px solid var(--line);
+    background: var(--night);
+    color: var(--ticket);
+    font: 700 22px var(--font-mono), ui-monospace, monospace;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.15s ease, color 0.15s ease, transform var(--press);
   }
-  .tone-neutral {
-    background: rgba(255, 255, 255, 0.08);
-    color: var(--text-2);
+  .db-step:hover:not(:disabled) {
+    background: var(--amber);
+    color: var(--night);
   }
-  .tone-solid {
-    background: var(--text);
-    color: #000;
+  .db-step:active:not(:disabled) {
+    transform: scale(0.94);
   }
-  .track {
-    background: rgba(255, 255, 255, 0.12);
+  .db-step:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
   }
-  /* Barre flottante translucide : le contenu défile dessous */
-  .chrome {
-    background: rgba(0, 0, 0, 0.62);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    backdrop-filter: blur(20px) saturate(180%);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  .nav-link {
+    padding: 14px 0;
+    text-decoration: none;
+    color: var(--ticket);
+    transition: color 0.15s ease;
   }
-  .section {
-    @apply grid gap-x-12 gap-y-8 py-16 md:grid-cols-[minmax(0,1fr)_minmax(0,2.1fr)] md:py-24;
-    border-top: 1px solid var(--line);
+  .nav-link:hover,
+  .nav-link[aria-current="page"] {
+    color: var(--amber);
   }
-  .row-link {
-    transition: background-color var(--settle), transform var(--press);
+  .nav-link:active {
+    opacity: 0.6;
   }
-  .row-link:hover {
-    background: rgba(255, 255, 255, 0.045);
+
+  /* ---------- Champs ---------- */
+  .field {
+    width: 100%;
+    min-width: 0;
+    border: 0;
+    border-radius: 8px;
+    padding: 0 20px;
+    min-height: 60px;
+    color: var(--ticket);
+    font: 700 17px var(--font-mono), ui-monospace, monospace;
+    letter-spacing: 0.02em;
   }
-  .row-link:active {
-    transform: scale(0.995);
-    background: rgba(255, 255, 255, 0.07);
+  textarea.field {
+    padding: 16px 20px;
+    min-height: 130px;
+    line-height: 1.5;
+    font-weight: 400;
+    resize: vertical;
+    background: #1c1c1f;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 6px 14px rgba(0, 0, 0, 0.6);
+  }
+  .field::placeholder {
+    color: #6e6e78;
+  }
+  .field-bare {
+    flex: 1 1 0;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    color: var(--amber);
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-weight: 700;
+  }
+  .field:focus,
+  .field-bare:focus {
+    outline: 3px solid var(--amber);
+    outline-offset: 2px;
+  }
+  select.field {
+    appearance: none;
+    cursor: pointer;
+  }
+  select.field option {
+    background: var(--tile);
+    color: var(--ticket);
+  }
+
+  .panel {
+    border: 1.5px solid var(--panel-line);
+    border-radius: 10px;
+    background: var(--panel);
   }
 }
 
+@keyframes dbflipA {
+  0% {
+    transform: rotateX(-92deg);
+    opacity: 0;
+  }
+  55% {
+    transform: rotateX(14deg);
+    opacity: 1;
+  }
+  100% {
+    transform: rotateX(0);
+    opacity: 1;
+  }
+}
+/* Jumeau de dbflipA : changer de nom d'animation rejoue le retournement */
+@keyframes dbflipB {
+  0% {
+    transform: rotateX(-92deg);
+    opacity: 0;
+  }
+  55% {
+    transform: rotateX(14deg);
+    opacity: 1;
+  }
+  100% {
+    transform: rotateX(0);
+    opacity: 1;
+  }
+}
+@keyframes dbflipLoop {
+  0%,
+  100% {
+    transform: rotateX(0);
+    opacity: 0.55;
+  }
+  45% {
+    transform: rotateX(-88deg);
+    opacity: 0.2;
+  }
+  70% {
+    transform: rotateX(12deg);
+    opacity: 0.55;
+  }
+}
+@keyframes dbblink {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.2;
+  }
+}
+@keyframes dbplane {
+  0% {
+    left: -6%;
+  }
+  100% {
+    left: 104%;
+  }
+}
+@keyframes dbbob {
+  0%,
+  100% {
+    transform: translate(-50%, -4px);
+  }
+  50% {
+    transform: translate(-50%, 4px);
+  }
+}
+@keyframes dbpass {
+  from {
+    opacity: 0;
+    transform: translateY(40px) rotate(-1.5deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes dbsweep {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes dbping {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.8);
+  }
+  12% {
+    opacity: 1;
+    transform: scale(1.5);
+  }
+  40% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+}
+@keyframes lgflip {
+  0%,
+  70%,
+  100% {
+    transform: rotateX(0);
+  }
+  78% {
+    transform: rotateX(-88deg);
+  }
+  86% {
+    transform: rotateX(12deg);
+  }
+  92% {
+    transform: rotateX(0);
+  }
+}
+
+/* Mouvement réduit : plus aucune animation, seuls restent les changements de couleur */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-property: opacity, background-color, border-color, color !important;
-    transition-duration: 150ms !important;
+  .db-flap,
+  .db-flap-loading,
+  .db-row,
+  .db-blink,
+  .db-plane,
+  .db-bob,
+  .db-pass,
+  .db-sweep,
+  .db-ping,
+  .lg-flip {
+    animation: none !important;
   }
+  .db-flap-loading {
+    opacity: 0.55;
+  }
+  .db-bob {
+    transform: translate(-50%, 0);
+  }
+  .db-plane {
+    left: 48%;
+  }
+  .db-bar,
+  .db-seg {
+    transition: none !important;
+  }
+  .btn,
+  .btn:hover:not(:disabled),
   .btn:active:not(:disabled),
-  .row-link:active {
-    transform: none;
-  }
-}
-
-@media (prefers-reduced-transparency: reduce) {
-  .chrome {
-    background: #000;
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
+  .db-row:active,
+  .db-chip:active,
+  .db-step:active:not(:disabled) {
+    transform: none !important;
   }
 }
 
 @media (prefers-contrast: more) {
   :root {
-    --line: rgba(255, 255, 255, 0.4);
-    --text-2: #d1d1d6;
-    --text-3: #aeaeb2;
-    --surface: #000;
+    --line: #a9a9b2;
+    --panel-line: #a9a9b2;
+    --gray: #d9d7cf;
   }
-  .chrome {
-    background: #000;
-    border-bottom-color: #fff;
+  .db-tile {
+    outline: 1px solid var(--gray);
   }
 }
