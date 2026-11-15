@@ -116,7 +116,7 @@ contract Handler is Test {
         if (!ok) return;
         (address creator,) = fund.campaignParties(id);
         vm.prank(creator);
-        governance.proposeMilestoneRelease(id, "jalon");
+        governance.proposeMilestoneRelease(id, "jalon", "ipfs://preuve");
         done["proposeRelease"]++;
     }
 

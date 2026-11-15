@@ -55,6 +55,7 @@ contract Governance is IVoting, AccessControl {
         uint256 participation; // CFD bruts ayant voté (sert au quorum, quel que soit le mode)
         uint256 quorum; // CFD bruts nécessaires, calculé au snapshot
         string description;
+        string proof; // CID IPFS ou lien de la preuve du jalon (MilestoneRelease uniquement)
     }
 
     CFDToken public immutable token;
@@ -100,6 +101,7 @@ contract Governance is IVoting, AccessControl {
     error NoVotingPower();
     error NotSucceeded(ProposalState state);
     error ProposalAlreadyOpen(uint256 id);
+    error MissingProof();
 
     constructor(address admin, CFDToken token_, ICampusFund fund_, uint256 votingPeriod_, uint256 threshold_) {
         token = token_;
@@ -113,16 +115,19 @@ contract Governance is IVoting, AccessControl {
     // ================================================================== Propositions
 
     /// @notice Le porteur (ou le bénéficiaire) d'une campagne réussie demande le déblocage du prochain jalon.
-    function proposeMilestoneRelease(uint256 campaignId, string calldata description)
+    /// @param proof CID IPFS ou lien vers la preuve du jalon (facture, vidéo…), affiché aux votants.
+    function proposeMilestoneRelease(uint256 campaignId, string calldata description, string calldata proof)
         external
         returns (uint256 id)
     {
+        if (bytes(proof).length == 0) revert MissingProof();
         (address creator, address beneficiary) = fund.campaignParties(campaignId);
         if (msg.sender != creator && msg.sender != beneficiary) revert NotCampaignOwner();
         if (fund.campaignStatus(campaignId) != ICampusFund.Status.Successful) revert CampaignNotSuccessful();
         (uint8 count, uint8 approved,) = fund.milestoneProgress(campaignId);
         if (approved >= count) revert AllMilestonesApproved();
         id = _createProposal(ProposalType.MilestoneRelease, campaignId, approved, description);
+        _proposals[id].proof = proof;
     }
 
     /// @notice Tout détenteur d'au moins `proposalThreshold` votes peut demander le gel d'une campagne.

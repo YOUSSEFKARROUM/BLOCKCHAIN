@@ -141,11 +141,11 @@ contract SeedDemo is Script {
 
         // Astronomie : demande de déblocage du jalon 1, votes favorables
         vm.startBroadcast(_key(4));
-        uint256 p0 = governance.proposeMilestoneRelease(ASTRONOMIE, "Telescope commande : facture du fournisseur");
+        uint256 p0 = governance.proposeMilestoneRelease(ASTRONOMIE, "Telescope commande : facture du fournisseur", "demo://facture-telescope.pdf");
         vm.stopBroadcast();
         // Robotique : demande de déblocage du jalon 1, un vote contre
         vm.startBroadcast(_key(3));
-        uint256 p1 = governance.proposeMilestoneRelease(ROBOTIQUE, "Composants achetes : factures en ligne");
+        uint256 p1 = governance.proposeMilestoneRelease(ROBOTIQUE, "Composants achetes : factures en ligne", "demo://factures-composants.pdf");
         vm.stopBroadcast();
 
         _vote(5, p0, true);
@@ -176,7 +176,7 @@ contract SeedDemo is Script {
         vm.startBroadcast(_key(3));
         fund.withdrawTranche(ROBOTIQUE);
         // Propositions laissées OUVERTES pour la démo en direct
-        governance.proposeMilestoneRelease(ROBOTIQUE, "Prototype termine : video de l'homologation");
+        governance.proposeMilestoneRelease(ROBOTIQUE, "Prototype termine : video de l'homologation", "demo://video-homologation.mp4");
         vm.stopBroadcast();
 
         vm.startBroadcast(_key(5));

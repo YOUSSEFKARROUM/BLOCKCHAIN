@@ -11,6 +11,7 @@ contract GovernanceBase is BaseTest {
 
     uint256 internal constant VOTING_PERIOD = 3 days;
     uint256 internal constant THRESHOLD = 100 ether; // 100 CFD
+    string internal constant PROOF = "ipfs://preuve-de-test";
 
     function setUp() public virtual override {
         super.setUp();
@@ -42,7 +43,7 @@ contract GovernanceBase is BaseTest {
     function _proposeRelease(uint256 campaignId) internal returns (uint256 pid) {
         _nextBlock();
         vm.prank(creator);
-        pid = governance.proposeMilestoneRelease(campaignId, "Jalon atteint : facture du materiel");
+        pid = governance.proposeMilestoneRelease(campaignId, "Jalon atteint : facture du materiel", PROOF);
     }
 
     /// @dev Propose, fait voter alice (6000 CFD) pour, attend la fin, exécute.

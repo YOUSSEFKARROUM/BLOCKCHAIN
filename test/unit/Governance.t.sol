@@ -75,21 +75,21 @@ contract GovernanceTest is GovernanceBase {
         uint256 id = _successfulCampaign();
         _nextBlock();
         vm.prank(beneficiary);
-        governance.proposeMilestoneRelease(id, "x");
+        governance.proposeMilestoneRelease(id, "x", PROOF);
     }
 
     function test_ProposeRelease_RevertsForStranger() public {
         uint256 id = _successfulCampaign();
         vm.expectRevert(Governance.NotCampaignOwner.selector);
         vm.prank(alice);
-        governance.proposeMilestoneRelease(id, "x");
+        governance.proposeMilestoneRelease(id, "x", PROOF);
     }
 
     function test_ProposeRelease_RevertsIfNotSuccessful() public {
         uint256 id = _createCampaign();
         vm.expectRevert(Governance.CampaignNotSuccessful.selector);
         vm.prank(creator);
-        governance.proposeMilestoneRelease(id, "x");
+        governance.proposeMilestoneRelease(id, "x", PROOF);
     }
 
     function test_ProposeRelease_RevertsWhenAllApproved() public {
@@ -99,7 +99,7 @@ contract GovernanceTest is GovernanceBase {
         _passRelease(id);
         vm.expectRevert(Governance.AllMilestonesApproved.selector);
         vm.prank(creator);
-        governance.proposeMilestoneRelease(id, "x");
+        governance.proposeMilestoneRelease(id, "x", PROOF);
     }
 
     // ================================================================ proposeFreeze
@@ -246,7 +246,7 @@ contract GovernanceTest is GovernanceBase {
         uint256 pid = _proposeRelease(id);
         vm.expectRevert(abi.encodeWithSelector(Governance.ProposalAlreadyOpen.selector, pid));
         vm.prank(creator);
-        governance.proposeMilestoneRelease(id, "Relance");
+        governance.proposeMilestoneRelease(id, "Relance", PROOF);
     }
 
     function test_Release_RevertsWhileSucceededNotExecuted() public {
@@ -257,7 +257,7 @@ contract GovernanceTest is GovernanceBase {
         _endVote(); // adoptée mais pas encore exécutée
         vm.expectRevert(abi.encodeWithSelector(Governance.ProposalAlreadyOpen.selector, pid));
         vm.prank(creator);
-        governance.proposeMilestoneRelease(id, "Relance");
+        governance.proposeMilestoneRelease(id, "Relance", PROOF);
     }
 
     function test_Release_AllowedAgainAfterDefeat() public {
@@ -280,6 +280,20 @@ contract GovernanceTest is GovernanceBase {
         governance.proposeFreeze(id, "Encore");
         // un déblocage reste possible en parallèle : les deux types sont indépendants
         _proposeRelease(id);
+    }
+
+    function test_Release_RevertsWithoutProof() public {
+        uint256 id = _successfulCampaign();
+        _nextBlock();
+        vm.expectRevert(Governance.MissingProof.selector);
+        vm.prank(creator);
+        governance.proposeMilestoneRelease(id, "Jalon atteint", "");
+    }
+
+    function test_Release_StoresProof() public {
+        uint256 id = _successfulCampaign();
+        uint256 pid = _proposeRelease(id);
+        assertEq(governance.getProposal(pid).proof, PROOF);
     }
 
     function test_VotingPower_RevertsForUnknownProposal() public {
