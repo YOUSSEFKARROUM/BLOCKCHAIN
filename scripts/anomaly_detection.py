@@ -21,7 +21,7 @@ Utilisation
     python scripts/anomaly_detection.py --demo
         génère un jeu de démonstration avec fraudes simulées et mesure la qualité de la détection
     python scripts/anomaly_detection.py --rpc http://127.0.0.1:8545 --deployment deployments/31337.json \\
-        --out frontend/public/risk-scores.json
+        (écrit frontend/public/risk-scores-<chainId>.json : un fichier par réseau)
         analyse les vraies campagnes on-chain (anvil ou Sepolia)
 """
 
@@ -402,7 +402,7 @@ def first_funders(w3, start: int, end: int, targets: set[str]) -> dict[str, str]
     return funders
 
 
-def analyse_chain(rpc: str, deployment_path: str, out_path: str) -> None:
+def analyse_chain(rpc: str, deployment_path: str, out_path: str | None) -> None:
     from web3 import Web3  # import tardif : le mode --demo n'a pas besoin de web3
 
     w3 = Web3(Web3.HTTPProvider(rpc))
@@ -435,6 +435,8 @@ def analyse_chain(rpc: str, deployment_path: str, out_path: str) -> None:
                    "levels": {"Faible": "< 35", "Moyen": "35 - 50", "Élevé": ">= 50"}},
         "campaigns": {str(k): v for k, v in results.items()},
     }
+    # Un fichier par réseau : les scores d'anvil n'écrasent plus ceux de Sepolia (et inversement).
+    out_path = out_path or str(ROOT / "frontend" / "public" / f"risk-scores-{deployment['chainId']}.json")
     Path(out_path).parent.mkdir(parents=True, exist_ok=True)
     Path(out_path).write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
     for c_id, r in results.items():
@@ -447,7 +449,7 @@ def main() -> None:
     parser.add_argument("--demo", action="store_true", help="jeu synthétique avec fraudes simulées + évaluation")
     parser.add_argument("--rpc", default="http://127.0.0.1:8545")
     parser.add_argument("--deployment", default=str(ROOT / "deployments" / "31337.json"))
-    parser.add_argument("--out", default=str(ROOT / "frontend" / "public" / "risk-scores.json"))
+    parser.add_argument("--out", default=None, help="par défaut : frontend/public/risk-scores-<chainId>.json")
     args = parser.parse_args()
     if args.demo:
         run_demo()

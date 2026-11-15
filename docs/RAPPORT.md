@@ -61,7 +61,7 @@ attribue un score de risque à chaque campagne, affiché dans l'interface.
  │      └──────────────▶ Treasury (multisig 2/3)               │
  └─────────────────────────────────────────────────────────────┘
           ▲ events
- ┌────────┴─────────┐  risk-scores.json
+ ┌────────┴─────────┐  risk-scores-<id>.json
  │ anomaly_detection │──────────────────▶ badge dans le front
  │ (Python, sklearn) │
  └──────────────────┘

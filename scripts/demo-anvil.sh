@@ -30,6 +30,6 @@ forge script scripts/foundry/SeedDemo.s.sol --sig "step3()" --rpc-url "$RPC" --b
 
 echo "== 6/6 Synchronisation du front-end (adresses + ABI) et score de risque IA"
 node frontend/scripts/sync-contracts.mjs
-python scripts/anomaly_detection.py --rpc "$RPC" --deployment deployments/31337.json --out frontend/public/risk-scores.json
+python scripts/anomaly_detection.py --rpc "$RPC" --deployment deployments/31337.json
 
 echo "Terminé. Lancez le front : cd frontend && npm run dev"

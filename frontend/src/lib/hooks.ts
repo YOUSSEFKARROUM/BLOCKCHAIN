@@ -108,7 +108,7 @@ export function useRiskScores(campusFund: string | undefined): { scores: Record<
   const [file, setFile] = useState<RiskFile | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
-    fetch("/risk-scores.json", { cache: "no-store" })
+    fetch(`/risk-scores-${CHAIN_ID}.json`, { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : null))
       .then((f: RiskFile | null) => setFile(f))
       .catch(() => setFile(null))

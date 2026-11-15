@@ -30,6 +30,6 @@ Invoke-Step "5/6 +1 h : exécution des votes, retraits, propositions ouvertes" {
 }
 Invoke-Step "6/6 Synchronisation du front-end et score de risque IA" {
     node frontend/scripts/sync-contracts.mjs
-    python scripts/anomaly_detection.py --rpc $RPC --deployment deployments/31337.json --out frontend/public/risk-scores.json
+    python scripts/anomaly_detection.py --rpc $RPC --deployment deployments/31337.json
 }
 Write-Host "Terminé. Lancez le front : cd frontend ; npm run dev"
