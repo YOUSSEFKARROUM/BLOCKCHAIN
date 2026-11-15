@@ -264,4 +264,10 @@ contract TreasuryTest is Test {
         evil.submitAndExecute(0.1 ether);
         assertEq(address(t).balance, 5 ether);
     }
+
+    function test_Approve_RevertsForUnknownTransaction() public {
+        vm.expectRevert(Treasury.TxNotFound.selector);
+        vm.prank(o1);
+        treasury.approve(99);
+    }
 }

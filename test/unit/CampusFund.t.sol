@@ -577,4 +577,9 @@ contract CampusFundTest is BaseTest {
         assertEq(c, creator);
         assertEq(b, beneficiary);
     }
+
+    function test_Read_RevertsForUnknownCampaign() public {
+        vm.expectRevert(CampusFund.CampaignNotFound.selector);
+        fund.getCampaign(99);
+    }
 }

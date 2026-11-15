@@ -1,8 +1,8 @@
 Warning: optimizer settings and `viaIR` have been disabled for accurate coverage reports.
 If you encounter "stack too deep" errors, consider using `--ir-minimum` which enables `viaIR` with minimum optimization resolving most of the errors.
 See more: https://book.getfoundry.sh/guides/best-practices/stack-too-deep
-Compiling 77 files with Solc 0.8.24
-Solc 0.8.24 finished in 4.77s
+Compiling 83 files with Solc 0.8.24
+Solc 0.8.24 finished in 5.48s
 Compiler run successful!
 Analysing contracts...
 Running tests...
@@ -15,9 +15,25 @@ Ran 7 tests for test/unit/CFDToken.t.sol:CFDTokenTest
 [PASS] test_NoVotingPowerWithoutDelegation() (gas: 253315)
 [PASS] test_PastVotesAreFrozen() (gas: 368563)
 [PASS] test_TransferMovesVotes() (gas: 424005)
-Suite result: ok. 7 passed; 0 failed; 0 skipped; finished in 18.74ms (7.11ms CPU time)
+Suite result: ok. 7 passed; 0 failed; 0 skipped; finished in 9.38ms (4.12ms CPU time)
 
-Ran 21 tests for test/unit/Treasury.t.sol:TreasuryTest
+Ran 5 tests for test/attacks/Reentrancy.t.sol:ReentrancyTest
+[PASS] test_Attack_FailsOnRefund() (gas: 1274326)
+[PASS] test_Attack_FailsOnSecureVault() (gas: 1151970)
+[PASS] test_Attack_FailsOnWithdrawTranche() (gas: 1118491)
+[PASS] test_Attack_SucceedsOnVulnerableVault() (gas: 1207621)
+[PASS] test_SecureVault_NormalWithdraw() (gas: 515147)
+Suite result: ok. 5 passed; 0 failed; 0 skipped; finished in 16.26ms (8.96ms CPU time)
+
+Ran 4 tests for test/attacks/FlashLoanGovernance.t.sol:FlashLoanGovernanceTest
+[PASS] test_FlashLender_RevertsIfNotRepaid() (gas: 318567)
+[PASS] test_FlashLoan_FailsEvenInProposalBlock() (gas: 1179264)
+[PASS] test_FlashLoan_FailsWithSnapshot() (gas: 1144116)
+[PASS] test_FlashLoan_SucceedsWithoutSnapshot() (gas: 2292058)
+Suite result: ok. 4 passed; 0 failed; 0 skipped; finished in 18.26ms (8.95ms CPU time)
+
+Ran 22 tests for test/unit/Treasury.t.sol:TreasuryTest
+[PASS] test_Approve_RevertsForUnknownTransaction() (gas: 37243)
 [PASS] test_Approve_RevertsTwice() (gas: 185882)
 [PASS] test_CannotTouchExecutedTx() (gas: 350089)
 [PASS] test_Constructor_Owners() (gas: 38106)
@@ -29,146 +45,147 @@ Ran 21 tests for test/unit/Treasury.t.sol:TreasuryTest
 [PASS] test_LargeWithdrawal_InsufficientBalanceReverts() (gas: 258896)
 [PASS] test_LargeWithdrawal_RevertsWithOneSignature() (gas: 195239)
 [PASS] test_LargeWithdrawal_TwoOfThree() (gas: 317596)
-[PASS] test_OnlyOwners() (gas: 114918)
+[PASS] test_OnlyOwners() (gas: 119977)
 [PASS] test_Receive_EmitsDeposit() (gas: 39709)
-[PASS] test_Reentrancy_Blocked() (gas: 2491131)
+[PASS] test_Reentrancy_Blocked() (gas: 2490880)
 [PASS] test_Revoke_AllApprovalsThenSmallTxCannotRun() (gas: 222714)
 [PASS] test_Revoke_RemovesApproval() (gas: 311889)
 [PASS] test_Revoke_RevertsIfNotApproved() (gas: 187902)
 [PASS] test_SmallWithdrawal_ExactlyOneEth() (gas: 253901)
 [PASS] test_SmallWithdrawal_OneSignature() (gas: 283533)
-[PASS] test_Submit_RevertsOnInvalid() (gas: 66455)
-[PASS] test_UnknownTx() (gas: 96015)
-Suite result: ok. 21 passed; 0 failed; 0 skipped; finished in 29.16ms (21.47ms CPU time)
+[PASS] test_Submit_RevertsOnInvalid() (gas: 66543)
+[PASS] test_UnknownTx() (gas: 95993)
+Suite result: ok. 22 passed; 0 failed; 0 skipped; finished in 22.69ms (18.77ms CPU time)
 
-Ran 4 tests for test/attacks/FlashLoanGovernance.t.sol:FlashLoanGovernanceTest
-[PASS] test_FlashLender_RevertsIfNotRepaid() (gas: 318567)
-[PASS] test_FlashLoan_FailsEvenInProposalBlock() (gas: 1152454)
-[PASS] test_FlashLoan_FailsWithSnapshot() (gas: 1117327)
-[PASS] test_FlashLoan_SucceedsWithoutSnapshot() (gas: 2292080)
-Suite result: ok. 4 passed; 0 failed; 0 skipped; finished in 78.86ms (12.65ms CPU time)
-
-Ran 37 tests for test/unit/Governance.t.sol:GovernanceTest
-[PASS] test_Constructor_RevertsOnBadPeriod() (gas: 302364)
-[PASS] test_Constructor_SetsParams() (gas: 37863)
-[PASS] test_Execute_AnyoneCanExecute() (gas: 1191572)
-[PASS] test_Execute_RevertsDuringVote() (gas: 1150300)
-[PASS] test_Execute_RevertsTwice() (gas: 1223339)
-[PASS] test_Execute_StaleMilestoneProposalReverts() (gas: 1509632)
-[PASS] test_Flow_FreezeSuspiciousCampaignThenRefund() (gas: 1955951)
-[PASS] test_Flow_ThreeMilestonesVotedAndWithdrawn() (gas: 2317689)
-[PASS] test_Params_OnlyParamsRole() (gas: 96674)
-[PASS] test_ProposeFreeze_RevertsBelowThreshold() (gas: 618097)
-[PASS] test_ProposeFreeze_RevertsOnFailedCampaign() (gas: 640598)
-[PASS] test_ProposeFreeze_RevertsSameBlockTokens() (gas: 616100)
-[PASS] test_ProposeFreeze_WithEnoughVotes() (gas: 776974)
-[PASS] test_ProposeRelease_BeneficiaryCanPropose() (gas: 964000)
-[PASS] test_ProposeRelease_RevertsForStranger() (gas: 821482)
-[PASS] test_ProposeRelease_RevertsIfNotSuccessful() (gas: 325857)
-[PASS] test_ProposeRelease_RevertsWhenAllApproved() (gas: 1981166)
-[PASS] test_ProposeRelease_StoresSnapshot() (gas: 1055100)
-[PASS] test_Quadratic_ModeFrozenAtCreation() (gas: 1203068)
-[PASS] test_Quadratic_SmallHoldersCanOutvoteWhale() (gas: 2295722)
-[PASS] test_Quadratic_WeightIsSqrt() (gas: 1341622)
-[PASS] test_SetProposalThreshold() (gas: 44286)
-[PASS] test_SetVotingPeriod() (gas: 44278)
-[PASS] test_SetVotingPeriod_RevertsOutOfBounds() (gas: 35449)
-[PASS] test_State_DefeatedOnTie() (gas: 1231087)
-[PASS] test_State_DefeatedWhenMajorityAgainst() (gas: 1231114)
-[PASS] test_State_DefeatedWithNoVotesAtAll() (gas: 1022423)
-[PASS] test_State_DefeatedWithoutQuorum() (gas: 1174911)
-[PASS] test_State_QuorumReachedExactly() (gas: 1137440)
-[PASS] test_State_RevertsUnknown() (gas: 28426)
-[PASS] test_Vote_RevertsAfterEnd() (gas: 1038187)
-[PASS] test_Vote_RevertsTwice() (gas: 1150038)
-[PASS] test_Vote_RevertsUnknownProposal() (gas: 35369)
-[PASS] test_Vote_RevertsWithoutDelegation() (gas: 823377)
-[PASS] test_Vote_TokensAcquiredAfterSnapshotDoNotCount() (gas: 1524978)
-[PASS] test_Vote_TransferAfterSnapshotDoesNotDoubleVote() (gas: 1303877)
-[PASS] test_Vote_WeightIsSnapshotVotes() (gas: 1249675)
-Suite result: ok. 37 passed; 0 failed; 0 skipped; finished in 6.11s (220.00ms CPU time)
-
-Ran 5 tests for test/attacks/Reentrancy.t.sol:ReentrancyTest
-[PASS] test_Attack_FailsOnRefund() (gas: 1274314)
-[PASS] test_Attack_FailsOnSecureVault() (gas: 1151970)
-[PASS] test_Attack_FailsOnWithdrawTranche() (gas: 1118491)
-[PASS] test_Attack_SucceedsOnVulnerableVault() (gas: 1207621)
-[PASS] test_SecureVault_NormalWithdraw() (gas: 515147)
-Suite result: ok. 5 passed; 0 failed; 0 skipped; finished in 6.12s (12.27ms CPU time)
+Ran 47 tests for test/unit/Governance.t.sol:GovernanceTest
+[PASS] test_Constructor_RevertsOnBadPeriod() (gas: 327986)
+[PASS] test_Constructor_SetsParams() (gas: 37841)
+[PASS] test_Execute_AnyoneCanExecute() (gas: 1237617)
+[PASS] test_Execute_DuplicateMilestoneProposalImpossible() (gas: 1500265)
+[PASS] test_Execute_RevertsDuringVote() (gas: 1196477)
+[PASS] test_Execute_RevertsTwice() (gas: 1269384)
+[PASS] test_Flow_FreezeSuspiciousCampaignThenRefund() (gas: 2025450)
+[PASS] test_Flow_ThreeMilestonesVotedAndWithdrawn() (gas: 2427518)
+[PASS] test_FreezeVote_RevertsWithoutDelegation() (gas: 943114)
+[PASS] test_Freeze_RevertsWhileAnotherIsOpen() (gas: 1294881)
+[PASS] test_Params_OnlyParamsRole() (gas: 96719)
+[PASS] test_ProposeFreeze_RevertsBelowThreshold() (gas: 618141)
+[PASS] test_ProposeFreeze_RevertsOnFailedCampaign() (gas: 640554)
+[PASS] test_ProposeFreeze_RevertsSameBlockTokens() (gas: 616144)
+[PASS] test_ProposeFreeze_WithEnoughVotes() (gas: 803567)
+[PASS] test_ProposeRelease_BeneficiaryCanPropose() (gas: 1008252)
+[PASS] test_ProposeRelease_RevertsForStranger() (gas: 822845)
+[PASS] test_ProposeRelease_RevertsIfNotSuccessful() (gas: 327308)
+[PASS] test_ProposeRelease_RevertsWhenAllApproved() (gas: 2092342)
+[PASS] test_ProposeRelease_StoresSnapshot() (gas: 1103404)
+[PASS] test_Quadratic_ModeFrozenAtCreation() (gas: 1253230)
+[PASS] test_Quadratic_SmallHoldersCanOutvoteWhale() (gas: 2353188)
+[PASS] test_Quadratic_WeightIsSqrt() (gas: 1397667)
+[PASS] test_ReleaseQuorum_IsTenPercentOfCampaign() (gas: 1589505)
+[PASS] test_ReleaseVote_RevertsForNonContributor() (gas: 1575499)
+[PASS] test_ReleaseVote_WorksWithoutDelegation() (gas: 976751)
+[PASS] test_Release_AllowedAgainAfterDefeat() (gas: 1413623)
+[PASS] test_Release_RevertsWhileAnotherIsOpen() (gas: 1107086)
+[PASS] test_Release_RevertsWhileSucceededNotExecuted() (gas: 1229139)
+[PASS] test_Release_RevertsWithoutProof() (gas: 812727)
+[PASS] test_Release_StoresProof() (gas: 1093608)
+[PASS] test_SetProposalThreshold() (gas: 44198)
+[PASS] test_SetVotingPeriod() (gas: 44301)
+[PASS] test_SetVotingPeriod_RevertsOutOfBounds() (gas: 35472)
+[PASS] test_State_DefeatedOnTie() (gas: 1279013)
+[PASS] test_State_DefeatedWhenMajorityAgainst() (gas: 1278974)
+[PASS] test_State_DefeatedWithNoVotesAtAll() (gas: 1066653)
+[PASS] test_State_DefeatedWithoutQuorum() (gas: 1221000)
+[PASS] test_State_QuorumReachedExactly() (gas: 1183574)
+[PASS] test_State_RevertsUnknown() (gas: 29183)
+[PASS] test_Vote_RevertsAfterEnd() (gas: 1082462)
+[PASS] test_Vote_RevertsTwice() (gas: 1196127)
+[PASS] test_Vote_RevertsUnknownProposal() (gas: 35457)
+[PASS] test_Vote_TokensAcquiredAfterSnapshotDoNotCount() (gas: 1571717)
+[PASS] test_Vote_TransferAfterSnapshotDoesNotDoubleVote() (gas: 1352492)
+[PASS] test_Vote_WeightIsSnapshotVotes() (gas: 1301718)
+[PASS] test_VotingPower_RevertsForUnknownProposal() (gas: 13741)
+Suite result: ok. 47 passed; 0 failed; 0 skipped; finished in 6.45s (141.11ms CPU time)
 
 Ran 8 tests for test/fuzz/CampusFund.fuzz.t.sol:CampusFundFuzzTest
-[PASS] testFuzz_ContributeMintsAtRate(uint256) (runs: 1000, μ: 581221, ~: 580585)
-[PASS] testFuzz_DurationBounds(uint256) (runs: 1000, μ: 162030, ~: 45225)
-[PASS] testFuzz_LateTokensNeverCount(uint256) (runs: 1000, μ: 1597084, ~: 1596448)
-[PASS] testFuzz_NoWithdrawWithoutVote(uint256,uint256) (runs: 1000, μ: 630943, ~: 644075)
-[PASS] testFuzz_QuorumRule(uint256) (runs: 1000, μ: 1140853, ~: 1141954)
-[PASS] testFuzz_RefundsNeverExceedRemaining(uint256,uint256,uint256) (runs: 1000, μ: 1637815, ~: 1758122)
-[PASS] testFuzz_TranchesSumToRaised(uint256,uint256) (runs: 1000, μ: 2165190, ~: 2041240)
-[PASS] testFuzz_TreasuryLargeNeedsTwo(uint256) (runs: 1000, μ: 1869944, ~: 1870121)
-Suite result: ok. 8 passed; 0 failed; 0 skipped; finished in 6.12s (30.02s CPU time)
+[PASS] testFuzz_ContributeMintsAtRate(uint256) (runs: 1000, μ: 581217, ~: 580585)
+[PASS] testFuzz_DurationBounds(uint256) (runs: 1000, μ: 157240, ~: 45213)
+[PASS] testFuzz_LateTokensNeverCount(uint256) (runs: 1000, μ: 1644475, ~: 1643843)
+[PASS] testFuzz_NoWithdrawWithoutVote(uint256,uint256) (runs: 1000, μ: 630107, ~: 644075)
+[PASS] testFuzz_QuorumRule(uint256) (runs: 1000, μ: 1186907, ~: 1188043)
+[PASS] testFuzz_RefundsNeverExceedRemaining(uint256,uint256,uint256) (runs: 1000, μ: 1714013, ~: 1806310)
+[PASS] testFuzz_TranchesSumToRaised(uint256,uint256) (runs: 1000, μ: 2313724, ~: 2151047)
+[PASS] testFuzz_TreasuryLargeNeedsTwo(uint256) (runs: 1000, μ: 1869939, ~: 1870121)
+Suite result: ok. 8 passed; 0 failed; 0 skipped; finished in 6.46s (34.34s CPU time)
 
-Ran 60 tests for test/unit/CampusFund.t.sol:CampusFundTest
-[PASS] test_Approve_OnlyGovernance() (gas: 725573)
+Ran 61 tests for test/unit/CampusFund.t.sol:CampusFundTest
+[PASS] test_Approve_OnlyGovernance() (gas: 725595)
 [PASS] test_Approve_RevertsIfNotSuccessful() (gas: 316392)
 [PASS] test_Approve_RevertsOutOfOrder() (gas: 720867)
 [PASS] test_Approve_RevertsWhenAllApproved() (gas: 826431)
-[PASS] test_CampaignParties() (gas: 295002)
-[PASS] test_CancelStale_AfterInactivity() (gas: 727329)
-[PASS] test_CancelStale_ApprovalResetsTimer() (gas: 753443)
+[PASS] test_CampaignParties() (gas: 295024)
+[PASS] test_CancelStale_AfterInactivity() (gas: 727219)
+[PASS] test_CancelStale_ApprovalResetsTimer() (gas: 753465)
 [PASS] test_CancelStale_RevertsIfNotSuccessful() (gas: 310683)
-[PASS] test_CancelStale_RevertsTooEarly() (gas: 714647)
+[PASS] test_CancelStale_RevertsTooEarly() (gas: 714580)
 [PASS] test_CancelStale_RevertsWhenAllApproved() (gas: 824059)
-[PASS] test_Cancel_ByCreatorWithoutContributions() (gas: 324665)
+[PASS] test_Cancel_ByCreatorWithoutContributions() (gas: 324643)
 [PASS] test_Cancel_RevertsIfNotActive() (gas: 350035)
 [PASS] test_Cancel_RevertsIfNotCreator() (gas: 312130)
-[PASS] test_Cancel_RevertsWithContributions() (gas: 549803)
-[PASS] test_Constructor_RevertsOnZeroToken() (gas: 399322)
-[PASS] test_Constructor_RevertsOnZeroTreasury() (gas: 399421)
+[PASS] test_Cancel_RevertsWithContributions() (gas: 549825)
+[PASS] test_Constructor_RevertsOnZeroToken() (gas: 401618)
+[PASS] test_Constructor_RevertsOnZeroTreasury() (gas: 401650)
 [PASS] test_Contribute_AboveGoalIsAccepted() (gas: 550041)
-[PASS] test_Contribute_Accumulates() (gas: 615591)
-[PASS] test_Contribute_MintsCFDAndRecords() (gas: 594932)
-[PASS] test_Contribute_RevertsAfterDeadline() (gas: 321928)
+[PASS] test_Contribute_Accumulates() (gas: 615722)
+[PASS] test_Contribute_MintsCFDAndRecords() (gas: 595041)
+[PASS] test_Contribute_RevertsAfterDeadline() (gas: 321950)
 [PASS] test_Contribute_RevertsOnUnknownCampaign() (gas: 43864)
-[PASS] test_Contribute_RevertsOnZero() (gas: 312128)
+[PASS] test_Contribute_RevertsOnZero() (gas: 312150)
 [PASS] test_Contribute_RevertsWhenNotActive() (gas: 725782)
 [PASS] test_CreateCampaign_EmitsEvent() (gas: 290535)
-[PASS] test_CreateCampaign_RevertsOnEmptyCID() (gas: 39224)
-[PASS] test_CreateCampaign_RevertsOnOneMilestone() (gas: 39617)
+[PASS] test_CreateCampaign_RevertsOnEmptyCID() (gas: 39246)
+[PASS] test_CreateCampaign_RevertsOnOneMilestone() (gas: 39639)
 [PASS] test_CreateCampaign_RevertsOnSixMilestones() (gas: 42492)
 [PASS] test_CreateCampaign_RevertsOnTooLongDuration() (gas: 40708)
 [PASS] test_CreateCampaign_RevertsOnTooShortDuration() (gas: 40619)
 [PASS] test_CreateCampaign_RevertsOnZeroBeneficiary() (gas: 38219)
-[PASS] test_CreateCampaign_RevertsOnZeroGoal() (gas: 40582)
+[PASS] test_CreateCampaign_RevertsOnZeroGoal() (gas: 40495)
 [PASS] test_CreateCampaign_RevertsOnZeroMilestone() (gas: 40962)
 [PASS] test_CreateCampaign_RevertsWhenSumIsNot100Percent() (gas: 41969)
-[PASS] test_CreateCampaign_StoresEverything() (gas: 347182)
-[PASS] test_Finalize_Failed() (gas: 561286)
+[PASS] test_CreateCampaign_StoresEverything() (gas: 347160)
+[PASS] test_Finalize_Failed() (gas: 561264)
 [PASS] test_Finalize_RevertsBeforeDeadline() (gas: 309691)
-[PASS] test_Finalize_RevertsTwice() (gas: 714229)
+[PASS] test_Finalize_RevertsTwice() (gas: 714251)
 [PASS] test_Finalize_Successful() (gas: 691716)
 [PASS] test_Freeze_ActiveCampaign() (gas: 685946)
 [PASS] test_Freeze_OnlyGovernance() (gas: 321485)
 [PASS] test_Freeze_RevertsOnFailed() (gas: 589089)
-[PASS] test_Pause_BlocksContributeWithdrawRefundCreate() (gas: 1719565)
-[PASS] test_Pause_OnlyPauser() (gas: 43578)
-[PASS] test_Refund_FailedCampaignFullRefundAndBurn() (gas: 704662)
-[PASS] test_Refund_ProRataAfterFreezeWithTrancheWithdrawn() (gas: 1096815)
-[PASS] test_Refund_RevertsForNonContributor() (gas: 594845)
-[PASS] test_Refund_RevertsIfCFDWereTransferred() (gas: 726020)
+[PASS] test_Pause_BlocksContributeWithdrawRefundCreate() (gas: 1719543)
+[PASS] test_Pause_OnlyPauser() (gas: 43556)
+[PASS] test_Read_RevertsForUnknownCampaign() (gas: 16381)
+[PASS] test_Refund_FailedCampaignFullRefundAndBurn() (gas: 704771)
+[PASS] test_Refund_ProRataAfterFreezeWithTrancheWithdrawn() (gas: 1096837)
+[PASS] test_Refund_RevertsForNonContributor() (gas: 594778)
+[PASS] test_Refund_RevertsIfCFDWereTransferred() (gas: 726042)
 [PASS] test_Refund_RevertsTwice() (gas: 709536)
 [PASS] test_Refund_RevertsWhenActive() (gas: 554249)
-[PASS] test_Refund_RevertsWhenSuccessful() (gas: 722405)
+[PASS] test_Refund_RevertsWhenSuccessful() (gas: 722427)
 [PASS] test_TrancheAmount_View() (gas: 729113)
-[PASS] test_Unpause_OnlyPauser() (gas: 96602)
-[PASS] test_Views_RevertOnUnknownId() (gas: 41197)
-[PASS] test_Withdraw_AllTranchesEmptiesCampaign() (gas: 1093821)
+[PASS] test_Unpause_OnlyPauser() (gas: 96580)
+[PASS] test_Views_RevertOnUnknownId() (gas: 41109)
+[PASS] test_Withdraw_AllTranchesEmptiesCampaign() (gas: 1093843)
 [PASS] test_Withdraw_FirstTrancheWithFee() (gas: 863037)
 [PASS] test_Withdraw_LastTrancheTakesRoundingDust() (gas: 927852)
-[PASS] test_Withdraw_RevertsIfNotBeneficiary() (gas: 759112)
+[PASS] test_Withdraw_RevertsIfNotBeneficiary() (gas: 759134)
 [PASS] test_Withdraw_RevertsIfNotSuccessful() (gas: 593972)
-[PASS] test_Withdraw_RevertsSecondTimeForSameApproval() (gas: 880293)
+[PASS] test_Withdraw_RevertsSecondTimeForSameApproval() (gas: 880315)
 [PASS] test_Withdraw_RevertsWithoutApproval() (gas: 723742)
-Suite result: ok. 60 passed; 0 failed; 0 skipped; finished in 6.12s (177.59ms CPU time)
+Suite result: ok. 61 passed; 0 failed; 0 skipped; finished in 6.46s (87.96ms CPU time)
+
+Ran 2 tests for test/unit/Deploy.t.sol:DeployTest
+[PASS] test_DeployRefusesWithoutOwnersOutsideAnvil() (gas: 15413116)
+[PASS] test_DeployWiresRolesAndRenouncesAdmin() (gas: 26949142)
+Suite result: ok. 2 passed; 0 failed; 0 skipped; finished in 6.46s (6.46s CPU time)
 
 Ran 1 test for test/invariant/Invariants.t.sol:InvariantsTest
 [PASS]
@@ -178,63 +195,63 @@ InvariantsTest invariants:
 [PASS] invariant_SolventBalance
 [PASS] invariant_SupplyMatchesContributions
 [PASS] invariant_TreasuryGetsOnlyFees
- InvariantsTest invariants (runs: 256, calls: 25600, reverts: 2231)
+ InvariantsTest invariants (runs: 256, calls: 25600, reverts: 2280)
 
 ╭----------+-----------------+-------+---------+----------╮
 | Contract | Selector        | Calls | Reverts | Discards |
 +=========================================================+
 | Handler  | cancelStale     | 2142  | 0       | 0        |
 |----------+-----------------+-------+---------+----------|
-| Handler  | contribute      | 2081  | 543     | 0        |
+| Handler  | contribute      | 2081  | 506     | 0        |
 |----------+-----------------+-------+---------+----------|
 | Handler  | createCampaign  | 2164  | 0       | 0        |
 |----------+-----------------+-------+---------+----------|
-| Handler  | execute         | 2137  | 26      | 0        |
+| Handler  | execute         | 2137  | 16      | 0        |
 |----------+-----------------+-------+---------+----------|
-| Handler  | finalize        | 2100  | 8       | 0        |
+| Handler  | finalize        | 2100  | 9       | 0        |
 |----------+-----------------+-------+---------+----------|
-| Handler  | proposeFreeze   | 2165  | 532     | 0        |
+| Handler  | proposeFreeze   | 2165  | 544     | 0        |
 |----------+-----------------+-------+---------+----------|
-| Handler  | proposeRelease  | 2100  | 16      | 0        |
+| Handler  | proposeRelease  | 2100  | 102     | 0        |
 |----------+-----------------+-------+---------+----------|
-| Handler  | refund          | 2100  | 802     | 0        |
+| Handler  | refund          | 2100  | 764     | 0        |
 |----------+-----------------+-------+---------+----------|
 | Handler  | transferCFD     | 2129  | 0       | 0        |
 |----------+-----------------+-------+---------+----------|
-| Handler  | vote            | 2198  | 50      | 0        |
+| Handler  | vote            | 2198  | 73      | 0        |
 |----------+-----------------+-------+---------+----------|
 | Handler  | warp            | 2158  | 0       | 0        |
 |----------+-----------------+-------+---------+----------|
-| Handler  | withdrawTranche | 2126  | 254     | 0        |
+| Handler  | withdrawTranche | 2126  | 266     | 0        |
 ╰----------+-----------------+-------+---------+----------╯
 
-Suite result: ok. 1 passed; 0 failed; 0 skipped; finished in 59.26s (59.23s CPU time)
+Suite result: ok. 1 passed; 0 failed; 0 skipped; finished in 58.29s (58.27s CPU time)
 
-Ran 8 test suites in 59.28s (83.85s CPU time): 143 tests passed, 0 failed, 0 skipped (143 total tests)
+Ran 9 test suites in 58.29s (84.18s CPU time): 157 tests passed, 0 failed, 0 skipped (157 total tests)
 
-╭---------------------------------------+-------------------+------------------+-----------------+-----------------╮
-| File                                  | % Lines           | % Statements     | % Branches      | % Funcs         |
-+==================================================================================================================+
-| contracts/CFDToken.sol                | 100.00% (8/8)     | 100.00% (4/4)    | N/A (0/0)       | 100.00% (4/4)   |
-|---------------------------------------+-------------------+------------------+-----------------+-----------------|
-| contracts/CampusFund.sol              | 100.00% (130/130) | 99.40% (165/166) | 97.14% (34/35)  | 100.00% (21/21) |
-|---------------------------------------+-------------------+------------------+-----------------+-----------------|
-| contracts/Governance.sol              | 100.00% (79/79)   | 100.00% (99/99)  | 100.00% (22/22) | 100.00% (12/12) |
-|---------------------------------------+-------------------+------------------+-----------------+-----------------|
-| contracts/Treasury.sol                | 100.00% (51/51)   | 98.25% (56/57)   | 92.31% (12/13)  | 100.00% (12/12) |
-|---------------------------------------+-------------------+------------------+-----------------+-----------------|
-| contracts/demo/FlashLoanAttacker.sol  | 100.00% (14/14)   | 100.00% (12/12)  | 50.00% (3/6)    | 100.00% (3/3)   |
-|---------------------------------------+-------------------+------------------+-----------------+-----------------|
-| contracts/demo/MockFlashLender.sol    | 100.00% (7/7)     | 100.00% (8/8)    | 100.00% (1/1)   | 100.00% (2/2)   |
-|---------------------------------------+-------------------+------------------+-----------------+-----------------|
-| contracts/demo/NaiveGovernance.sol    | 100.00% (24/24)   | 100.00% (21/21)  | 56.25% (9/16)   | 100.00% (4/4)   |
-|---------------------------------------+-------------------+------------------+-----------------+-----------------|
-| contracts/demo/ReentrancyAttacker.sol | 100.00% (16/16)   | 100.00% (13/13)  | 57.14% (4/7)    | 100.00% (4/4)   |
-|---------------------------------------+-------------------+------------------+-----------------+-----------------|
-| contracts/demo/SecureVault.sol        | 100.00% (8/8)     | 100.00% (7/7)    | 100.00% (4/4)   | 100.00% (2/2)   |
-|---------------------------------------+-------------------+------------------+-----------------+-----------------|
-| contracts/demo/VulnerableVault.sol    | 100.00% (8/8)     | 100.00% (7/7)    | 50.00% (2/4)    | 100.00% (2/2)   |
-|---------------------------------------+-------------------+------------------+-----------------+-----------------|
-| Total                                 | 100.00% (345/345) | 99.49% (392/394) | 84.26% (91/108) | 100.00% (66/66) |
-╰---------------------------------------+-------------------+------------------+-----------------+-----------------╯
+╭---------------------------------------+-------------------+-------------------+-----------------+-----------------╮
+| File                                  | % Lines           | % Statements      | % Branches      | % Funcs         |
++===================================================================================================================+
+| contracts/CFDToken.sol                | 100.00% (8/8)     | 100.00% (4/4)     | N/A (0/0)       | 100.00% (4/4)   |
+|---------------------------------------+-------------------+-------------------+-----------------+-----------------|
+| contracts/CampusFund.sol              | 100.00% (132/132) | 99.40% (166/167)  | 97.14% (34/35)  | 100.00% (22/22) |
+|---------------------------------------+-------------------+-------------------+-----------------+-----------------|
+| contracts/Governance.sol              | 100.00% (95/95)   | 100.00% (124/124) | 100.00% (29/29) | 100.00% (14/14) |
+|---------------------------------------+-------------------+-------------------+-----------------+-----------------|
+| contracts/Treasury.sol                | 100.00% (51/51)   | 98.25% (56/57)    | 92.31% (12/13)  | 100.00% (12/12) |
+|---------------------------------------+-------------------+-------------------+-----------------+-----------------|
+| contracts/demo/FlashLoanAttacker.sol  | 100.00% (14/14)   | 100.00% (12/12)   | 50.00% (3/6)    | 100.00% (3/3)   |
+|---------------------------------------+-------------------+-------------------+-----------------+-----------------|
+| contracts/demo/MockFlashLender.sol    | 100.00% (7/7)     | 100.00% (8/8)     | 100.00% (1/1)   | 100.00% (2/2)   |
+|---------------------------------------+-------------------+-------------------+-----------------+-----------------|
+| contracts/demo/NaiveGovernance.sol    | 100.00% (24/24)   | 100.00% (21/21)   | 56.25% (9/16)   | 100.00% (4/4)   |
+|---------------------------------------+-------------------+-------------------+-----------------+-----------------|
+| contracts/demo/ReentrancyAttacker.sol | 100.00% (16/16)   | 100.00% (13/13)   | 57.14% (4/7)    | 100.00% (4/4)   |
+|---------------------------------------+-------------------+-------------------+-----------------+-----------------|
+| contracts/demo/SecureVault.sol        | 100.00% (8/8)     | 100.00% (7/7)     | 100.00% (4/4)   | 100.00% (2/2)   |
+|---------------------------------------+-------------------+-------------------+-----------------+-----------------|
+| contracts/demo/VulnerableVault.sol    | 100.00% (8/8)     | 100.00% (7/7)     | 50.00% (2/4)    | 100.00% (2/2)   |
+|---------------------------------------+-------------------+-------------------+-----------------+-----------------|
+| Total                                 | 100.00% (363/363) | 99.52% (418/420)  | 85.22% (98/115) | 100.00% (69/69) |
+╰---------------------------------------+-------------------+-------------------+-----------------+-----------------╯
 Wrote LCOV report.
