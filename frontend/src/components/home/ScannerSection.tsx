@@ -1,4 +1,5 @@
 import { RiskScale } from "@/components/board/RiskScale";
+import { MEASURED_ON } from "./SecuritySection";
 
 const SIGNALS = ["Montants répétés", "Adresses liées", "Adresses neuves", "Pic de contributions", "Concentration"];
 
@@ -32,16 +33,16 @@ export function ScannerSection() {
         <RiskScale variant="large" />
         <div className="grid gap-3.5" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(160px, 100%), 1fr))" }}>
           <div className="db-tile rounded-lg p-[22px]">
-            <div className="mono text-[56px] font-bold leading-none text-amber">1,0</div>
-            <div className="mt-4 text-[14px] text-soft">de précision</div>
+            <div className="mono text-[48px] font-bold leading-none text-amber">0,88</div>
+            <div className="mt-4 text-[14px] text-soft">de rappel, fraudes connues (précision 1,00)</div>
           </div>
           <div className="db-tile rounded-lg p-[22px]">
-            <div className="mono text-[56px] font-bold leading-none text-amber">0,87</div>
-            <div className="mt-4 text-[14px] text-soft">de rappel</div>
+            <div className="mono text-[48px] font-bold leading-none text-alert">0,38</div>
+            <div className="mt-4 text-[14px] text-soft">de rappel, fraudes déguisées (précision 0,99)</div>
           </div>
         </div>
         <p className="tag m-0">
-          Jeu de démo : 300 campagnes, 30 fraudes.
+          Données simulées par le script : 10 tirages de 300 campagnes et 30 fraudes. Mesuré le {MEASURED_ON}.
         </p>
       </div>
     </section>

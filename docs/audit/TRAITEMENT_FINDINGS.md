@@ -86,3 +86,15 @@ dangereux (le cas visé par ce détecteur est un `transfer` ERC-20 dont on ignor
 - Chaque protection revendiquée est **prouvée par un test** (voir SECURITE.md) et pas seulement par l'absence d'alerte.
 - Limite : l'analyse statique ne remplace pas un audit humain professionnel. Slither ne voit pas les
   failles de logique économique : c'est le rôle des tests d'invariants (voir `docs/coverage/` et `test/invariant/`).
+
+## 5. Nouvel audit après les changements du 15/11/2026
+
+Changements analysés : vote de déblocage réservé aux contributeurs de la campagne, une seule proposition
+ouverte par campagne et par type, preuve obligatoire pour un déblocage, nouvelle lecture `votingPower`.
+
+Commande : `python -m slither . --filter-paths "lib/|test/" --exclude-dependencies`
+Sortie complète : [`slither-report-2026-11-15.txt`](slither-report-2026-11-15.txt).
+
+**13 résultats, exactement les mêmes détecteurs et les mêmes nombres** qu'au §3. Les nouvelles lignes de
+`Governance` relèvent des cas déjà traités : `block-timestamp` (fin du vote, §2.2) et `unused-return`
+(lecture de `milestoneProgress`, §2.3). Aucun nouveau type de finding, aucun High ou Medium.
