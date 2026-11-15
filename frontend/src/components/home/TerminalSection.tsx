@@ -77,11 +77,11 @@ export function FinalCta() {
         </h2>
         <div className="flex flex-wrap gap-3">
           <a href="#departs" className="btn btn-dark !min-h-[64px] !text-[15px]">
-            Voir les départs
+            Voir les campagnes
             <ArrowIcon />
           </a>
           <Link href="/creator" className="btn btn-outline-dark !min-h-[64px] !text-[15px]">
-            Plan de vol
+            Créer une campagne
           </Link>
         </div>
       </div>

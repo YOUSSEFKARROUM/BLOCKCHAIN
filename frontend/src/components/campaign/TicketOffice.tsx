@@ -120,11 +120,11 @@ function FinalizeBox({ campaignId, isReached }: { campaignId: number; isReached:
   return (
     <div className="flex flex-col gap-4">
       <p className="m-0 text-[16px] font-medium">
-        L&apos;embarquement est terminé. N&apos;importe qui peut clôturer : la campagne deviendra{" "}
+        La collecte est terminée. N&apos;importe qui peut la clôturer : la campagne deviendra{" "}
         <strong>{isReached ? "financée" : "échouée, et les remboursements s'ouvriront"}</strong>.
       </p>
       <button type="button" disabled={busy} onClick={() => void send((s) => getContracts(s).fund.finalize(campaignId))} className="btn btn-dark">
-        Clôturer l&apos;embarquement
+        Clôturer la collecte
       </button>
       <TxStrip status={status} />
     </div>
@@ -180,7 +180,7 @@ export function TicketOffice({ campaign: c, myContribution, now, rate }: TicketO
       {isCancelled && <span className="tag-b -mt-3">Remboursement</span>}
       {isActive && !canFinalize && <ContributeForm campaignId={c.id} rate={rate} />}
       {canFinalize && <FinalizeBox campaignId={c.id} isReached={c.raised >= c.goal} />}
-      {c.status === 1 && <p className="m-0 text-[16px] font-medium">Embarquement terminé : l&apos;objectif est atteint. Les tranches partent escale par escale, sur vote.</p>}
+      {c.status === 1 && <p className="m-0 text-[16px] font-medium">Collecte terminée : objectif atteint. Chaque tranche est versée après le vote des contributeurs.</p>}
       {isCancelled && myContribution > 0n && <RefundBox campaign={c} contribution={myContribution} rate={rate} />}
       {isCancelled && myContribution === 0n && <p className="m-0 text-[16px] font-medium">Aucune mise à rembourser pour ce compte.</p>}
       {myContribution > 0n && (

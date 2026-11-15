@@ -44,8 +44,8 @@ function findProblems(form: FormState, escales: EscaleDraft[], beneficiary: stri
   if (form.name.trim().length < 3) problems.push("Nom de la campagne : 3 caractères minimum.");
   if (parseGoal(form.goal) <= 0n) problems.push("Objectif : un montant en ETH supérieur à 0.");
   if (!form.isDemoHour && (!Number.isInteger(days) || days < 1 || days > MAX_DAYS)) problems.push("Durée : un nombre entier de jours entre 1 et 90.");
-  if (escales.reduce((a, e) => a + e.pct, 0) !== 100) problems.push("La somme des escales doit faire exactement 100 %.");
-  if (escales.some((e) => e.title.trim().length < 3)) problems.push("Chaque escale doit avoir un intitulé.");
+  if (escales.reduce((a, e) => a + e.pct, 0) !== 100) problems.push("La somme des jalons doit faire exactement 100 %.");
+  if (escales.some((e) => e.title.trim().length < 3)) problems.push("Chaque jalon doit avoir un intitulé.");
   if (form.club.trim().length < 2) problems.push("Club : nom manquant.");
   if (form.description.trim().length < 20) problems.push("Description : 20 caractères minimum.");
   if (!isAddress(beneficiary)) problems.push("Bénéficiaire : adresse invalide (ou connectez MetaMask).");

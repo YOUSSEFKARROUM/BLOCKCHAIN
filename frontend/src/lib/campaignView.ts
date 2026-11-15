@@ -49,8 +49,8 @@ function fundedStatus(c: Campaign, hasFreeze: boolean, hasRelease: boolean): Boa
   const base = { filter: "flying" as const };
   if (hasFreeze) return { ...base, label: "Gel proposé", color: COLORS.alert, isBlinking: true };
   if (hasRelease) return { ...base, label: "Vote en cours", color: COLORS.amber, isBlinking: true };
-  if (c.approvedMilestones > c.withdrawnMilestones) return { ...base, label: "Prête au décollage", color: COLORS.amber, isBlinking: false };
-  if (c.withdrawnMilestones === c.milestoneCount) return { ...base, label: "Arrivée", color: COLORS.ok, isBlinking: false };
+  if (c.approvedMilestones > c.withdrawnMilestones) return { ...base, label: "Tranche à retirer", color: COLORS.amber, isBlinking: false };
+  if (c.withdrawnMilestones === c.milestoneCount) return { ...base, label: "Terminée", color: COLORS.ok, isBlinking: false };
   if (c.withdrawnMilestones > 0) return { ...base, label: "Tranche versée", color: COLORS.ok, isBlinking: false };
   return { ...base, label: "Financée", color: COLORS.ok, isBlinking: false };
 }
@@ -67,7 +67,7 @@ export function boardStatus(c: Campaign, proposals: Proposal[], now: number): Bo
     case 2:
       return { label: "Remboursement", color: COLORS.alert, isBlinking: false, filter: "cancel" };
     default:
-      return { label: "Vol annulé", color: COLORS.alert, isBlinking: false, filter: "cancel" };
+      return { label: "Annulée", color: COLORS.alert, isBlinking: false, filter: "cancel" };
   }
 }
 

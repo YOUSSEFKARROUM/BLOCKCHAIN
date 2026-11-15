@@ -21,7 +21,7 @@ export function FreezeForm({ campaigns, thresholdCfd }: { campaigns: Campaign[];
   if (!isOpen) {
     return (
       <button type="button" onClick={() => setIsOpen(true)} className="btn btn-ghost btn-sm self-start" style={{ borderColor: "var(--alert)" }}>
-        Signaler un vol suspect · proposer un gel
+        Signaler une campagne suspecte
       </button>
     );
   }
@@ -37,7 +37,7 @@ export function FreezeForm({ campaigns, thresholdCfd }: { campaigns: Campaign[];
       <div className="grid gap-4" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(220px, 100%), 1fr))" }}>
         <div className="flex flex-col gap-2.5">
           <label htmlFor="freeze-campaign" className="tag-b text-gray">
-            Vol (campagne)
+            Campagne
           </label>
           <select id="freeze-campaign" value={campaignId} onChange={(e) => setCampaignId(e.target.value)} className="field db-tile">
             <option value="">Choisir…</option>

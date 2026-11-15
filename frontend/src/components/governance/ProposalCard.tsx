@@ -22,7 +22,7 @@ function tagFor(p: Proposal): { text: string; color: string; border: string } {
   const kind = isFreeze ? "Demande de gel" : "Demande de déblocage";
   if (p.state === 0) return { text: `${kind} · Vote en cours`, color: isFreeze ? "#FF9B7A" : COLORS.amber, border: isFreeze ? COLORS.alert : COLORS.amber };
   if (p.state === 1) return { text: `${kind} · Rejetée`, color: COLORS.gray, border: "#3A3A40" };
-  if (p.state === 2) return { text: isFreeze ? "Adoptée · Gel à exécuter" : "Adoptée · Prête au décollage", color: "#6BE584", border: COLORS.ok };
+  if (p.state === 2) return { text: isFreeze ? "Adoptée · gel à exécuter" : "Adoptée · déblocage à exécuter", color: "#6BE584", border: COLORS.ok };
   return { text: "Exécutée", color: "#6BE584", border: "#3A3A40" };
 }
 
@@ -119,10 +119,10 @@ function Actions({ proposal: p, campaign, mine, feePercent }: { proposal: Propos
     body = (
       <>
         <button type="button" disabled={busy} onClick={() => void send((s) => getContracts(s).governance.castVote(p.id, true))} className="btn btn-amber">
-          Pour · autoriser
+          Voter pour
         </button>
         <button type="button" disabled={busy} onClick={() => void send((s) => getContracts(s).governance.castVote(p.id, false))} className="btn btn-tile">
-          Contre · refuser
+          Voter contre
         </button>
         <span className="mono text-center text-[12px] text-gray">VOTRE POIDS : {cfd(mine.weight)} CFD</span>
       </>
@@ -131,16 +131,16 @@ function Actions({ proposal: p, campaign, mine, feePercent }: { proposal: Propos
     body = (
       <>
         <button type="button" disabled={busy} onClick={() => void send((s) => getContracts(s).governance.execute(p.id))} className="btn btn-ok">
-          {isFreeze ? "Exécuter · geler le vol" : "Exécuter · décollage"}
+          {isFreeze ? "Exécuter le gel" : "Exécuter le déblocage"}
         </button>
         <span className="mono text-center text-[12px] text-gray">N&apos;IMPORTE QUI PEUT EXÉCUTER UNE PROPOSITION ADOPTÉE</span>
       </>
     );
   } else if (p.state === 3) {
     body = isFreeze ? (
-      <ResultTile title="VOL GELÉ" text="REMBOURSEMENTS OUVERTS" />
+      <ResultTile title="GELÉE" text="REMBOURSEMENTS OUVERTS" />
     ) : (
-      <ResultTile title="DÉCOLLÉ" text={tranche !== undefined ? `${eth(tranche - fee, 3)} ETH AU CLUB · ${eth(fee, 3)} ETH DE FRAIS` : "JALON APPROUVÉ"} />
+      <ResultTile title="DÉBLOQUÉE" text={tranche !== undefined ? `${eth(tranche - fee, 3)} ETH AU CLUB · ${eth(fee, 3)} ETH DE FRAIS` : "JALON APPROUVÉ"} />
     );
   } else if (p.state === 1) {
     body = <ResultTile title="REJETÉE" text="LES FONDS RESTENT À QUAI" isOk={false} />;

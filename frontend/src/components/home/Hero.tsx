@@ -62,11 +62,11 @@ export function Hero() {
         </p>
         <div className="flex flex-wrap gap-3">
           <a href="#departs" className="btn btn-amber !text-[15px]">
-            Voir les départs
+            Voir les campagnes
             <ArrowIcon />
           </a>
           <Link href="/creator" className="btn btn-ghost !text-[15px]">
-            Déposer un plan de vol
+            Créer une campagne
           </Link>
         </div>
       </div>

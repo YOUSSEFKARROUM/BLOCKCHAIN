@@ -45,9 +45,9 @@ function Itinerary({ campaign: c, states, metadata }: { campaign: Campaign; stat
   const current = firstUnpaid === -1 ? n - 1 : firstUnpaid;
   const center = (i: number) => `${((i + 0.5) / n) * 100}%`;
   const edge = `${(0.5 / n) * 100}%`;
-  const summary = states.map((s, i) => `escale ${i + 1} ${ESCALE_LABELS[s].toLowerCase()}`).join(", ");
+  const summary = states.map((s, i) => `jalon ${i + 1} ${ESCALE_LABELS[s].toLowerCase()}`).join(", ");
   return (
-    <div className="relative pt-[34px]" role="img" aria-label={`${n} escales : ${summary}`}>
+    <div className="relative pt-[34px]" role="img" aria-label={`${n} jalons : ${summary}`}>
       <div className="absolute top-[45px] border-t-[3px] border-night" style={{ left: edge, right: edge }} />
       {current < n - 1 && <div className="absolute top-[45px] border-t-[3px] border-dashed border-ticket" style={{ left: center(current), right: edge }} />}
       <PlaneIcon className="db-bob absolute top-0 text-night" style={{ left: center(current) }} />
@@ -55,7 +55,7 @@ function Itinerary({ campaign: c, states, metadata }: { campaign: Campaign; stat
         {states.map((s, i) => (
           <div key={i} className="flex flex-col items-center gap-2 px-1">
             <EscaleDot state={s} />
-            <strong className="text-[14px]">ESCALE {i + 1}</strong>
+            <strong className="text-[14px]">JALON {i + 1}</strong>
             <span className="hidden sm:inline">{metadata?.milestones[i]?.title ?? `Jalon ${i + 1}`}</span>
             <span>
               {c.milestonesBps[i] / 100} % · {eth(tranches[i], 2)} ETH

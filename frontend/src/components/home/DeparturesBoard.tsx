@@ -96,7 +96,7 @@ export function DeparturesBoard() {
       <div className="hidden overflow-x-auto pb-1.5 md:block" tabIndex={0} aria-label="Tableau des départs, défilement horizontal">
         <div className="flex min-w-[1040px] flex-col gap-[5px]" style={{ perspective: 1400 }}>
           <div className="mono grid gap-x-5 px-5 pb-1.5 text-[12px] tracking-[.18em] text-amber" style={{ gridTemplateColumns: BOARD_GRID }}>
-            <span>VOL</span>
+            <span>N°</span>
             <span>CAMPAGNE</span>
             <span>CLUB</span>
             <span>JALON</span>

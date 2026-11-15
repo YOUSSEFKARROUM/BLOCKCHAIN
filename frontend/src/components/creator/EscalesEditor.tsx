@@ -29,27 +29,27 @@ export function EscalesEditor({ escales, goalEth, onChange }: EscalesEditorProps
   const update = (i: number, patch: Partial<EscaleDraft>) => onChange(escales.map((e, j) => (j === i ? { ...e, ...patch } : e)));
   return (
     <fieldset className="m-0 flex min-w-0 flex-col gap-3 border-0 p-0">
-      <legend className="tag-b mb-2.5 p-0 text-gray">04 · Escales = jalons (2 à 5, total 100 %)</legend>
+      <legend className="tag-b mb-2.5 p-0 text-gray">04 · Jalons (2 à 5, total 100 %)</legend>
       <ol className="m-0 flex list-none flex-col gap-[5px] p-0">
         {escales.map((e, i) => (
           <li key={i} className="db-tile flex flex-col gap-3 rounded-md py-3 pl-5 pr-3.5">
             <div className="mono flex flex-wrap items-center gap-x-5 gap-y-2.5 text-[18px] font-bold">
               <span className="flex-[0_0_34px] text-gray">{String(i + 1).padStart(2, "0")}</span>
-              <span className="flex-[1_1_150px] tracking-[.04em]">ESCALE {i + 1}</span>
+              <span className="flex-[1_1_150px] tracking-[.04em]">JALON {i + 1}</span>
               <span className="flex-[0_0_120px] font-normal text-soft">{fmt((goalEth * e.pct) / 100)} ETH</span>
               <div className="flex items-center gap-1.5">
-                <button type="button" className="db-step" disabled={e.pct <= MIN_PCT} onClick={() => update(i, { pct: Math.max(MIN_PCT, e.pct - STEP) })} aria-label={`Retirer 5 % à l'escale ${i + 1}`}>
+                <button type="button" className="db-step" disabled={e.pct <= MIN_PCT} onClick={() => update(i, { pct: Math.max(MIN_PCT, e.pct - STEP) })} aria-label={`Retirer 5 % au jalon ${i + 1}`}>
                   −
                 </button>
                 <span className="w-[84px] text-center text-[26px] text-amber" aria-live="polite">
                   {e.pct} %
                 </span>
-                <button type="button" className="db-step" disabled={e.pct >= MAX_PCT} onClick={() => update(i, { pct: Math.min(MAX_PCT, e.pct + STEP) })} aria-label={`Ajouter 5 % à l'escale ${i + 1}`}>
+                <button type="button" className="db-step" disabled={e.pct >= MAX_PCT} onClick={() => update(i, { pct: Math.min(MAX_PCT, e.pct + STEP) })} aria-label={`Ajouter 5 % au jalon ${i + 1}`}>
                   +
                 </button>
               </div>
               {escales.length > MIN_ESCALES && (
-                <button type="button" className="db-step !bg-transparent !text-gray hover:!text-night" onClick={() => onChange(escales.filter((_, j) => j !== i))} aria-label={`Supprimer l'escale ${i + 1}`}>
+                <button type="button" className="db-step !bg-transparent !text-gray hover:!text-night" onClick={() => onChange(escales.filter((_, j) => j !== i))} aria-label={`Supprimer le jalon ${i + 1}`}>
                   <CrossIcon />
                 </button>
               )}
@@ -77,7 +77,7 @@ export function EscalesEditor({ escales, goalEth, onChange }: EscalesEditorProps
       </ol>
       {escales.length < MAX_ESCALES && (
         <button type="button" onClick={() => onChange([...escales, { title: "", proof: "", pct: STEP }])} className="btn btn-ghost btn-sm self-start border-dashed">
-          + Ajouter une escale
+          + Ajouter un jalon
         </button>
       )}
     </fieldset>
@@ -93,7 +93,7 @@ export function ItineraryPreview({ escales }: { escales: EscaleDraft[] }) {
   return (
     <div className="flex flex-col gap-[18px] rounded-[10px] bg-[#0E0E10] p-6" style={{ border: `1.5px solid ${color}` }}>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <span className="tag-b text-gray">Itinéraire des tranches</span>
+        <span className="tag-b text-gray">Répartition des tranches</span>
         <span role="status" className="mono inline-flex items-center gap-2.5 text-[14px] font-bold tracking-[.08em]" style={{ color }}>
           <StatusLamp color={color} />
           TOTAL {sum} % · {message}

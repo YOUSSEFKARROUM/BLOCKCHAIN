@@ -70,7 +70,7 @@ function FlightTicket({ campaign: c, proposals, now, feePercent }: FlightTicketP
           <Cell label="Collecté">{eth(c.raised, 3)} ETH</Cell>
           <Cell label="Reçu par le club">{eth(net(c.released), 3)} ETH</Cell>
           {states.map((s, i) => (
-            <Cell key={i} label={`Escale ${i + 1} · ${c.milestonesBps[i] / 100} %`}>
+            <Cell key={i} label={`Jalon ${i + 1} · ${c.milestonesBps[i] / 100} %`}>
               <span className="uppercase">{ESCALE_LABELS[s]}</span>
             </Cell>
           ))}
@@ -113,7 +113,7 @@ function FlightTicket({ campaign: c, proposals, now, feePercent }: FlightTicketP
         )}
         {canCancel && (
           <button type="button" disabled={busy} onClick={() => void send((s) => getContracts(s).fund.cancelCampaign(c.id))} className="btn btn-outline-dark btn-sm">
-            Annuler le vol (aucune contribution)
+            Annuler la campagne (aucune contribution)
           </button>
         )}
         {c.status === 1 && !isBeneficiary && c.withdrawnMilestones < c.approvedMilestones && (

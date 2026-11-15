@@ -48,7 +48,7 @@ function VoteSummary({ proposal: p }: { proposal: Proposal }) {
       </div>
       {p.proof && <ProofLink proof={p.proof} />}
       <Link href="/governance" className="btn btn-amber btn-sm self-start !min-h-[52px]">
-        Voter à la tour de contrôle
+        Voter sur ce déblocage
         <ArrowIcon />
       </Link>
     </>
