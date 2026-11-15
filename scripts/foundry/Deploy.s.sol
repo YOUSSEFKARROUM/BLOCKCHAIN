@@ -59,9 +59,14 @@ contract Deploy is Script {
         // --- Décentralisation : le déployeur abandonne les clés d'administration.
         // Sans cela il pourrait s'accorder MINTER_ROLE (frapper des CFD et contrôler la DAO) ou
         // GOVERNANCE_ROLE (débloquer des jalons sans vote). Après ces deux lignes, les rôles sont figés.
-        // Il conserve PAUSER_ROLE (circuit breaker) et PARAMS_ROLE (durée de vote, seuil de proposition).
+        // Les paramètres de vote (durée, seuil, mode quadratique) sont figés au déploiement : il abandonne
+        // aussi PARAMS_ROLE et l'administration de la gouvernance.
+        // Il ne conserve que PAUSER_ROLE : un coupe-circuit qui peut retarder (pause) mais jamais prendre
+        // des fonds, aucune fonction ne le permet.
         token.renounceRole(token.DEFAULT_ADMIN_ROLE(), deployer);
         fund.renounceRole(fund.DEFAULT_ADMIN_ROLE(), deployer);
+        governance.renounceRole(governance.PARAMS_ROLE(), deployer);
+        governance.renounceRole(governance.DEFAULT_ADMIN_ROLE(), deployer);
 
         vm.stopBroadcast();
 

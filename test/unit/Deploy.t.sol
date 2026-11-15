@@ -23,9 +23,14 @@ contract DeployTest is Test {
         assertFalse(d.fund.hasRole(d.fund.DEFAULT_ADMIN_ROLE(), d.deployer), "admin du fonds abandonne");
         assertFalse(d.token.hasRole(d.token.MINTER_ROLE(), d.deployer));
         assertFalse(d.fund.hasRole(d.fund.GOVERNANCE_ROLE(), d.deployer));
-        // le circuit breaker et les paramètres de vote restent disponibles
+        // paramètres de vote figés : plus personne ne peut les changer ni redonner le rôle
+        assertFalse(d.governance.hasRole(d.governance.PARAMS_ROLE(), d.deployer), "parametres figes");
+        assertFalse(d.governance.hasRole(d.governance.DEFAULT_ADMIN_ROLE(), d.deployer), "admin gouvernance abandonne");
+        vm.expectRevert();
+        vm.prank(d.deployer);
+        d.governance.setQuadraticVoting(true);
+        // seul le coupe-circuit reste
         assertTrue(d.fund.hasRole(d.fund.PAUSER_ROLE(), d.deployer));
-        assertTrue(d.governance.hasRole(d.governance.PARAMS_ROLE(), d.deployer));
 
         // le fichier de déploiement est cohérent
         string memory json = vm.readFile("./deployments/test-deploy.json");
