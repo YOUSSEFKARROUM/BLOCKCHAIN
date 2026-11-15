@@ -66,13 +66,15 @@ export default function CampaignPage() {
 
   const c = campaign;
   const name = metadata?.name ?? `Campagne n°${c.id}`;
-  const [first, ...rest] = name.split(" ");
+  // Comme la maquette : le dernier mot du nom passe en ambre.
+  const cut = name.lastIndexOf(" ");
+  const [head, tail] = cut > 0 ? [name.slice(0, cut), name.slice(cut + 1)] : ["", name];
   return (
     <main className="wrap flex flex-col gap-11 pb-28 pt-5">
       <div className="flex flex-col gap-3.5">
         <BackLink />
         <h1 className="display" style={{ fontSize: "clamp(48px, 9.6vw, 156px)", lineHeight: 0.82, fontStretch: "66%" }}>
-          {first} {rest.length > 0 && <span className="text-amber">{rest.join(" ")}</span>}
+          {head} <span className="text-amber">{tail}</span>
         </h1>
         <p className="m-0 mt-1.5 max-w-[700px] whitespace-pre-line text-[19px] text-soft">{metadata?.description ?? "Métadonnées IPFS indisponibles."}</p>
       </div>

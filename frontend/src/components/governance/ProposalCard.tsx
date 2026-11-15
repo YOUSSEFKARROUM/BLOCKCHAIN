@@ -21,21 +21,16 @@ function tagFor(p: Proposal): { text: string; color: string; border: string } {
   const kind = isFreeze ? "Demande de gel" : "Demande de déblocage";
   if (p.state === 0) return { text: `${kind} · Vote en cours`, color: isFreeze ? "#FF9B7A" : COLORS.amber, border: isFreeze ? COLORS.alert : COLORS.amber };
   if (p.state === 1) return { text: `${kind} · Rejetée`, color: COLORS.gray, border: "#3A3A40" };
-  if (p.state === 2) return { text: "Adoptée · Prête au décollage", color: "#6BE584", border: COLORS.ok };
+  if (p.state === 2) return { text: isFreeze ? "Adoptée · Gel à exécuter" : "Adoptée · Prête au décollage", color: "#6BE584", border: COLORS.ok };
   return { text: "Exécutée", color: "#6BE584", border: "#3A3A40" };
 }
 
-/** Barres Pour / Contre / quorum ; elles partent de zéro au montage puis suivent chaque vote. */
+/** Barres Pour / Contre / quorum : elles grandissent au montage (CSS), puis suivent chaque vote (transition de largeur). */
 function VoteBars({ proposal: p, supply }: { proposal: Proposal; supply: bigint }) {
-  const [isShown, setIsShown] = useState(false);
-  useEffect(() => {
-    const id = requestAnimationFrame(() => setIsShown(true));
-    return () => cancelAnimationFrame(id);
-  }, []);
   const max = p.forVotes > p.againstVotes ? p.forVotes : p.againstVotes;
-  const width = (v: bigint) => (isShown && max > 0n ? `${Number((v * 10_000n) / max) / 100}%` : "0%");
+  const width = (v: bigint) => (max > 0n ? `${Number((v * 10_000n) / max) / 100}%` : "0%");
   const isReached = p.participation >= p.quorum && p.quorum > 0n;
-  const quorumWidth = isShown && p.quorum > 0n ? `${Math.min(100, Number((p.participation * 10_000n) / p.quorum) / 100)}%` : "0%";
+  const quorumWidth = p.quorum > 0n ? `${Math.min(100, Number((p.participation * 10_000n) / p.quorum) / 100)}%` : "0%";
   const quorumColor = isReached ? COLORS.ok : "#FF9B7A";
   return (
     <div className="flex min-w-0 flex-[1_1_300px] flex-col gap-4">

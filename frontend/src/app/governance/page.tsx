@@ -6,7 +6,6 @@ import { FreezeForm } from "@/components/governance/FreezeForm";
 import { ProposalCard } from "@/components/governance/ProposalCard";
 import { Radar } from "@/components/governance/Radar";
 import { VotingPower } from "@/components/governance/VotingPower";
-import { CHAIN } from "@/config/chain";
 import { useCampaigns, useChainTime, useProposals } from "@/lib/hooks";
 import { formatPeriod, useProtocol } from "@/lib/useProtocol";
 
@@ -21,7 +20,7 @@ export default function GovernancePage() {
   const signs = [
     { big: `${rules.quorumPercent} %`, text: "de quorum, sur l'offre au snapshot" },
     { big: "POUR > CONTRE", text: "majorité stricte, l'égalité vaut rejet" },
-    { big: formatPeriod(rules.votingPeriodSeconds).toUpperCase(), text: `de vote sur ce déploiement ${CHAIN.name} (1 h à 14 j possibles)` },
+    { big: formatPeriod(rules.votingPeriodSeconds).toUpperCase(), text: "de vote sur ce déploiement, de 1 h à 14 j possibles" },
     { big: `${rules.proposalThresholdCfd} CFD`, text: "minimum pour proposer un gel" },
   ];
 

@@ -180,7 +180,10 @@ input[type="number"]::-webkit-inner-spin-button {
   .db-ping {
     animation: dbping 4s ease-out infinite;
   }
+  /* Barre de vote : grandit depuis la gauche au montage, puis suit les votes */
   .db-bar {
+    transform-origin: 0 50%;
+    animation: dbgrow 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
     transition: width 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
   }
   .db-seg {
@@ -427,6 +430,14 @@ input[type="number"]::-webkit-inner-spin-button {
     opacity: 0.55;
   }
 }
+@keyframes dbgrow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
 @keyframes dbblink {
   0% {
     opacity: 1;
@@ -527,6 +538,7 @@ input[type="number"]::-webkit-inner-spin-button {
   }
   .db-bar,
   .db-seg {
+    animation: none !important;
     transition: none !important;
   }
   .btn,

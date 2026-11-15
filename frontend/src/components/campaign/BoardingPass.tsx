@@ -127,8 +127,8 @@ export function BoardingPass({ campaign: c, proposals, metadata, risk, now, feeP
         <div>
           <div className="mono text-[11px] tracking-[.14em]" style={{ color: INK_SOFT }}>SCANNER IA</div>
           {risk ? (
-            <div className="flex items-baseline gap-2.5">
-              <span className="display text-[96px]" style={{ fontStretch: "70%", lineHeight: 0.85 }}>{Math.round(risk.score)}</span>
+            <div className="flex flex-wrap items-baseline gap-x-2.5">
+              <span className="display whitespace-nowrap text-[96px]" style={{ fontStretch: "70%", lineHeight: 0.85, overflowWrap: "normal" }}>{Math.round(risk.score)}</span>
               <span className="mono text-[14px] font-bold uppercase" style={{ color: risk.level === "Faible" ? INK_OK : "#9A2A00" }}>
                 {risk.level}
               </span>
