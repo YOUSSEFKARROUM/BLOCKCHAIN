@@ -241,6 +241,47 @@ contract GovernanceTest is GovernanceBase {
         assertEq(governance.votingPower(pid, bob), 4_000 ether);
     }
 
+    function test_Release_RevertsWhileAnotherIsOpen() public {
+        uint256 id = _successfulCampaign();
+        uint256 pid = _proposeRelease(id);
+        vm.expectRevert(abi.encodeWithSelector(Governance.ProposalAlreadyOpen.selector, pid));
+        vm.prank(creator);
+        governance.proposeMilestoneRelease(id, "Relance");
+    }
+
+    function test_Release_RevertsWhileSucceededNotExecuted() public {
+        uint256 id = _successfulCampaign();
+        uint256 pid = _proposeRelease(id);
+        vm.prank(alice);
+        governance.castVote(pid, true);
+        _endVote(); // adoptée mais pas encore exécutée
+        vm.expectRevert(abi.encodeWithSelector(Governance.ProposalAlreadyOpen.selector, pid));
+        vm.prank(creator);
+        governance.proposeMilestoneRelease(id, "Relance");
+    }
+
+    function test_Release_AllowedAgainAfterDefeat() public {
+        uint256 id = _successfulCampaign();
+        uint256 pid = _proposeRelease(id);
+        vm.prank(alice);
+        governance.castVote(pid, false);
+        _endVote(); // rejetée
+        uint256 next = _proposeRelease(id);
+        assertEq(next, pid + 1);
+    }
+
+    function test_Freeze_RevertsWhileAnotherIsOpen() public {
+        uint256 id = _successfulCampaign();
+        _nextBlock();
+        vm.prank(alice);
+        uint256 pid = governance.proposeFreeze(id, "Suspecte");
+        vm.expectRevert(abi.encodeWithSelector(Governance.ProposalAlreadyOpen.selector, pid));
+        vm.prank(bob);
+        governance.proposeFreeze(id, "Encore");
+        // un déblocage reste possible en parallèle : les deux types sont indépendants
+        _proposeRelease(id);
+    }
+
     function test_VotingPower_RevertsForUnknownProposal() public {
         vm.expectRevert(Governance.ProposalNotFound.selector);
         governance.votingPower(42, alice);
@@ -380,20 +421,17 @@ contract GovernanceTest is GovernanceBase {
         assertEq(approved, 1);
     }
 
-    function test_Execute_StaleMilestoneProposalReverts() public {
-        // deux propositions concurrentes pour le même jalon : la seconde ne peut pas être exécutée
+    function test_Execute_DuplicateMilestoneProposalImpossible() public {
+        // Deux propositions concurrentes pour le même jalon ne peuvent plus coexister ; le contrôle
+        // d'ordre des jalons de CampusFund (WrongMilestone, testé dans CampusFund.t.sol) reste en défense.
         uint256 id = _successfulCampaign();
         uint256 p1 = _proposeRelease(id);
-        vm.prank(creator);
-        uint256 p2 = governance.proposeMilestoneRelease(id, "doublon");
-        vm.startPrank(alice);
+        vm.prank(alice);
         governance.castVote(p1, true);
-        governance.castVote(p2, true);
-        vm.stopPrank();
         _endVote();
         governance.execute(p1);
-        vm.expectRevert(abi.encodeWithSelector(CampusFund.WrongMilestone.selector, 1, 0));
-        governance.execute(p2);
+        uint256 p2 = _proposeRelease(id); // après exécution, le jalon suivant peut être demandé
+        assertEq(governance.getProposal(p2).milestoneIndex, 1);
     }
 
     // ================================================================ parcours complet : jalons

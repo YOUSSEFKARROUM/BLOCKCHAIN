@@ -69,6 +69,8 @@ contract Governance is IVoting, AccessControl {
     uint256 public proposalCount;
     mapping(uint256 => Proposal) private _proposals;
     mapping(uint256 => mapping(address => bool)) public hasVoted;
+    /// @dev Dernière proposition (id + 1, 0 = aucune) par campagne et par type : une seule à la fois.
+    mapping(uint256 => mapping(ProposalType => uint256)) private _lastProposal;
 
     event ProposalCreated(
         uint256 indexed id,
@@ -97,6 +99,7 @@ contract Governance is IVoting, AccessControl {
     error AlreadyVoted();
     error NoVotingPower();
     error NotSucceeded(ProposalState state);
+    error ProposalAlreadyOpen(uint256 id);
 
     constructor(address admin, CFDToken token_, ICampusFund fund_, uint256 votingPeriod_, uint256 threshold_) {
         token = token_;
@@ -133,13 +136,23 @@ contract Governance is IVoting, AccessControl {
 
     /// @dev Le snapshot est le bloc PRÉCÉDENT : même un prêt flash pris dans le bloc de création
     ///      (ou dans la même transaction) n'est pas compté.
+    ///      Anti-harcèlement : pas de nouvelle proposition du même type pour la même campagne tant que la
+    ///      précédente est en vote ou adoptée sans être exécutée (sinon on relance jusqu'à un vote creux).
     function _createProposal(ProposalType ptype, uint256 campaignId, uint8 milestoneIndex, string calldata description)
         private
         returns (uint256 id)
     {
+        uint256 last = _lastProposal[campaignId][ptype];
+        if (last != 0) {
+            ProposalState previous = state(last - 1);
+            if (previous == ProposalState.Active || previous == ProposalState.Succeeded) {
+                revert ProposalAlreadyOpen(last - 1);
+            }
+        }
         uint64 snapshot = uint64(block.number - 1);
         uint64 voteEnd = uint64(block.timestamp + votingPeriod);
         id = proposalCount++;
+        _lastProposal[campaignId][ptype] = id + 1;
         Proposal storage p = _proposals[id];
         p.ptype = ptype;
         p.campaignId = campaignId;
