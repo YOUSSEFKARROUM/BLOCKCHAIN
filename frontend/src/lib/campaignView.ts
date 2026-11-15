@@ -30,6 +30,11 @@ export function flightCode(id: number): string {
   return `CF ${String(id + 1).padStart(2, "0")}`;
 }
 
+/** Nom de secours tant que les métadonnées IPFS ne sont pas lues : même numéro que le vol. */
+export function fallbackName(id: number): string {
+  return `Campagne ${flightCode(id)}`;
+}
+
 function openProposal(proposals: Proposal[], campaignId: number, ptype: 0 | 1): Proposal | undefined {
   return proposals.find((p) => p.campaignId === campaignId && p.ptype === ptype && p.state === 0);
 }

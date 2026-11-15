@@ -2,7 +2,7 @@ import Link from "next/link";
 import { StatusLamp } from "./StatusLamp";
 
 /** Grille commune à l'en-tête et aux lignes du tableau des départs (maquette Main). */
-export const BOARD_GRID = "90px 1.5fr 1.2fr 130px 170px 250px";
+export const BOARD_GRID = "84px 2.2fr 1fr 110px 170px 230px";
 export const BOARD_ROW_BG =
   "linear-gradient(#1E1E21 0, #1A1A1D 48.5%, #050506 48.5%, #050506 51.5%, #161618 51.5%, #121214 100%)";
 
@@ -37,6 +37,31 @@ export function BoardRow({ row, delay }: { row: BoardRowData; delay: number }) {
       <span className="flex items-center gap-3 uppercase" style={{ color: row.color }}>
         <StatusLamp color={row.color} isBlinking={row.isBlinking} />
         {row.status}
+      </span>
+    </Link>
+  );
+}
+
+/** Variante mobile (< 768 px) : une carte par campagne, tout l'essentiel visible sans défiler. */
+export function BoardCard({ row, delay }: { row: BoardRowData; delay: number }) {
+  return (
+    <Link
+      href={row.href}
+      className="db-row flex flex-col gap-2 rounded-md border border-[#2A2A2E] bg-[#151517] px-4 py-3.5 text-ticket no-underline"
+      style={{ animationDelay: `${delay}s` }}
+      aria-label={`Vol ${row.flight}, ${row.name}, ${row.club}, ${row.status}`}
+    >
+      <span className="mono flex items-center justify-between gap-3 text-[13px] font-bold">
+        <span className="text-gray">{row.flight}</span>
+        <span className="flex items-center gap-2 uppercase" style={{ color: row.color }}>
+          <StatusLamp color={row.color} isBlinking={row.isBlinking} size={10} />
+          {row.status}
+        </span>
+      </span>
+      <span className="text-[18px] font-bold leading-tight">{row.name}</span>
+      <span className="flex justify-between gap-3 text-[14px] text-soft">
+        <span className="truncate">{row.club}</span>
+        <span className="mono whitespace-nowrap font-bold text-ticket">{row.amount}</span>
       </span>
     </Link>
   );

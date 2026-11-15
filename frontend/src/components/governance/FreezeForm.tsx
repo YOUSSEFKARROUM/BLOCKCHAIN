@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { TxStrip } from "@/components/board/Feedback";
-import { flightCode } from "@/lib/campaignView";
+import { fallbackName } from "@/lib/campaignView";
 import type { Campaign } from "@/lib/data";
 import { getContracts } from "@/lib/contracts";
 import { useTx } from "@/lib/useTx";
@@ -43,7 +43,7 @@ export function FreezeForm({ campaigns, thresholdCfd }: { campaigns: Campaign[];
             <option value="">Choisir…</option>
             {campaigns.map((c) => (
               <option key={c.id} value={c.id}>
-                {flightCode(c.id)} · campagne n°{c.id}
+                {fallbackName(c.id)}
               </option>
             ))}
           </select>

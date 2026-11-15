@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { EmptyPanel, TxStrip } from "@/components/board/Feedback";
 import { StatusLamp } from "@/components/board/StatusLamp";
-import { boardStatus, ESCALE_LABELS, escaleStates, flightCode } from "@/lib/campaignView";
+import { boardStatus, ESCALE_LABELS, escaleStates, fallbackName, flightCode } from "@/lib/campaignView";
 import { getContracts } from "@/lib/contracts";
 import { type Campaign, type Proposal, trancheAmounts } from "@/lib/data";
 import { eth } from "@/lib/format";
@@ -59,7 +59,7 @@ function FlightTicket({ campaign: c, proposals, now, feePercent }: FlightTicketP
       </div>
       <div className="flex flex-col gap-4 p-[22px]">
         <Link href={`/campaign/${c.id}`} className="display text-[38px] no-underline hover:underline" style={{ lineHeight: 0.92, fontStretch: "72%" }}>
-          {metadata?.name ?? `Campagne n°${c.id}`}
+          {metadata?.name ?? fallbackName(c.id)}
         </Link>
         <div className="flex h-4 gap-1" aria-hidden="true">
           {c.milestonesBps.map((bps, i) => (

@@ -1,26 +1,35 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { BOARD_GRID, BoardRow, BoardRowPlaceholder } from "@/components/board/BoardRow";
+import { BOARD_GRID, BoardCard, BoardRow, BoardRowPlaceholder } from "@/components/board/BoardRow";
 import { EmptyPanel, ErrorPanel } from "@/components/board/Feedback";
-import { BOARD_FILTERS, type BoardFilter, boardStatus, flightCode } from "@/lib/campaignView";
+import { BOARD_FILTERS, type BoardFilter, boardStatus, fallbackName, flightCode } from "@/lib/campaignView";
 import type { Campaign, Proposal } from "@/lib/data";
 import { eth } from "@/lib/format";
 import { useCampaigns, useChainTime, useMetadata, useProposals } from "@/lib/hooks";
 
 const ROW_STAGGER = 0.12;
 
-function CampaignBoardRow({ campaign: c, proposals, now, delay }: { campaign: Campaign; proposals: Proposal[]; now: number; delay: number }) {
+interface CampaignBoardRowProps {
+  campaign: Campaign;
+  proposals: Proposal[];
+  now: number;
+  delay: number;
+  variant: "row" | "card";
+}
+
+function CampaignBoardRow({ campaign: c, proposals, now, delay, variant }: CampaignBoardRowProps) {
   const { metadata } = useMetadata(c.metadataCID);
   const status = boardStatus(c, proposals, now);
   const isFunded = c.status === 1;
+  const Item = variant === "row" ? BoardRow : BoardCard;
   return (
-    <BoardRow
+    <Item
       delay={delay}
       row={{
         href: `/campaign/${c.id}`,
         flight: flightCode(c.id),
-        name: metadata?.name ?? `Campagne n°${c.id}`,
+        name: metadata?.name ?? fallbackName(c.id),
         club: metadata?.club ?? "—",
         tranche: isFunded ? `${c.withdrawnMilestones} sur ${c.milestoneCount}` : "—",
         amount: isFunded ? `${eth(c.raised, 2)} ETH` : `${eth(c.raised, 2)} / ${eth(c.goal, 2)} ETH`,
@@ -76,7 +85,15 @@ export function DeparturesBoard() {
         <FilterTabs value={filter} onChange={setFilter} />
       </div>
       {error && <ErrorPanel title="Tableau indisponible">{error}</ErrorPanel>}
-      <div className="overflow-x-auto pb-1.5" tabIndex={0} aria-label="Tableau des départs, défilement horizontal">
+      <ul className="m-0 flex list-none flex-col gap-[5px] p-0 md:hidden" aria-label="Départs">
+        {isFirstLoad && [0, 1, 2].map((i) => <li key={i}><BoardRowPlaceholder delay={i * 0.18} /></li>)}
+        {rows.map((c, i) => (
+          <li key={c.id}>
+            <CampaignBoardRow campaign={c} proposals={proposals ?? []} now={now} delay={0.1 + i * ROW_STAGGER} variant="card" />
+          </li>
+        ))}
+      </ul>
+      <div className="hidden overflow-x-auto pb-1.5 md:block" tabIndex={0} aria-label="Tableau des départs, défilement horizontal">
         <div className="flex min-w-[1040px] flex-col gap-[5px]" style={{ perspective: 1400 }}>
           <div className="mono grid gap-x-5 px-5 pb-1.5 text-[12px] tracking-[.18em] text-amber" style={{ gridTemplateColumns: BOARD_GRID }}>
             <span>VOL</span>
@@ -88,7 +105,7 @@ export function DeparturesBoard() {
           </div>
           {isFirstLoad && [0, 1, 2].map((i) => <BoardRowPlaceholder key={i} delay={i * 0.18} />)}
           {rows.map((c, i) => (
-            <CampaignBoardRow key={c.id} campaign={c} proposals={proposals ?? []} now={now} delay={0.1 + i * ROW_STAGGER} />
+            <CampaignBoardRow key={c.id} campaign={c} proposals={proposals ?? []} now={now} delay={0.1 + i * ROW_STAGGER} variant="row" />
           ))}
         </div>
       </div>

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { TxStrip } from "@/components/board/Feedback";
 import { StatusLamp } from "@/components/board/StatusLamp";
-import { COLORS, flightCode } from "@/lib/campaignView";
+import { COLORS, fallbackName, flightCode } from "@/lib/campaignView";
 import { getContracts } from "@/lib/contracts";
 import { type Campaign, type Proposal, trancheAmounts } from "@/lib/data";
 import { cfd, dateTime, eth, relative, shortAddress } from "@/lib/format";
@@ -182,7 +182,7 @@ export function ProposalCard({ proposal: p, campaign, now, quorumPercent, feePer
   }, [readProvider, account, p.id, refreshKey]);
 
   const tag = tagFor(p);
-  const name = metadata?.name ?? `campagne n°${p.campaignId}`;
+  const name = metadata?.name ?? fallbackName(p.campaignId);
   const title = p.ptype === 0 ? `${flightCode(p.campaignId)} · Débloquer le jalon ${p.milestoneIndex + 1} de « ${name} »` : `${flightCode(p.campaignId)} · Geler la campagne « ${name} »`;
   const supply = quorumPercent > 0 ? (p.quorum * 100n) / BigInt(Math.round(quorumPercent)) : 0n;
   const timing = p.state === 0 ? `Se termine ${relative(p.voteEnd, now)}` : `Vote clos le ${dateTime(p.voteEnd)}`;

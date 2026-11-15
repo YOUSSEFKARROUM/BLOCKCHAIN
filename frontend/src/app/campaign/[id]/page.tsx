@@ -10,6 +10,7 @@ import { Escales } from "@/components/campaign/Escales";
 import { ScannerPanel } from "@/components/campaign/ScannerPanel";
 import { FlightInfo, TicketOffice } from "@/components/campaign/TicketOffice";
 import { deployment, getContracts } from "@/lib/contracts";
+import { fallbackName } from "@/lib/campaignView";
 import { type Campaign, loadCampaign } from "@/lib/data";
 import { describeError } from "@/lib/errors";
 import { useChainTime, useMetadata, useProposals, useRiskScores } from "@/lib/hooks";
@@ -65,7 +66,7 @@ export default function CampaignPage() {
   }
 
   const c = campaign;
-  const name = metadata?.name ?? `Campagne n°${c.id}`;
+  const name = metadata?.name ?? fallbackName(c.id);
   // Comme la maquette : le dernier mot du nom passe en ambre.
   const cut = name.lastIndexOf(" ");
   const [head, tail] = cut > 0 ? [name.slice(0, cut), name.slice(cut + 1)] : ["", name];
