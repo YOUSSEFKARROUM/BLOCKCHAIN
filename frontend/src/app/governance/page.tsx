@@ -18,7 +18,7 @@ export default function GovernancePage() {
   const list = proposals ?? [];
 
   const signs = [
-    { big: `${rules.quorumPercent} %`, text: "de quorum, sur l'offre au snapshot" },
+    { big: `${rules.quorumPercent} %`, text: "de quorum : CFD de la campagne (déblocage) ou offre totale (gel)" },
     { big: "POUR > CONTRE", text: "majorité stricte, l'égalité vaut rejet" },
     { big: formatPeriod(rules.votingPeriodSeconds).toUpperCase(), text: "de vote sur ce déploiement, de 1 h à 14 j possibles" },
     { big: `${rules.proposalThresholdCfd} CFD`, text: "minimum pour proposer un gel" },

@@ -35,6 +35,7 @@ export interface Proposal {
   participation: bigint;
   quorum: bigint;
   description: string;
+  proof: string; // CID IPFS ou lien de preuve (déblocage uniquement)
   state: 0 | 1 | 2 | 3; // Active, Defeated, Succeeded, Executed
 }
 
@@ -86,6 +87,7 @@ export async function loadProposals(governance: Contract): Promise<Proposal[]> {
         participation: p.participation,
         quorum: p.quorum,
         description: p.description,
+        proof: p.proof,
         state: Number(state) as Proposal["state"],
       } satisfies Proposal;
     }),

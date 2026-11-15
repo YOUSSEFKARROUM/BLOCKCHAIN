@@ -62,11 +62,15 @@ export function VotingPower({ rate }: { rate: number }) {
           CFD
         </span>
       </div>
+      <p className="m-0 max-w-[560px] text-[14px] text-gray">
+        Déblocage d&apos;une tranche : vous votez avec votre contribution à la campagne, sans rien faire de plus. Gel d&apos;une campagne : il faut
+        avoir délégué vos CFD.
+      </p>
       {info && !isDelegated && info.balance > 0n && (
         <div className="flex max-w-[560px] flex-col gap-3 rounded-md border-[1.5px] border-amber bg-[#121008] p-4">
           <p className="m-0 text-[15px] text-soft">
-            Vos {wholeTokens(info.balance)} CFD ne sont pas délégués : ils ne comptent pour aucun vote. La délégation s&apos;applique aux propositions
-            créées <em>après</em> elle.
+            Vos {wholeTokens(info.balance)} CFD ne sont pas délégués : ils ne comptent pas pour les votes de gel. La délégation s&apos;applique aux
+            propositions créées <em>après</em> elle.
           </p>
           <button type="button" disabled={busy} onClick={() => void send((s) => getContracts(s).token.delegate(account))} className="btn btn-amber btn-sm self-start">
             Activer mon pouvoir de vote

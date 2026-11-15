@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowIcon } from "@/components/board/Icons";
 import { StatusLamp } from "@/components/board/StatusLamp";
+import { ProofLink } from "@/components/governance/ProposalCard";
 import { COLORS, ESCALE_LABELS, type EscaleState, escaleStates, releaseProposalFor } from "@/lib/campaignView";
 import { type Campaign, type Proposal, trancheAmounts } from "@/lib/data";
 import { cfd, eth, percent } from "@/lib/format";
@@ -45,6 +46,7 @@ function VoteSummary({ proposal: p }: { proposal: Proposal }) {
           </span>
         </div>
       </div>
+      {p.proof && <ProofLink proof={p.proof} />}
       <Link href="/governance" className="btn btn-amber btn-sm self-start !min-h-[52px]">
         Voter à la tour de contrôle
         <ArrowIcon />

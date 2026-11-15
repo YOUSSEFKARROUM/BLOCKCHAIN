@@ -1651,6 +1651,25 @@
       },
       {
         "type": "function",
+        "name": "raisedOf",
+        "inputs": [
+          {
+            "name": "id",
+            "type": "uint256",
+            "internalType": "uint256"
+          }
+        ],
+        "outputs": [
+          {
+            "name": "",
+            "type": "uint256",
+            "internalType": "uint256"
+          }
+        ],
+        "stateMutability": "view"
+      },
+      {
+        "type": "function",
         "name": "refund",
         "inputs": [
           {
@@ -2544,6 +2563,11 @@
                 "name": "description",
                 "type": "string",
                 "internalType": "string"
+              },
+              {
+                "name": "proof",
+                "type": "string",
+                "internalType": "string"
               }
             ]
           }
@@ -2696,6 +2720,11 @@
           },
           {
             "name": "description",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "proof",
             "type": "string",
             "internalType": "string"
           }
@@ -2852,6 +2881,30 @@
         "type": "function",
         "name": "votingPeriod",
         "inputs": [],
+        "outputs": [
+          {
+            "name": "",
+            "type": "uint256",
+            "internalType": "uint256"
+          }
+        ],
+        "stateMutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "votingPower",
+        "inputs": [
+          {
+            "name": "id",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "voter",
+            "type": "address",
+            "internalType": "address"
+          }
+        ],
         "outputs": [
           {
             "name": "",
@@ -3144,6 +3197,11 @@
       },
       {
         "type": "error",
+        "name": "MissingProof",
+        "inputs": []
+      },
+      {
+        "type": "error",
         "name": "NoVotingPower",
         "inputs": []
       },
@@ -3160,6 +3218,17 @@
             "name": "state",
             "type": "uint8",
             "internalType": "enum Governance.ProposalState"
+          }
+        ]
+      },
+      {
+        "type": "error",
+        "name": "ProposalAlreadyOpen",
+        "inputs": [
+          {
+            "name": "id",
+            "type": "uint256",
+            "internalType": "uint256"
           }
         ]
       },
@@ -3627,12 +3696,12 @@
   },
   "deployments": {
     "31337": {
-      "CFDToken": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
-      "CampusFund": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
-      "Governance": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
-      "Treasury": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "CFDToken": "0x610178dA211FEF7D417bC0e6FeD39F05609AD788",
+      "CampusFund": "0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e",
+      "Governance": "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0",
+      "Treasury": "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318",
       "chainId": 31337,
-      "deployBlock": 0,
+      "deployBlock": 68,
       "votingPeriod": 3600
     },
     "11155111": {

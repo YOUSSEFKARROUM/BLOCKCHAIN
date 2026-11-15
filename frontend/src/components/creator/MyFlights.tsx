@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { EmptyPanel, TxStrip } from "@/components/board/Feedback";
 import { StatusLamp } from "@/components/board/StatusLamp";
 import { boardStatus, ESCALE_LABELS, escaleStates, flightCode } from "@/lib/campaignView";
@@ -36,6 +37,7 @@ function FlightTicket({ campaign: c, proposals, now, feePercent }: FlightTicketP
   const { account } = useWeb3();
   const { metadata } = useMetadata(c.metadataCID);
   const { status, send, busy } = useTx();
+  const [proof, setProof] = useState("");
   const me = account?.toLowerCase();
   const isBeneficiary = me === c.beneficiary.toLowerCase();
   const isCreator = me === c.creator.toLowerCase();
@@ -74,14 +76,29 @@ function FlightTicket({ campaign: c, proposals, now, feePercent }: FlightTicketP
           ))}
         </div>
         {canRequest && (
-          <button
-            type="button"
-            disabled={busy}
-            onClick={() => void send((s) => getContracts(s).governance.proposeMilestoneRelease(c.id, `Jalon ${next + 1} atteint : ${nextTitle}`))}
-            className="btn btn-dark btn-sm !min-h-[56px]"
+          <form
+            className="flex flex-col gap-2"
+            onSubmit={(e) => {
+              e.preventDefault();
+              const value = proof.trim();
+              if (value) void send((s) => getContracts(s).governance.proposeMilestoneRelease(c.id, `Jalon ${next + 1} atteint : ${nextTitle}`, value));
+            }}
           >
-            Demander le déblocage du jalon {next + 1}
-          </button>
+            <label htmlFor={`proof-${c.id}`} className="text-[13px] font-semibold">
+              Preuve du jalon {next + 1} (CID IPFS ou lien https)
+            </label>
+            <input
+              id={`proof-${c.id}`}
+              value={proof}
+              maxLength={300}
+              onChange={(e) => setProof(e.target.value)}
+              placeholder="ipfs://… ou https://…"
+              className="field !min-h-[48px] bg-night !text-[14px] !font-normal"
+            />
+            <button type="submit" disabled={busy || proof.trim() === ""} className="btn btn-dark btn-sm !min-h-[56px]">
+              Demander le déblocage du jalon {next + 1}
+            </button>
+          </form>
         )}
         {hasOpenRelease && (
           <Link href="/governance" className="btn btn-outline-dark btn-sm !min-h-[56px]">

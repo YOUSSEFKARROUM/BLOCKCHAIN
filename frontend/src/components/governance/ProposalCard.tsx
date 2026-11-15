@@ -8,6 +8,7 @@ import { getContracts } from "@/lib/contracts";
 import { type Campaign, type Proposal, trancheAmounts } from "@/lib/data";
 import { cfd, dateTime, eth, relative, shortAddress } from "@/lib/format";
 import { useMetadata } from "@/lib/hooks";
+import { proofHref } from "@/lib/proof";
 import { useTx } from "@/lib/useTx";
 import { useWeb3 } from "@/lib/web3";
 
@@ -64,6 +65,23 @@ function VoteBars({ proposal: p, supply }: { proposal: Proposal; supply: bigint 
   );
 }
 
+/** Preuve du jalon : lien seulement si l'adresse est sûre (https ou IPFS), sinon texte brut. */
+export function ProofLink({ proof }: { proof: string }) {
+  const href = proofHref(proof);
+  return (
+    <p className="m-0 text-[15px]">
+      <span className="text-gray">Preuve : </span>
+      {href ? (
+        <a href={href} target="_blank" rel="noopener noreferrer" className="break-all text-amber underline underline-offset-4">
+          {proof}
+        </a>
+      ) : (
+        <span className="mono break-all text-soft">{proof}</span>
+      )}
+    </p>
+  );
+}
+
 function ResultTile({ title, text, isOk = true }: { title: string; text: string; isOk?: boolean }) {
   return (
     <div className="flex flex-col gap-1.5 rounded-lg px-4 py-5 text-center" style={{ background: isOk ? "#0F2E17" : "#1C1C1F" }}>
@@ -92,7 +110,11 @@ function Actions({ proposal: p, campaign, mine, feePercent }: { proposal: Propos
   } else if (p.state === 0 && mine?.hasVoted) {
     body = <ResultTile title="VOTÉ" text={`${cfd(mine.weight)} CFD COMPTÉS`} />;
   } else if (p.state === 0 && mine && mine.weight === 0n) {
-    body = <p className="mono m-0 text-center text-[12px] text-gray">AUCUN CFD DÉLÉGUÉ AU BLOC {p.snapshotBlock} : PAS DE POUVOIR DE VOTE ICI</p>;
+    body = (
+      <p className="mono m-0 text-center text-[12px] text-gray">
+        {isFreeze ? `AUCUN CFD DÉLÉGUÉ AU BLOC ${p.snapshotBlock} : PAS DE VOIX SUR CE GEL` : "SEULS LES CONTRIBUTEURS DE CETTE CAMPAGNE VOTENT SUR SES TRANCHES"}
+      </p>
+    );
   } else if (p.state === 0 && mine) {
     body = (
       <>
@@ -149,14 +171,15 @@ export function ProposalCard({ proposal: p, campaign, now, quorumPercent, feePer
   useEffect(() => {
     if (!account) return;
     let cancelled = false;
-    const { governance, token } = getContracts(readProvider);
-    Promise.all([governance.hasVoted(p.id, account), token.getPastVotes(account, p.snapshotBlock)])
+    const { governance } = getContracts(readProvider);
+    // votingPower : contribution à la campagne (déblocage) ou CFD délégués au snapshot (gel)
+    Promise.all([governance.hasVoted(p.id, account), governance.votingPower(p.id, account)])
       .then(([hasVoted, weight]) => !cancelled && setMine({ hasVoted, weight }))
       .catch(() => !cancelled && setMine(null));
     return () => {
       cancelled = true;
     };
-  }, [readProvider, account, p.id, p.snapshotBlock, refreshKey]);
+  }, [readProvider, account, p.id, refreshKey]);
 
   const tag = tagFor(p);
   const name = metadata?.name ?? `campagne n°${p.campaignId}`;
@@ -177,8 +200,9 @@ export function ProposalCard({ proposal: p, campaign, now, quorumPercent, feePer
         </div>
         <h3 className="display display-s">{title}</h3>
         <p className="m-0 text-[16px] text-soft">{p.description}</p>
+        {p.proof && <ProofLink proof={p.proof} />}
         <div className="tag mt-auto flex flex-wrap gap-x-5 gap-y-1.5 pt-2" style={{ letterSpacing: ".06em" }}>
-          <span>Offre au snapshot : {cfd(supply)} CFD</span>
+          <span>{p.ptype === 0 ? `CFD de la campagne : ${cfd(supply)}` : `Offre au snapshot : ${cfd(supply)} CFD`}</span>
           <span>Bloc {p.snapshotBlock}</span>
           <span>{timing}</span>
           <span>Par {shortAddress(p.proposer)}</span>

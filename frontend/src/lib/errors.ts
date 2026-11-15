@@ -30,7 +30,9 @@ const MESSAGES: Record<string, string> = {
   VotingClosed: "Le vote est terminé.",
   AlreadyVoted: "Vous avez déjà voté.",
   NoVotingPower:
-    "Aucun pouvoir de vote au moment du snapshot : il fallait détenir ET avoir délégué vos CFD avant la création de la proposition.",
+    "Aucun pouvoir de vote : pour un déblocage, seuls les contributeurs de la campagne votent ; pour un gel, il fallait avoir délégué vos CFD avant la création de la proposition.",
+  ProposalAlreadyOpen: "Une proposition du même type est déjà en cours (ou adoptée, à exécuter) pour cette campagne.",
+  MissingProof: "Ajoutez une preuve du jalon (CID IPFS ou lien) avant de demander le déblocage.",
   NotSucceeded: "La proposition n'est pas adoptée (ou le vote n'est pas terminé).",
   ERC20InsufficientBalance: "Solde de CFD insuffisant : pour être remboursé, il faut rendre les CFD reçus.",
   AccessControlUnauthorizedAccount: "Vous n'avez pas le rôle requis.",
