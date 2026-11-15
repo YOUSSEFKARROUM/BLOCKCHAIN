@@ -15,7 +15,7 @@ const NAV = [
   { href: "/#departs", label: "Départs", real: "Campagnes", match: (p: string) => p === "/" || p.startsWith("/campaign") },
   { href: "/governance", label: "Tour de contrôle", real: "Gouvernance", match: (p: string) => p.startsWith("/governance") },
   { href: "/creator", label: "Plan de vol", real: "Créer une campagne", match: (p: string) => p.startsWith("/creator") },
-  { href: "/#securite", label: "Sécurité", real: "Audit et tests", match: () => false },
+  { href: "/securite", label: "Sécurité", real: "Audit et tests", match: (p: string) => p.startsWith("/securite") },
 ];
 
 function WalletButton() {

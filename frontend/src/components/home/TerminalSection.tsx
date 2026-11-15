@@ -35,7 +35,7 @@ export function TerminalSection({ rules }: { rules: ProtocolRules }) {
           </span>
         )}
       </div>
-      <div className="grid gap-3.5" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(300px, 100%), 1fr))" }}>
+      <div className="grid gap-3.5" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(240px, 100%), 1fr))" }}>
         {gates(rules).map((g) => {
           const address = deployment?.[g.name];
           const link = address ? explorerUrl(address) : null;

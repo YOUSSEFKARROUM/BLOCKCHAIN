@@ -33,7 +33,7 @@ const AUTO_GRID = (min: number) => ({ gridTemplateColumns: `repeat(auto-fit, min
 
 export function SecuritySection() {
   return (
-    <section id="securite" aria-labelledby="securite-title" className="wrap flex flex-col gap-14 pb-[72px] pt-28">
+    <section id="securite" aria-labelledby="securite-title" className="wrap flex flex-col gap-14 pb-[72px] pt-16">
       <div className="flex flex-wrap items-end justify-between gap-5">
         <h2 id="securite-title" className="display display-xl">
           Contrôle
