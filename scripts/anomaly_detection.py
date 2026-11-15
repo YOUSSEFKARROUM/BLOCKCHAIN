@@ -11,6 +11,8 @@ Principe
    - un ISOLATION FOREST (scikit-learn) entraîné sur un jeu de référence de campagnes : il isole les
      campagnes « qui ne ressemblent pas aux autres » sans qu'on lui dise ce qu'est une fraude.
 4. Score final = 60 % règles + 40 % Isolation Forest, puis badge : Faible (< 35), Moyen (35-50), Élevé (>= 50).
+   Évaluation (--demo) sur données SIMULÉES : 10 tirages, fraudes connues ET fraudes déguisées,
+   score combiné comparé aux règles seules et à la forêt seule (voir scripts/data/demo_report.json).
    Seuils calibrés sur le tirage de calibration (graine 7) : 35 ≈ 95e centile des campagnes normales.
    Le résultat est écrit en JSON pour le front-end.
 
@@ -169,11 +171,15 @@ def _addr(rng: random.Random) -> str:
     return "0x" + "".join(rng.choice("0123456789abcdef") for _ in range(40))
 
 
-def generate_demo_dataset(n_normal: int = 300, n_fraud: int = 30, seed: int = 7):
+def generate_demo_dataset(n_normal: int = 300, n_fraud: int = 30, seed: int = 7, disguised: bool = False):
     """Campagnes synthétiques. Fraudes simulées de 3 types :
     - sybil : N adresses neuves financées par une même source, même montant, en rafale ;
     - pic coordonné : contributions massives en quelques blocs depuis des adresses neuves ;
     - auto-financement : le porteur alimente une poignée d'adresses qui apportent presque tout.
+
+    `disguised=True` produit des fraudes « déguisées », que les règles n'ont pas été écrites pour voir :
+    montants tous différents, contributions étalées sur des centaines de blocs, adresses déjà actives,
+    fonds répartis entre 2 ou 3 sources. Sert à mesurer la détection hors des motifs connus.
     """
     rng = random.Random(seed)
     rows: list[Contribution] = []
@@ -199,7 +205,9 @@ def generate_demo_dataset(n_normal: int = 300, n_fraud: int = 30, seed: int = 7)
         source = _addr(rng)
         kind = ["sybil", "pic", "auto-financement"][k % 3]
         honest(cid, start, rng.randint(0, 4))  # un peu de bruit honnête
-        if kind == "sybil":
+        if disguised:
+            _disguised_fraud(rows, rng, cid, start, kind, source)
+        elif kind == "sybil":
             amount = int(rng.choice([0.1, 0.25, 0.5, 1.0]) * 1e18)
             for i in range(rng.randint(6, 20)):
                 rows.append(Contribution(cid, _addr(rng), amount, start + i * rng.randint(1, 2), source, 0))
@@ -214,6 +222,18 @@ def generate_demo_dataset(n_normal: int = 300, n_fraud: int = 30, seed: int = 7)
         meta[cid] = {"label": 1, "type": kind, "creator_funder": source if kind != "pic" else _addr(rng)}
         cid += 1
     return rows, meta
+
+
+def _disguised_fraud(rows: list[Contribution], rng: random.Random, cid: int, start: int, kind: str, source: str) -> None:
+    """Même intention que la fraude connue, mais les signaux évidents sont brouillés."""
+    sources = [source] + [_addr(rng) for _ in range(rng.randint(1, 2))]  # 2 ou 3 sources de fonds
+    count = {"sybil": rng.randint(8, 20), "pic": rng.randint(10, 25), "auto-financement": rng.randint(5, 9)}[kind]
+    base = {"sybil": 0.4, "pic": 0.25, "auto-financement": 2.5}[kind]
+    for _ in range(count):
+        amount = base * rng.uniform(0.6, 1.6)  # tous différents : plus de « montant répété »
+        delay = rng.randint(0, 600)  # étalé sur ~600 blocs : plus de « pic »
+        nonce = rng.randint(1, 30)  # adresses déjà utilisées : plus d'« adresses neuves »
+        rows.append(Contribution(cid, _addr(rng), int(amount * 1e18), start + delay, rng.choice(sources), nonce))
 
 
 def score_campaigns(by_campaign: dict[int, list[Contribution]], creators: dict[int, str | None],
@@ -242,6 +262,43 @@ def reference_features(seed: int = 7) -> list[dict]:
 
 
 CALIBRATION_SEED, TRAINING_SEED, EVALUATION_SEED = 7, 11, 23
+MULTI_EVALUATION_SEEDS = list(range(23, 33))  # 10 tirages indépendants
+FOREST_ONLY_THRESHOLD = 95  # forêt seule : signalée si plus anormale que 95 % des campagnes de référence
+
+
+def _confusion(predicted: dict[int, bool], meta: dict[int, dict]) -> tuple[float, float]:
+    tp = sum(1 for c, p in predicted.items() if p and meta[c]["label"] == 1)
+    fp = sum(1 for c, p in predicted.items() if p and meta[c]["label"] == 0)
+    fn = sum(1 for c, p in predicted.items() if not p and meta[c]["label"] == 1)
+    return (tp / (tp + fp) if tp + fp else 0.0), (tp / (tp + fn) if tp + fn else 0.0)
+
+
+def evaluate(seed: int, disguised: bool, forest: ForestScorer) -> dict[str, tuple[float, float]]:
+    """Précision et rappel sur un tirage : score combiné, règles seules, Isolation Forest seule."""
+    rows, meta = generate_demo_dataset(seed=seed, disguised=disguised)
+    grouped = defaultdict(list)
+    for r in rows:
+        grouped[r.campaign].append(r)
+    results = score_campaigns(grouped, {c: m["creator_funder"] for c, m in meta.items()}, forest)
+    return {
+        "combine": _confusion({c: r["level"] == "Élevé" for c, r in results.items()}, meta),
+        "regles_seules": _confusion({c: r["rulesScore"] >= 50 for c, r in results.items()}, meta),
+        "foret_seule": _confusion({c: r["forestScore"] >= FOREST_ONLY_THRESHOLD for c, r in results.items()}, meta),
+    }
+
+
+def multi_seed_report(forest: ForestScorer, disguised: bool) -> dict:
+    """Moyenne et écart type sur MULTI_EVALUATION_SEEDS, pour chaque détecteur."""
+    runs = [evaluate(seed, disguised, forest) for seed in MULTI_EVALUATION_SEEDS]
+    out = {}
+    for name in runs[0]:
+        precisions = np.array([r[name][0] for r in runs])
+        recalls = np.array([r[name][1] for r in runs])
+        out[name] = {
+            "precision": f"{precisions.mean():.2f} ± {precisions.std():.2f}",
+            "rappel": f"{recalls.mean():.2f} ± {recalls.std():.2f}",
+        }
+    return out
 
 
 def run_demo() -> None:
@@ -283,6 +340,14 @@ def run_demo() -> None:
         "precision": round(precision, 3), "rappel": round(recall, 3),
         "normales_signalees_Moyen_ou_plus": flagged_medium,
         "detection_par_type": {k: f"{v[0]}/{v[1]}" for k, v in by_type.items()},
+        "avertissement": "Données SIMULÉES par le script lui-même : ces chiffres mesurent la cohérence du détecteur, "
+                         "pas sa performance sur de vraies fraudes.",
+        "multi_tirages": {
+            "tirages": MULTI_EVALUATION_SEEDS,
+            "seuil_foret_seule": FOREST_ONLY_THRESHOLD,
+            "fraudes_connues": multi_seed_report(forest, disguised=False),
+            "fraudes_deguisees": multi_seed_report(forest, disguised=True),
+        },
     }
     (DATA_DIR / "demo_report.json").write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
     print(json.dumps(report, indent=2, ensure_ascii=False))

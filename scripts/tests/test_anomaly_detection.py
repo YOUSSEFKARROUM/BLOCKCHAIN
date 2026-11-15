@@ -67,3 +67,40 @@ def test_demo_evaluation_detects_frauds_without_false_alarms() -> None:
     detected = sum(1 for c, r in res.items() if r["level"] == "Élevé" and meta[c]["label"] == 1)
     assert false_high == 0
     assert detected >= 24  # au moins 80 % des 30 fraudes
+
+
+def test_disguised_frauds_blur_the_obvious_signals() -> None:
+    """Fraudes déguisées : ni montant répété, ni rafale, ni adresses neuves en majorité."""
+    from collections import defaultdict
+
+    rows, meta = ad.generate_demo_dataset(n_normal=0, n_fraud=9, seed=5, disguised=True)
+    grouped = defaultdict(list)
+    for r in rows:
+        grouped[r.campaign].append(r)
+    for c_id, contribs in grouped.items():
+        f = ad.campaign_features(contribs, meta[c_id]["creator_funder"])
+        assert f["repeated"] < 0.5
+        assert f["burst"] < 0.6
+        assert f["fresh"] < 0.5
+
+
+def test_evaluate_returns_probabilities_for_each_detector() -> None:
+    forest = ad.ForestScorer(ad.reference_features(seed=ad.TRAINING_SEED))
+    result = ad.evaluate(ad.EVALUATION_SEED, disguised=False, forest=forest)
+    assert set(result) == {"combine", "regles_seules", "foret_seule"}
+    for precision, recall in result.values():
+        assert 0.0 <= precision <= 1.0 and 0.0 <= recall <= 1.0
+
+
+def test_combined_score_beats_each_detector_alone_on_known_frauds() -> None:
+    forest = ad.ForestScorer(ad.reference_features(seed=ad.TRAINING_SEED))
+    result = ad.evaluate(ad.EVALUATION_SEED, disguised=False, forest=forest)
+    assert result["combine"][1] > result["regles_seules"][1]
+    assert result["combine"][1] > result["foret_seule"][1]
+
+
+def test_disguised_frauds_are_harder_to_detect() -> None:
+    forest = ad.ForestScorer(ad.reference_features(seed=ad.TRAINING_SEED))
+    known = ad.evaluate(ad.EVALUATION_SEED, disguised=False, forest=forest)
+    disguised = ad.evaluate(ad.EVALUATION_SEED, disguised=True, forest=forest)
+    assert disguised["combine"][1] < known["combine"][1]

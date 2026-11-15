@@ -18,5 +18,49 @@
     "sybil": "10/10",
     "pic": "10/10",
     "auto-financement": "6/10"
+  },
+  "avertissement": "Données SIMULÉES par le script lui-même : ces chiffres mesurent la cohérence du détecteur, pas sa performance sur de vraies fraudes.",
+  "multi_tirages": {
+    "tirages": [
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32
+    ],
+    "seuil_foret_seule": 95,
+    "fraudes_connues": {
+      "combine": {
+        "precision": "1.00 ± 0.01",
+        "rappel": "0.88 ± 0.02"
+      },
+      "regles_seules": {
+        "precision": "1.00 ± 0.00",
+        "rappel": "0.34 ± 0.01"
+      },
+      "foret_seule": {
+        "precision": "1.00 ± 0.00",
+        "rappel": "0.50 ± 0.06"
+      }
+    },
+    "fraudes_deguisees": {
+      "combine": {
+        "precision": "0.99 ± 0.03",
+        "rappel": "0.38 ± 0.11"
+      },
+      "regles_seules": {
+        "precision": "0.00 ± 0.00",
+        "rappel": "0.00 ± 0.00"
+      },
+      "foret_seule": {
+        "precision": "0.00 ± 0.00",
+        "rappel": "0.00 ± 0.00"
+      }
+    }
   }
 }
