@@ -18,8 +18,7 @@ export function ScannerSection() {
           <span className="text-amber">La DAO décide.</span>
         </h2>
         <p className="m-0 max-w-[540px] text-soft">
-          Scanner = score de risque IA. Un script lit les contributions sur la chaîne et calcule 6 indicateurs par campagne. Le score final
-          mêle 60 % de règles et 40 % d&apos;Isolation Forest. Il n&apos;a aucun pouvoir : geler une campagne reste un vote.
+          Score de risque IA : 60 % règles, 40 % Isolation Forest. Il signale, il ne gèle rien.
         </p>
         <ul className="mono m-0 flex list-none flex-wrap gap-1.5 p-0 text-[12px] uppercase tracking-[.08em]">
           {SIGNALS.map((s) => (
@@ -42,7 +41,7 @@ export function ScannerSection() {
           </div>
         </div>
         <p className="tag m-0" style={{ letterSpacing: ".06em" }}>
-          Mesuré sur le jeu de démonstration : 300 campagnes normales et 30 fraudes.
+          Jeu de démo : 300 campagnes, 30 fraudes.
         </p>
       </div>
     </section>

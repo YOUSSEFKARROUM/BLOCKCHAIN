@@ -98,7 +98,7 @@ export function DeparturesBoard() {
         </EmptyPanel>
       )}
       <p className="tag m-0" style={{ letterSpacing: ".1em" }}>
-        Vol = campagne · Jalon = escale · Score de risque IA affiché sur chaque fiche
+        Vol = campagne · Escale = jalon
       </p>
     </section>
   );

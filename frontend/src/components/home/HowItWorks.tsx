@@ -15,25 +15,25 @@ function gates(r: ProtocolRules): Gate[] {
       letter: "A",
       title: "Enregistrement",
       real: "Création de la campagne",
-      text: "Le club crée sa campagne : un objectif, une durée de 1 h à 90 jours et 2 à 5 jalons dont la somme fait exactement 100 %.",
+      text: "Un objectif, une durée, 2 à 5 jalons.",
     },
     {
       letter: "B",
       title: "Embarquement",
       real: "Contribution",
-      text: `Vous contribuez en ETH et recevez des CFD au taux fixe de 1 ETH = ${r.rate} CFD. Ce sont vos droits de vote.`,
+      text: `1 ETH = ${r.rate} CFD : vos droits de vote.`,
     },
     {
       letter: "C",
       title: "Tour de contrôle",
       real: "Vote de la DAO",
-      text: "La DAO vote chaque jalon avec les CFD détenus au snapshot, le bloc qui précède la proposition.",
+      text: "La DAO vote chaque jalon, au snapshot.",
     },
     {
       letter: "D",
       title: "Décollage",
       real: "Déblocage de la tranche",
-      text: `N'importe qui peut exécuter une proposition acceptée : la tranche part. Les ${r.feePercent} % de frais sont prélevés à ce moment-là.`,
+      text: `Vote adopté : la tranche part (${r.feePercent} % de frais).`,
     },
   ];
 }
@@ -71,8 +71,7 @@ export function HowItWorks({ rules }: { rules: ProtocolRules }) {
         <div className="flex flex-wrap items-center gap-x-7 gap-y-[18px] rounded-[10px] bg-night px-[30px] py-[26px] text-ticket">
           <span className="tag-b text-[15px] text-alert">Vol annulé ?</span>
           <p className="m-0 flex-[1_1_420px] text-[19px]">
-            Objectif manqué, ou campagne gelée par la DAO : chacun récupère lui-même <strong className="text-amber">100 % de sa mise</strong>, et ses CFD
-            sont brûlés.
+            Objectif manqué ou gel : <strong className="text-amber">100 % de la mise</strong> rendue.
           </p>
         </div>
       </div>

@@ -10,23 +10,23 @@ const THREATS = [
   {
     kind: "Menace type The DAO",
     title: "Réentrance",
-    text: "ReentrancyAttacker vide VulnerableVault. SecureVault résiste, comme CampusFund avec nonReentrant et le pull payment.",
+    text: "Le coffre vulnérable est vidé. CampusFund résiste.",
     lost: "VulnerableVault : vidé",
     held: "SecureVault : intact",
   },
   {
     kind: "Menace type Beanstalk",
     title: "Flash loan de gouvernance",
-    text: "FlashLoanAttacker fait tomber NaiveGovernance. Ici, les CFD empruntés dans le bloc ne pèsent rien : le vote lit le snapshot du bloc précédent.",
+    text: "Les CFD empruntés ne pèsent rien : le vote lit le bloc précédent.",
     lost: "NaiveGovernance : prise",
     held: "block.number − 1 : tient",
   },
 ];
 
 const NOTES = [
-  { title: "Trésorerie multisig 2 sur 3", text: "Une signature suffit tant que le cumul du jour reste sous 1 ETH. Au-delà, il en faut deux : découper un gros retrait ne sert à rien." },
-  { title: "Rôles admin abandonnés", text: "Après le déploiement, plus personne ne peut frapper des CFD ni débloquer des fonds sans vote." },
-  { title: "Audit Slither traité", text: "18 findings au départ, 13 ensuite, tous traités et justifiés, plus un passage de forge lint." },
+  { title: "Multisig 2 sur 3", text: "Deux signatures au-delà de 1 ETH par jour." },
+  { title: "Aucun admin", text: "Personne ne débloque de fonds sans vote." },
+  { title: "Audit Slither", text: "Tous les findings traités." },
 ];
 
 const AUTO_GRID = (min: number) => ({ gridTemplateColumns: `repeat(auto-fit, minmax(min(${min}px, 100%), 1fr))` });
@@ -67,7 +67,7 @@ export function SecuritySection() {
               <span className="text-gray">{t.kind}</span>
               <span className="text-ok">Interceptée</span>
             </div>
-            <h3 className="display m-0 text-[44px]" style={{ fontStretch: "72%", lineHeight: 0.95 }}>
+            <h3 className="display m-0" style={{ fontSize: "clamp(32px, 4vw, 44px)", fontStretch: "72%", lineHeight: 0.95 }}>
               {t.title}
             </h3>
             <p className="m-0 text-[16px] text-soft">{t.text}</p>

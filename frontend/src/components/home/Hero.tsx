@@ -58,8 +58,7 @@ export function Hero() {
           </span>
         </div>
         <p className="m-0 max-w-[540px] text-[21px] leading-[1.45] text-soft" style={{ textWrap: "pretty" }}>
-          CampusFund finance les projets des clubs étudiants. Les ETH restent à quai : une tranche ne part vers le club que
-          lorsque les contributeurs ont voté son départ.
+          Les ETH restent à quai. Chaque tranche part vers le club après le vote des contributeurs.
         </p>
         <div className="flex flex-wrap gap-3">
           <a href="#departs" className="btn btn-amber !text-[15px]">

@@ -10,14 +10,10 @@ type ContractKey = "CFDToken" | "CampusFund" | "Governance" | "Treasury";
 
 function gates(r: ProtocolRules): { gate: string; name: ContractKey; text: string }[] {
   return [
-    { gate: "A1", name: "CFDToken", text: "Jeton de gouvernance ERC20Votes, frappé et brûlé par CampusFund seulement." },
-    { gate: "A2", name: "CampusFund", text: "Campagnes, jalons, statuts et remboursements. Pause d'urgence et nonReentrant." },
-    {
-      gate: "A3",
-      name: "Governance",
-      text: `DAO à snapshot : quorum de ${r.quorumPercent} %, majorité stricte, vote de ${formatPeriod(r.votingPeriodSeconds)} sur ce déploiement (1 h à 14 j).`,
-    },
-    { gate: "A4", name: "Treasury", text: "Multisig 2 sur 3 avec plafond journalier cumulé de 1 ETH pour une seule signature." },
+    { gate: "A1", name: "CFDToken", text: "Jeton de vote ERC20Votes." },
+    { gate: "A2", name: "CampusFund", text: "Campagnes, jalons, remboursements." },
+    { gate: "A3", name: "Governance", text: `DAO à snapshot, quorum ${r.quorumPercent} %, vote de ${formatPeriod(r.votingPeriodSeconds)}.` },
+    { gate: "A4", name: "Treasury", text: "Multisig 2 sur 3." },
   ];
 }
 
