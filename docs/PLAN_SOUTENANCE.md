@@ -20,7 +20,7 @@
 | 1:00 – 2:30 | **Architecture** : 4 contrats (CFDToken, CampusFund, Governance, Treasury), métadonnées sur IPFS, front Next.js + ethers, script IA hors chaîne. Machine d'états d'une campagne. | Schéma de RAPPORT.md §3 |
 | 2:30 – 5:30 | **Démo (3 min)**, voir ci-dessous | Front |
 | 5:30 – 8:00 | **Sécurité** : réentrance (The DAO), snapshot contre flash loan (Beanstalk) avec le test en direct, multisig avec plafond journalier, renonciation aux rôles admin, Slither (18 → 13 findings, tous traités). | Terminal + SECURITE.md |
-| 8:00 – 9:15 | **Tests** : 157 tests, fuzz 1000 tirages, 5 invariants, canaris, couverture 100 % des lignes et 97 % des branches des 4 contrats. **IA** : rappel 0,88 sur fraudes connues mais 0,38 sur fraudes déguisées, sur données simulées : le dire franchement. | docs/coverage, demo_report.json |
+| 8:00 – 9:15 | **Tests** : 159 tests, fuzz 1000 tirages, 5 invariants, canaris, couverture 100 % des lignes et 97 % des branches des 4 contrats. **IA** : rappel 0,88 sur fraudes connues mais 0,38 sur fraudes déguisées, sur données simulées : le dire franchement. | docs/coverage, demo_report.json |
 | 9:15 – 10:00 | **Bilan et limites** : pas d'audit pro, Sybil sur le vote quadratique, jeton achetable avant une proposition. Pistes : timelock, délai de vote, identité étudiante. | — |
 
 ## La démo en 3 minutes (chronométrée)

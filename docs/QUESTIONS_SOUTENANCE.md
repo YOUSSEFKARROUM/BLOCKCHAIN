@@ -154,7 +154,7 @@ dizaines d'octets. Le JWT Pinata reste côté serveur, sinon n'importe qui pourr
 
 ### Bonus : questions pièges
 
-- **« Votre contrat est-il sûr à 100 % ? »** Non, et personne ne peut le garantir. Il est testé (157 tests,
+- **« Votre contrat est-il sûr à 100 % ? »** Non, et personne ne peut le garantir. Il est testé (159 tests,
   invariants, fuzzing), analysé (Slither) et ses limites sont documentées (SECURITE.md §8). Pour de vrais
   fonds, il faudrait un audit professionnel.
 - **« Avez-vous écrit le code vous-même ? »** La logique métier (jalons, machine d'états, multisig, snapshot,
@@ -183,3 +183,19 @@ d'administration sont abandonnés au déploiement.
 Sur les 4 contrats, elle est de 97 % (75/77). Les deux branches restantes sont des refus dans un modificateur
 (`exists`, `pending`) : les tests y passent, mais `forge coverage` ne les attribue pas. Le total global (85 %)
 inclut les contrats de démonstration volontairement vulnérables.
+
+## Questions ajoutées après la revue du 16/11/2026
+
+- **« Le porteur peut-il voter le déblocage de ses propres fonds ? »** Non. S'il contribue à sa campagne, sa
+  mise ne lui donne aucune voix sur ses tranches (`_votingPower` renvoie 0 pour le porteur et le
+  bénéficiaire). Avant cette règle, 10 % de mise suffisaient à atteindre seul le quorum quand les autres
+  s'abstenaient. Limite assumée : il peut utiliser une seconde adresse, ce qu'aucun contrat ne peut empêcher
+  sans identité vérifiée ; le scanner IA signale les adresses liées.
+- **« Avez-vous testé l'interface, ou seulement les contrats ? »** Les deux. `npm run e2e` pilote un vrai
+  navigateur : il contribue, vote, exécute, retire, rembourse et crée une campagne en cliquant dans les
+  pages, puis vérifie l'état sur la chaîne. Le portefeuille est simulé (les requêtes vont à anvil) : c'est
+  MetaMask lui-même qui n'est pas automatisé.
+- **« Pourquoi garder des fonctions que personne ne peut appeler ? »** `setVotingPeriod`,
+  `setProposalThreshold` et `setQuadraticVoting` exigent `PARAMS_ROLE`, abandonné au déploiement. Elles
+  restent pour un déploiement où ce rôle serait confié à un timelock. C'est discutable : la version la plus
+  simple les supprimerait et rendrait ces paramètres `immutable`.

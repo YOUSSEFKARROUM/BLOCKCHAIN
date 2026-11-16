@@ -1,9 +1,9 @@
 /** Date de la dernière mesure (docs/tests, docs/coverage, docs/audit). À mettre à jour à chaque relance. */
-export const MEASURED_ON = "15/11/2026";
+export const MEASURED_ON = "16/11/2026";
 
 /** Chiffres de la campagne de tests et d'audit (docs/tests, docs/coverage, docs/audit). */
 const STATS = [
-  { value: "157", strong: "tests Foundry", rest: "unitaires, attaques, fuzz, invariants", isAccent: true },
+  { value: "159", strong: "tests Foundry", rest: "unitaires, attaques, fuzz, invariants", isAccent: true },
   { value: "97%", strong: "des branches couvertes", rest: "100 % des lignes, sur les 4 contrats" },
   { value: "8", strong: "tests de fuzz", rest: "1000 exécutions chacun" },
   { value: "5", strong: "invariants", rest: "256 séquences chacun, avec un Handler" },
@@ -29,7 +29,7 @@ const THREATS = [
 const NOTES = [
   { title: "Multisig 2 sur 3", text: "Deux signatures au-delà de 1 ETH par jour." },
   { title: "Admin abandonné", text: "Seule la pause reste : elle ne peut prendre aucun fonds." },
-  { title: "Audit Slither", text: "Relancé le 15/11/2026 : aucun High ni Medium." },
+  { title: "Audit Slither", text: "Relancé le 16/11/2026 : aucun High ni Medium." },
 ];
 
 const AUTO_GRID = (min: number) => ({ gridTemplateColumns: `repeat(auto-fit, minmax(min(${min}px, 100%), 1fr))` });

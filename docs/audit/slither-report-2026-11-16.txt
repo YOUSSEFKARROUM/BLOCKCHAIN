@@ -1,0 +1,67 @@
+'forge clean' running (wd: C:\Users\hp\Desktop\5eme_annee\BLOCKCHAIN\Projet)
+'forge config --json' running
+'forge build --build-info --deny never --skip ./test/** ./scripts/foundry/** --force' running (wd: C:\Users\hp\Desktop\5eme_annee\BLOCKCHAIN\Projet)
+INFO:Detectors:
+Detector: reentrancy-balance
+Reentrancy in MockFlashLender.flashLoan(uint256,bytes) (contracts/demo/MockFlashLender.sol#27-32):
+	External call allowing reentrancy:
+	- IFlashBorrower(msg.sender).onFlashLoan(amount,data) (contracts/demo/MockFlashLender.sol#30)
+	Balance read before the call:
+	- balanceBefore = token.balanceOf(address(this)) (contracts/demo/MockFlashLender.sol#28)
+	Possible stale balance used after the call in a condition:
+	- token.balanceOf(address(this)) < balanceBefore (contracts/demo/MockFlashLender.sol#31)
+		- stale variable `balanceBefore`
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#reentrancy-vulnerabilities
+INFO:Detectors:
+Detector: reentrancy-eth
+Reentrancy in VulnerableVault.withdraw() (contracts/demo/VulnerableVault.sol#17-24):
+	External calls:
+	- (ok,None) = msg.sender.call{value: amount}() (contracts/demo/VulnerableVault.sol#21)
+	State variables written after the call(s):
+	- balances[msg.sender] = 0 (contracts/demo/VulnerableVault.sol#23)
+	VulnerableVault.balances (contracts/demo/VulnerableVault.sol#11) can be used in cross function reentrancies:
+	- VulnerableVault.balances (contracts/demo/VulnerableVault.sol#11)
+	- VulnerableVault.deposit() (contracts/demo/VulnerableVault.sol#13-15)
+	- VulnerableVault.withdraw() (contracts/demo/VulnerableVault.sol#17-24)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#reentrancy-vulnerabilities-1
+INFO:Detectors:
+Detector: unused-return
+Governance.proposeMilestoneRelease(uint256,string,string) (contracts/Governance.sol#126-138) ignores return value by (count,approved,None) = fund.milestoneProgress(campaignId) (contracts/Governance.sol#134)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#unused-return
+INFO:Detectors:
+Detector: timestamp
+CampusFund.contribute(uint256) (contracts/CampusFund.sol#194-208) uses timestamp for comparisons
+	Dangerous comparisons:
+	- block.timestamp >= c.deadline (contracts/CampusFund.sol#198)
+CampusFund.finalize(uint256) (contracts/CampusFund.sol#212-219) uses timestamp for comparisons
+	Dangerous comparisons:
+	- block.timestamp < c.deadline (contracts/CampusFund.sol#215)
+CampusFund.cancelStale(uint256) (contracts/CampusFund.sol#249-256) uses timestamp for comparisons
+	Dangerous comparisons:
+	- block.timestamp < uint256(c.lastProgressAt) + STALE_PERIOD (contracts/CampusFund.sol#253)
+Governance.castVote(uint256,bool) (contracts/Governance.sol#193-209) uses timestamp for comparisons
+	Dangerous comparisons:
+	- block.timestamp > p.voteEnd (contracts/Governance.sol#196)
+Governance.state(uint256) (contracts/Governance.sol#226-235) uses timestamp for comparisons
+	Dangerous comparisons:
+	- block.timestamp <= p.voteEnd (contracts/Governance.sol#230)
+NaiveGovernance.castVote(uint256,bool) (contracts/demo/NaiveGovernance.sol#41-51) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(block.timestamp <= p.voteEnd,vote termine) (contracts/demo/NaiveGovernance.sol#43)
+NaiveGovernance.execute(uint256) (contracts/demo/NaiveGovernance.sol#53-62) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(block.timestamp > p.voteEnd,vote en cours) (contracts/demo/NaiveGovernance.sol#55)
+	- require(bool,string)(! p.executed,deja execute) (contracts/demo/NaiveGovernance.sol#56)
+	- require(bool,string)(p.forVotes + p.againstVotes >= token.totalSupply() / 10,quorum) (contracts/demo/NaiveGovernance.sol#58)
+	- require(bool,string)(p.forVotes > p.againstVotes,rejete) (contracts/demo/NaiveGovernance.sol#59)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#block-timestamp
+INFO:Detectors:
+Detector: low-level-calls
+Low level call in ReentrancyAttacker.collect() (contracts/demo/ReentrancyAttacker.sol#35-39):
+	- (ok,None) = owner.call{value: address(this).balance}() (contracts/demo/ReentrancyAttacker.sol#37)
+Low level call in SecureVault.withdraw() (contracts/demo/SecureVault.sol#18-24):
+	- (ok,None) = msg.sender.call{value: amount}() (contracts/demo/SecureVault.sol#22)
+Low level call in VulnerableVault.withdraw() (contracts/demo/VulnerableVault.sol#17-24):
+	- (ok,None) = msg.sender.call{value: amount}() (contracts/demo/VulnerableVault.sol#21)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#low-level-calls
+INFO:Slither:. analyzed (50 contracts with 102 detectors), 13 result(s) found

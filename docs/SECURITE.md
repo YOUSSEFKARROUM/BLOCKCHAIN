@@ -2,7 +2,7 @@
 
 Pour chaque exigence du sujet (§5) : **la notion**, **le code** qui l'implémente, **le test** qui la prouve et
 **le résultat réel**. Toutes les sorties de test sont dans [`tests/forge-test-output.txt`](tests/forge-test-output.txt)
-(157 tests, 0 échec).
+(159 tests, 0 échec).
 
 ---
 
@@ -112,11 +112,11 @@ pour le protocole : environ **182 millions de dollars**. Le vote comptait les je
 l'exécution, pas à un instant figé.
 
 **Code.**
-- `Governance._createProposal` (l. 157) : `snapshot = block.number - 1`.
-- `Governance.castVote` (l. 186) → `_votingPower` : pour un **gel**, `token.getPastVotes(votant, snapshotBlock)` ;
+- `Governance._createProposal` (l. 168) : `snapshot = block.number - 1`.
+- `Governance.castVote` (l. 199) → `_votingPower` : pour un **gel**, `token.getPastVotes(votant, snapshotBlock)` ;
   pour un **déblocage**, la contribution du votant à la campagne × 1000, **figée** (on ne contribue plus à une
   campagne réussie). Aucun jeton emprunté ne compte dans les deux cas. Poids nul → revert `NoVotingPower`.
-- Quorum (l. 172) : 10 % de `getPastTotalSupply(snapshot)` (gel) ou des CFD émis par la campagne (déblocage).
+- Quorum (l. 183) : 10 % de `getPastTotalSupply(snapshot)` (gel) ou des CFD émis par la campagne (déblocage).
 - Démo de la version faible : `contracts/demo/NaiveGovernance.sol` (`balanceOf` au moment du vote),
   `MockFlashLender.sol`, `FlashLoanAttacker.sol`.
 
@@ -160,7 +160,13 @@ Rapports bruts : `audit/slither-report-initial.txt` et `audit/slither-report-fin
 - **Vote quadratique** vulnérable aux identités multiples (Sybil) : c'est pourquoi il est désactivé par défaut.
 - **Jeton transférable** : on peut *acheter* du pouvoir de vote **avant** une proposition. Le snapshot
   empêche seulement l'achat *après*. Pistes : délai de verrouillage, ou délai entre création et début du vote.
-- **Pauseur et paramètres** gardés par le déployeur. Amélioration : les confier au multisig ou à un timelock.
+- **Pauseur** gardé par le déployeur (les paramètres de vote, eux, sont figés). Amélioration : le confier au
+  multisig ou à un timelock.
+- **Porteur à deux adresses** : le porteur et le bénéficiaire ne votent pas leur propre déblocage, mais rien
+  n'empêche le porteur de contribuer et de voter depuis une seconde adresse. Sans identité étudiante vérifiée,
+  aucune règle on-chain ne l'interdit ; le scanner IA (règle « adresses liées ») est le seul signal.
+- **Transactions testées sur anvil seulement** : les parcours de bout en bout (`npm run e2e`) utilisent un
+  portefeuille simulé. MetaMask lui-même n'est pas automatisé.
 - **Script IA** : un fraudeur patient (montants variés, financement par des sources différentes) peut passer
   sous les seuils. Le score est une aide, pas une preuve.
 
@@ -177,3 +183,14 @@ Rapports bruts : `audit/slither-report-initial.txt` et `audit/slither-report-fin
 
 Slither relancé après ces changements : mêmes 13 résultats, aucun High ni Medium
 ([TRAITEMENT_FINDINGS §5](audit/TRAITEMENT_FINDINGS.md)).
+
+## Ajouts du 16/11/2026
+
+| Protection | Code | Test |
+|---|---|---|
+| Le porteur et le bénéficiaire ne votent pas le déblocage de leurs propres fonds (sinon 10 % de mise suffisaient à atteindre seul le quorum) | `Governance._votingPower` | `test_ReleaseVote_RevertsForCreatorAndBeneficiary`, `test_FreezeVote_AllowsCreator` |
+| Contribuer, voter, exécuter, retirer, rembourser et créer fonctionnent depuis l'interface | `frontend/e2e/flows.mjs` | `npm run e2e` : 6 parcours, état vérifié sur la chaîne |
+| Code Solidity formaté, vérifié à chaque push | `.github/workflows/ci.yml` | `forge fmt --check` |
+
+Slither relancé le 16/11/2026 : mêmes 13 résultats, aucun High ni Medium
+([slither-report-2026-11-16.txt](audit/slither-report-2026-11-16.txt)).

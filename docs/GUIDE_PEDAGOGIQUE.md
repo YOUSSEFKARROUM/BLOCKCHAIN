@@ -88,26 +88,26 @@ CampusFund. L'enum `Status` y est défini : `Active` (0, En cours), `Successful`
 | 262-270 | `approveMilestone` | `onlyRole(GOVERNANCE_ROLE)` : **seul le contrat Governance**, donc seulement après un vote adopté. Les jalons s'approuvent **dans l'ordre** (`index == approvedMilestones`). |
 | 274-279 | `freezeCampaign` | Gel décidé par la DAO : statut Annulée, remboursements ouverts. |
 | 284-290 | `pause` / `unpause` | Circuit breaker, réservé au rôle PAUSER. |
-| 294-327 | fonctions `view` | Lecture gratuite (sans transaction) pour le front et la gouvernance. |
-| 331-334 | `_trancheAmount` | Tranche = `raised × bps / 10 000`, sauf la **dernière**, qui prend tout le reste : aucune poussière d'arrondi ne reste bloquée. |
-| 336-345 | `_checkMilestones` | 2 à 5 jalons, chacun > 0, somme exactement 10 000 (100 %). |
+| 294-336 | fonctions `view` | Lecture gratuite (sans transaction) pour le front et la gouvernance. |
+| 341-344 | `_trancheAmount` | Tranche = `raised × bps / 10 000`, sauf la **dernière**, qui prend tout le reste : aucune poussière d'arrondi ne reste bloquée. |
+| 346-355 | `_checkMilestones` | 2 à 5 jalons, chacun > 0, somme exactement 10 000 (100 %). |
 
 ## 2.4 `contracts/Governance.sol` — la DAO
 
 | Lignes | Code | Explication |
 |---|---|---|
 | 18 | `contract Governance is IVoting, AccessControl` | La DAO. `IVoting` = elle expose `castVote`. |
-| 21-26 | constantes | Quorum 10 % (`QUORUM_BPS = 1000`), durée de vote entre 1 h et 14 jours. |
-| 28-38 | enums | Deux types de proposition (déblocage, gel) et quatre états (Active, Rejetée, Adoptée, Exécutée). |
-| 40-54 | `struct Proposal` | Le **snapshotBlock** et le **quorum** sont figés à la création. `quadratic` aussi : changer le mode pendant un vote n'a aucun effet. `participation` compte les CFD bruts (pour le quorum). `forVotes`/`againstVotes` comptent les poids (pour la majorité). |
-| 119-131 | `proposeMilestoneRelease` | Seul le porteur ou le bénéficiaire, campagne Réussie, il reste un jalon à approuver, et une **preuve** (CID ou lien) est obligatoire (`MissingProof`, l. 123). Le jalon visé est le prochain (`approved`). |
-| 134-140 | `proposeFreeze` | Tout détenteur d'au moins 100 CFD délégués **au bloc précédent** peut proposer un gel (anti-spam). |
-| 146-175 | `_createProposal` | D'abord, **une seule proposition ouverte** par campagne et par type (l. 150-155, `ProposalAlreadyOpen`). Puis **le cœur anti-flash-loan** : `snapshot = block.number - 1` (l. 157). Le quorum (l. 172) vaut 10 % des CFD de la campagne pour un déblocage, 10 % de l'offre au snapshot pour un gel. La fin du vote = maintenant + durée. |
-| 180-196 | `castVote` | Checks : la proposition existe, le vote est ouvert, pas de double vote. **Poids = `_votingPower`** (l. 186) : contribution à la campagne × 1000 pour un déblocage, CFD délégués au snapshot pour un gel. S'il est nul, revert `NoVotingPower`. En mode quadratique, poids = √CFD. On marque `hasVoted` puis on additionne. |
-| 201-209 | `execute` | Appelable par **n'importe qui**, seulement si l'état est Adoptée (donc vote terminé). `executed = true` **avant** l'appel externe (CEI). Puis l'appel à `approveMilestone` ou `freezeCampaign`. |
-| 213-222 | `state` | Exécutée ? Sinon vote en cours tant que `now <= voteEnd`. Sinon Adoptée si **participation ≥ quorum** et **pour > contre**, sinon Rejetée. |
-| 225-236 | `votingPower`, `_votingPower` | Lecture du poids qu'aurait un votant (utilisée par le front) et règle du poids : contribution figée pour un déblocage, `getPastVotes` au snapshot pour un gel. |
-| 245-265 | paramètres | Durée de vote (bornée), seuil de proposition, mode quadratique : réservés à `PARAMS_ROLE`, **abandonné au déploiement** : ces paramètres sont donc figés. |
+| 26-31 | constantes | Quorum 10 % (`QUORUM_BPS = 1000`), durée de vote entre 1 h et 14 jours. |
+| 33-43 | enums | Deux types de proposition (déblocage, gel) et quatre états (Active, Rejetée, Adoptée, Exécutée). |
+| 45-60 | `struct Proposal` | Le **snapshotBlock** et le **quorum** sont figés à la création. `quadratic` aussi : changer le mode pendant un vote n'a aucun effet. `participation` compte les CFD bruts (pour le quorum). `forVotes`/`againstVotes` comptent les poids (pour la majorité). |
+| 126-138 | `proposeMilestoneRelease` | Seul le porteur ou le bénéficiaire, campagne Réussie, il reste un jalon à approuver, et une **preuve** (CID ou lien) est obligatoire (`MissingProof`, l. 130). Le jalon visé est le prochain (`approved`). |
+| 141-149 | `proposeFreeze` | Tout détenteur d'au moins 100 CFD délégués **au bloc précédent** peut proposer un gel (anti-spam). |
+| 155-188 | `_createProposal` | D'abord, **une seule proposition ouverte** par campagne et par type (l. 161-167, `ProposalAlreadyOpen`). Puis **le cœur anti-flash-loan** : `snapshot = block.number - 1` (l. 168). Le quorum (l. 183) vaut 10 % des CFD de la campagne pour un déblocage, 10 % de l'offre au snapshot pour un gel. La fin du vote = maintenant + durée. |
+| 193-209 | `castVote` | Checks : la proposition existe, le vote est ouvert, pas de double vote. **Poids = `_votingPower`** (l. 199) : contribution à la campagne × 1000 pour un déblocage, CFD délégués au snapshot pour un gel. S'il est nul, revert `NoVotingPower`. En mode quadratique, poids = √CFD. On marque `hasVoted` puis on additionne. |
+| 214-222 | `execute` | Appelable par **n'importe qui**, seulement si l'état est Adoptée (donc vote terminé). `executed = true` **avant** l'appel externe (CEI). Puis l'appel à `approveMilestone` ou `freezeCampaign`. |
+| 226-235 | `state` | Exécutée ? Sinon vote en cours tant que `now <= voteEnd`. Sinon Adoptée si **participation ≥ quorum** et **pour > contre**, sinon Rejetée. |
+| 238-253 | `votingPower`, `_votingPower` | Lecture du poids qu'aurait un votant (utilisée par le front) et règle du poids : contribution figée pour un déblocage, `getPastVotes` au snapshot pour un gel. **Le porteur et le bénéficiaire ont un poids nul sur le déblocage de leur propre campagne** (l. 248-249) : ils ne valident pas leurs propres fonds. |
+| 262-282 | paramètres | Durée de vote (bornée), seuil de proposition, mode quadratique : réservés à `PARAMS_ROLE`, **abandonné au déploiement** : ces paramètres sont donc figés. |
 
 ## 2.5 `contracts/Treasury.sol` — le multisig 2-sur-3
 

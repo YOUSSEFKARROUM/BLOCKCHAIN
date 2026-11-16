@@ -12,7 +12,7 @@ les campagnes à surveiller.
 | | |
 |---|---|
 | Contrats | `CFDToken` (ERC20Votes) · `CampusFund` (jalons, statuts, remboursements) · `Governance` (DAO à snapshot) · `Treasury` (multisig 2-sur-3) |
-| Tests | **157 tests Foundry verts** : unitaires, attaques, 8 fuzz × 1000, 5 invariants × 256 séquences. Couverture : **100 % des lignes et 97 % des branches** des 4 contrats |
+| Tests | **159 tests Foundry verts** : unitaires, attaques, 8 fuzz × 1000, 5 invariants × 256 séquences. Couverture : **100 % des lignes et 97 % des branches** des 4 contrats |
 | Audit | Slither : 18 findings, puis 13 restants, **tous traités** ([docs/audit](docs/audit/TRAITEMENT_FINDINGS.md)) |
 | Attaques démontrées | réentrance (The DAO) et flash loan de gouvernance (Beanstalk) : réussite sur la version faible, échec sur la nôtre |
 | IA | règles + Isolation Forest. Sur données **simulées** (10 tirages) : rappel 0,88 sur les fraudes connues, 0,38 sur des fraudes déguisées, précision ≈ 1 |
@@ -50,7 +50,7 @@ pip install slither-analyzer solc-select && solc-select install 0.8.24 && solc-s
 ## Commandes
 
 ```bash
-forge test                                   # 157 tests
+forge test                                   # 159 tests
 forge test --match-contract FlashLoanGovernance -vv   # démo de l'attaque flash loan
 forge test --match-contract Reentrancy -vvvv          # trace complète de la réentrance
 forge coverage --report summary --no-match-coverage "(test|scripts)"
@@ -95,7 +95,17 @@ contrats : **il faut redéployer** avant de montrer Sepolia. Cela demande **vos*
    événements : le RPC public `publicnode` répond « pruned history unavailable ».
 6. Captures pour le rapport : liste dans [docs/RAPPORT.md](docs/RAPPORT.md) §9.3. Committer `deployments/11155111.json`.
 
+## Tests de bout en bout
+
+`npm run e2e` (dans `frontend/`) contribue, vote, exécute, retire, rembourse et crée une campagne **en cliquant
+dans l'interface**, puis vérifie l'état sur la chaîne. Il faut anvil, la démo chargée (`scripts/demo-anvil.sh`)
+et `npm run dev` lancés, ainsi que Chrome (variable `CHROME_PATH` s'il n'est pas trouvé). Le portefeuille est
+simulé : les requêtes vont à anvil, qui signe pour ses comptes de test. La démo est restaurée à la fin.
+
 ## Limites connues
+
+- **Seconde adresse** : le porteur ne vote pas le déblocage de ses fonds, mais peut contribuer et voter depuis
+  une autre adresse. Sans identité vérifiée, seul le scanner IA le signale.
 
 - **Pause** : le déployeur garde `PAUSER_ROLE`, un coupe-circuit qui peut suspendre contributions, retraits et
   remboursements, mais ne permet de prendre aucun fonds. Tous les autres rôles sont abandonnés.

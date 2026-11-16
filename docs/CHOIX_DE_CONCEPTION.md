@@ -51,7 +51,7 @@ pourquoi. Les chiffres viennent du code, pas d'une estimation.
 
 | Choix | Justification |
 |---|---|
-| **Foundry** plutôt que Hardhat | Tests écrits en Solidity (même langage que les contrats), fuzzing et **invariants natifs**, exécution très rapide (157 tests en ~30 s, fuzz compris), `forge coverage`, `forge script` pour déployer et vérifier. |
+| **Foundry** plutôt que Hardhat | Tests écrits en Solidity (même langage que les contrats), fuzzing et **invariants natifs**, exécution très rapide (159 tests en ~35 s, fuzz compris), `forge coverage`, `forge script` pour déployer et vérifier. |
 | **OpenZeppelin v5.4** | Code audité pour ERC20, ERC20Votes, AccessControl, ReentrancyGuard, Pausable : on n'écrit soi-même que la logique métier. |
 | **solc 0.8.24** | Version stable ; overflow vérifié automatiquement depuis 0.8 (plus besoin de SafeMath). |
 | **Erreurs personnalisées** (`error WrongStatus(...)`) | Moins de gaz que des chaînes, et décodables par le front (traduction française dans `frontend/src/lib/errors.ts`). |
@@ -59,3 +59,11 @@ pourquoi. Les chiffres viennent du code, pas d'une estimation.
 | **IPFS via une route serveur** (`/api/ipfs`) | Le JWT Pinata reste sur le serveur : mis dans le navigateur, n'importe qui pourrait le copier et épingler des fichiers à nos frais. |
 | **CID calculé localement pour la démo** | CIDv1 raw sha-256, identique à celui d'IPFS pour un petit fichier. Le contenu est vérifiable, et la démo marche hors ligne. |
 | **Script IA hors chaîne** | Un modèle de ML ne tourne pas dans l'EVM (coût, déterminisme). Le score est **indicatif** : la décision (gel) reste à la DAO. |
+
+## Le porteur ne vote pas son propre déblocage (16/11/2026)
+
+Le poids d'un vote de déblocage est la mise dans la campagne. Un porteur qui contribuait 10 % à sa propre
+campagne atteignait donc seul le quorum. Le porteur et le bénéficiaire ont désormais un poids nul sur leurs
+propres tranches ; le quorum reste calculé sur toute la collecte, leur part comprise, ce qui le rend plus
+exigeant. La règle ne s'applique pas aux gels. Elle ne résiste pas à une seconde adresse : c'est écrit dans
+les limites de `SECURITE.md`.

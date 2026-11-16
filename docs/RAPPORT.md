@@ -16,7 +16,7 @@ CampusFund permet aux clubs et aux projets étudiants de collecter des ETH sans 
 contributeur reçoit des jetons de gouvernance CFD (1 ETH = 1000 CFD). Les fonds sont versés **jalon par
 jalon**, chacun après le vote des contributeurs de la campagne (poids = leur mise) et sur preuve du jalon.
 Toute la communauté peut aussi voter le gel d'une campagne suspecte. Quatre contrats Solidity (OpenZeppelin v5)
-sont testés avec Foundry : 157 tests, fuzzing, 5 invariants, 100 % des lignes et 97 % des branches couvertes. L'audit Slither est traité et deux attaques réelles
+sont testés avec Foundry : 159 tests, fuzzing, 5 invariants, 100 % des lignes et 97 % des branches couvertes. L'audit Slither est traité et deux attaques réelles
 sont démontrées : la réentrance et le flash loan de gouvernance. Un script d'IA (règles + Isolation Forest)
 attribue un score de risque à chaque campagne, affiché dans l'interface.
 
@@ -119,18 +119,18 @@ anti path traversal, limite de débit).
 |---|---|---|
 | CFDToken | 7 | ✅ |
 | CampusFund | 61 | ✅ |
-| Governance | 47 | ✅ |
+| Governance | 49 | ✅ |
 | Treasury | 22 | ✅ |
 | Réentrance | 5 | ✅ |
 | Flash loan | 4 | ✅ |
 | Fuzz (1000 tirages chacun) | 8 | ✅ |
 | Invariants (256 × 100 appels, 5 propriétés) | 1 suite | ✅ |
 | Déploiement | 2 | ✅ |
-| **Total** | **157** | **0 échec** |
+| **Total** | **159** | **0 échec** |
 
 6.3 Les invariants expliqués, et la preuve d'atteignabilité par les canaris.
 6.4 **Couverture** (`docs/coverage/COUVERTURE.md`) : 100 % des lignes de CFDToken, CampusFund, Governance et
-Treasury ; branches : 97 % sur les 4 contrats (75/77). Les deux branches restantes sont des refus dans un
+Treasury ; branches : 97 % sur les 4 contrats (76/78). Les deux branches restantes sont des refus dans un
 modificateur, exécutés par les tests mais non attribués par `forge coverage`. Le total global (85 %) inclut les
 contrats de démonstration volontairement vulnérables.
 6.5 Bugs trouvés grâce aux tests (honnêteté) : seuil de risque mal calibré (rappel 33 %, puis 87 % après

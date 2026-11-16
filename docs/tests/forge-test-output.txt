@@ -1,4 +1,23 @@
-No files changed, compilation skipped
+Compiling 82 files with Solc 0.8.24
+Solc 0.8.24 finished in 20.16s
+Compiler run successful!
+
+Ran 7 tests for test/unit/CFDToken.t.sol:CFDTokenTest
+[PASS] test_BurnOnlyBurner() (gas: 45283)
+[PASS] test_Metadata() (gas: 35610)
+[PASS] test_MintOnlyMinter() (gas: 43282)
+[PASS] test_MinterCanMint() (gas: 136668)
+[PASS] test_NoVotingPowerWithoutDelegation() (gas: 248201)
+[PASS] test_PastVotesAreFrozen() (gas: 358419)
+[PASS] test_TransferMovesVotes() (gas: 414733)
+Suite result: ok. 7 passed; 0 failed; 0 skipped; finished in 7.53ms (2.35ms CPU time)
+
+Ran 4 tests for test/attacks/FlashLoanGovernance.t.sol:FlashLoanGovernanceTest
+[PASS] test_FlashLender_RevertsIfNotRepaid() (gas: 249162)
+[PASS] test_FlashLoan_FailsEvenInProposalBlock() (gas: 863888)
+[PASS] test_FlashLoan_FailsWithSnapshot() (gas: 826181)
+[PASS] test_FlashLoan_SucceedsWithoutSnapshot() (gas: 1543548)
+Suite result: ok. 4 passed; 0 failed; 0 skipped; finished in 13.76ms (6.75ms CPU time)
 
 Ran 5 tests for test/attacks/Reentrancy.t.sol:ReentrancyTest
 [PASS] test_Attack_FailsOnRefund() (gas: 1176772)
@@ -6,14 +25,64 @@ Ran 5 tests for test/attacks/Reentrancy.t.sol:ReentrancyTest
 [PASS] test_Attack_FailsOnWithdrawTranche() (gas: 1008380)
 [PASS] test_Attack_SucceedsOnVulnerableVault() (gas: 867402)
 [PASS] test_SecureVault_NormalWithdraw() (gas: 357451)
-Suite result: ok. 5 passed; 0 failed; 0 skipped; finished in 11.73ms (7.09ms CPU time)
+Suite result: ok. 5 passed; 0 failed; 0 skipped; finished in 10.15ms (6.61ms CPU time)
 
-Ran 4 tests for test/attacks/FlashLoanGovernance.t.sol:FlashLoanGovernanceTest
-[PASS] test_FlashLender_RevertsIfNotRepaid() (gas: 249162)
-[PASS] test_FlashLoan_FailsEvenInProposalBlock() (gas: 863888)
-[PASS] test_FlashLoan_FailsWithSnapshot() (gas: 826181)
-[PASS] test_FlashLoan_SucceedsWithoutSnapshot() (gas: 1543560)
-Suite result: ok. 4 passed; 0 failed; 0 skipped; finished in 11.32ms (4.41ms CPU time)
+Ran 2 tests for test/unit/Deploy.t.sol:DeployTest
+[PASS] test_DeployRefusesWithoutOwnersOutsideAnvil() (gas: 9023831)
+[PASS] test_DeployWiresRolesAndRenouncesAdmin() (gas: 15966125)
+Suite result: ok. 2 passed; 0 failed; 0 skipped; finished in 70.12ms (68.40ms CPU time)
+
+Ran 49 tests for test/unit/Governance.t.sol:GovernanceTest
+[PASS] test_Constructor_RevertsOnBadPeriod() (gas: 242382)
+[PASS] test_Constructor_SetsParams() (gas: 35701)
+[PASS] test_Execute_AnyoneCanExecute() (gas: 1215161)
+[PASS] test_Execute_DuplicateMilestoneProposalImpossible() (gas: 1467227)
+[PASS] test_Execute_RevertsDuringVote() (gas: 1177645)
+[PASS] test_Execute_RevertsTwice() (gas: 1247397)
+[PASS] test_Flow_FreezeSuspiciousCampaignThenRefund() (gas: 1980388)
+[PASS] test_Flow_ThreeMilestonesVotedAndWithdrawn() (gas: 2383799)
+[PASS] test_FreezeVote_AllowsCreator() (gas: 1113728)
+[PASS] test_FreezeVote_RevertsWithoutDelegation() (gas: 919746)
+[PASS] test_Freeze_RevertsWhileAnotherIsOpen() (gas: 1261024)
+[PASS] test_Params_OnlyParamsRole() (gas: 93627)
+[PASS] test_ProposeFreeze_RevertsBelowThreshold() (gas: 604383)
+[PASS] test_ProposeFreeze_RevertsOnFailedCampaign() (gas: 628285)
+[PASS] test_ProposeFreeze_RevertsSameBlockTokens() (gas: 603103)
+[PASS] test_ProposeFreeze_WithEnoughVotes() (gas: 781859)
+[PASS] test_ProposeRelease_BeneficiaryCanPropose() (gas: 985274)
+[PASS] test_ProposeRelease_RevertsForStranger() (gas: 805967)
+[PASS] test_ProposeRelease_RevertsIfNotSuccessful() (gas: 319141)
+[PASS] test_ProposeRelease_RevertsWhenAllApproved() (gas: 2057269)
+[PASS] test_ProposeRelease_StoresSnapshot() (gas: 1074961)
+[PASS] test_Quadratic_ModeFrozenAtCreation() (gas: 1229918)
+[PASS] test_Quadratic_SmallHoldersCanOutvoteWhale() (gas: 2329698)
+[PASS] test_Quadratic_WeightIsSqrt() (gas: 1374522)
+[PASS] test_ReleaseQuorum_IsTenPercentOfCampaign() (gas: 1562906)
+[PASS] test_ReleaseVote_RevertsForCreatorAndBeneficiary() (gas: 1280121)
+[PASS] test_ReleaseVote_RevertsForNonContributor() (gas: 1553676)
+[PASS] test_ReleaseVote_WorksWithoutDelegation() (gas: 958246)
+[PASS] test_Release_AllowedAgainAfterDefeat() (gas: 1387336)
+[PASS] test_Release_RevertsWhileAnotherIsOpen() (gas: 1079801)
+[PASS] test_Release_RevertsWhileSucceededNotExecuted() (gas: 1206519)
+[PASS] test_Release_RevertsWithoutProof() (gas: 796263)
+[PASS] test_Release_StoresProof() (gas: 1065770)
+[PASS] test_SetProposalThreshold() (gas: 43150)
+[PASS] test_SetVotingPeriod() (gas: 43241)
+[PASS] test_SetVotingPeriod_RevertsOutOfBounds() (gas: 34692)
+[PASS] test_State_DefeatedOnTie() (gas: 1265045)
+[PASS] test_State_DefeatedWhenMajorityAgainst() (gas: 1265025)
+[PASS] test_State_DefeatedWithNoVotesAtAll() (gas: 1042808)
+[PASS] test_State_DefeatedWithoutQuorum() (gas: 1201176)
+[PASS] test_State_QuorumReachedExactly() (gas: 1164657)
+[PASS] test_State_RevertsUnknown() (gas: 26036)
+[PASS] test_Vote_RevertsAfterEnd() (gas: 1058579)
+[PASS] test_Vote_RevertsTwice() (gas: 1177650)
+[PASS] test_Vote_RevertsUnknownProposal() (gas: 34565)
+[PASS] test_Vote_TokensAcquiredAfterSnapshotDoNotCount() (gas: 1543729)
+[PASS] test_Vote_TransferAfterSnapshotDoesNotDoubleVote() (gas: 1336451)
+[PASS] test_Vote_WeightIsSnapshotVotes() (gas: 1283160)
+[PASS] test_VotingPower_RevertsForUnknownProposal() (gas: 12808)
+Suite result: ok. 49 passed; 0 failed; 0 skipped; finished in 1.88s (73.07ms CPU time)
 
 Ran 22 tests for test/unit/Treasury.t.sol:TreasuryTest
 [PASS] test_Approve_RevertsForUnknownTransaction() (gas: 36477)
@@ -38,12 +107,18 @@ Ran 22 tests for test/unit/Treasury.t.sol:TreasuryTest
 [PASS] test_SmallWithdrawal_OneSignature() (gas: 277651)
 [PASS] test_Submit_RevertsOnInvalid() (gas: 64513)
 [PASS] test_UnknownTx() (gas: 92326)
-Suite result: ok. 22 passed; 0 failed; 0 skipped; finished in 10.42ms (8.09ms CPU time)
+Suite result: ok. 22 passed; 0 failed; 0 skipped; finished in 3.17s (37.45ms CPU time)
 
-Ran 2 tests for test/unit/Deploy.t.sol:DeployTest
-[PASS] test_DeployRefusesWithoutOwnersOutsideAnvil() (gas: 8975877)
-[PASS] test_DeployWiresRolesAndRenouncesAdmin() (gas: 15874872)
-Suite result: ok. 2 passed; 0 failed; 0 skipped; finished in 28.72ms (27.36ms CPU time)
+Ran 8 tests for test/fuzz/CampusFund.fuzz.t.sol:CampusFundFuzzTest
+[PASS] testFuzz_ContributeMintsAtRate(uint256) (runs: 1000, μ: 569579, ~: 569279)
+[PASS] testFuzz_DurationBounds(uint256) (runs: 1000, μ: 148186, ~: 42018)
+[PASS] testFuzz_LateTokensNeverCount(uint256) (runs: 1000, μ: 1609926, ~: 1609626)
+[PASS] testFuzz_NoWithdrawWithoutVote(uint256,uint256) (runs: 1000, μ: 618770, ~: 630851)
+[PASS] testFuzz_QuorumRule(uint256) (runs: 1000, μ: 1166013, ~: 1167088)
+[PASS] testFuzz_RefundsNeverExceedRemaining(uint256,uint256,uint256) (runs: 1000, μ: 1645707, ~: 1771285)
+[PASS] testFuzz_TranchesSumToRaised(uint256,uint256) (runs: 1000, μ: 2233451, ~: 2110640)
+[PASS] testFuzz_TreasuryLargeNeedsTwo(uint256) (runs: 1000, μ: 1235150, ~: 1235223)
+Suite result: ok. 8 passed; 0 failed; 0 skipped; finished in 3.19s (18.94s CPU time)
 
 Ran 61 tests for test/unit/CampusFund.t.sol:CampusFundTest
 [PASS] test_Approve_OnlyGovernance() (gas: 710020)
@@ -107,78 +182,7 @@ Ran 61 tests for test/unit/CampusFund.t.sol:CampusFundTest
 [PASS] test_Withdraw_RevertsIfNotSuccessful() (gas: 582492)
 [PASS] test_Withdraw_RevertsSecondTimeForSameApproval() (gas: 860693)
 [PASS] test_Withdraw_RevertsWithoutApproval() (gas: 708853)
-Suite result: ok. 61 passed; 0 failed; 0 skipped; finished in 317.59ms (45.54ms CPU time)
-
-Ran 47 tests for test/unit/Governance.t.sol:GovernanceTest
-[PASS] test_Constructor_RevertsOnBadPeriod() (gas: 239182)
-[PASS] test_Constructor_SetsParams() (gas: 35767)
-[PASS] test_Execute_AnyoneCanExecute() (gas: 1207502)
-[PASS] test_Execute_DuplicateMilestoneProposalImpossible() (gas: 1459546)
-[PASS] test_Execute_RevertsDuringVote() (gas: 1169986)
-[PASS] test_Execute_RevertsTwice() (gas: 1239738)
-[PASS] test_Flow_FreezeSuspiciousCampaignThenRefund() (gas: 1972707)
-[PASS] test_Flow_ThreeMilestonesVotedAndWithdrawn() (gas: 2360822)
-[PASS] test_FreezeVote_RevertsWithoutDelegation() (gas: 919701)
-[PASS] test_Freeze_RevertsWhileAnotherIsOpen() (gas: 1261024)
-[PASS] test_Params_OnlyParamsRole() (gas: 93588)
-[PASS] test_ProposeFreeze_RevertsBelowThreshold() (gas: 604383)
-[PASS] test_ProposeFreeze_RevertsOnFailedCampaign() (gas: 628285)
-[PASS] test_ProposeFreeze_RevertsSameBlockTokens() (gas: 603103)
-[PASS] test_ProposeFreeze_WithEnoughVotes() (gas: 781926)
-[PASS] test_ProposeRelease_BeneficiaryCanPropose() (gas: 985274)
-[PASS] test_ProposeRelease_RevertsForStranger() (gas: 805945)
-[PASS] test_ProposeRelease_RevertsIfNotSuccessful() (gas: 319206)
-[PASS] test_ProposeRelease_RevertsWhenAllApproved() (gas: 2034270)
-[PASS] test_ProposeRelease_StoresSnapshot() (gas: 1074939)
-[PASS] test_Quadratic_ModeFrozenAtCreation() (gas: 1222323)
-[PASS] test_Quadratic_SmallHoldersCanOutvoteWhale() (gas: 2291319)
-[PASS] test_Quadratic_WeightIsSqrt() (gas: 1359204)
-[PASS] test_ReleaseQuorum_IsTenPercentOfCampaign() (gas: 1547576)
-[PASS] test_ReleaseVote_RevertsForNonContributor() (gas: 1538324)
-[PASS] test_ReleaseVote_WorksWithoutDelegation() (gas: 950520)
-[PASS] test_Release_AllowedAgainAfterDefeat() (gas: 1379655)
-[PASS] test_Release_RevertsWhileAnotherIsOpen() (gas: 1079846)
-[PASS] test_Release_RevertsWhileSucceededNotExecuted() (gas: 1198860)
-[PASS] test_Release_RevertsWithoutProof() (gas: 796241)
-[PASS] test_Release_StoresProof() (gas: 1065770)
-[PASS] test_SetProposalThreshold() (gas: 43128)
-[PASS] test_SetVotingPeriod() (gas: 43219)
-[PASS] test_SetVotingPeriod_RevertsOutOfBounds() (gas: 34759)
-[PASS] test_State_DefeatedOnTie() (gas: 1249727)
-[PASS] test_State_DefeatedWhenMajorityAgainst() (gas: 1249685)
-[PASS] test_State_DefeatedWithNoVotesAtAll() (gas: 1042786)
-[PASS] test_State_DefeatedWithoutQuorum() (gas: 1193517)
-[PASS] test_State_QuorumReachedExactly() (gas: 1156998)
-[PASS] test_State_RevertsUnknown() (gas: 26014)
-[PASS] test_Vote_RevertsAfterEnd() (gas: 1058557)
-[PASS] test_Vote_RevertsTwice() (gas: 1169969)
-[PASS] test_Vote_RevertsUnknownProposal() (gas: 34630)
-[PASS] test_Vote_TokensAcquiredAfterSnapshotDoNotCount() (gas: 1536048)
-[PASS] test_Vote_TransferAfterSnapshotDoesNotDoubleVote() (gas: 1321045)
-[PASS] test_Vote_WeightIsSnapshotVotes() (gas: 1267820)
-[PASS] test_VotingPower_RevertsForUnknownProposal() (gas: 12808)
-Suite result: ok. 47 passed; 0 failed; 0 skipped; finished in 2.86s (65.61ms CPU time)
-
-Ran 7 tests for test/unit/CFDToken.t.sol:CFDTokenTest
-[PASS] test_BurnOnlyBurner() (gas: 45283)
-[PASS] test_Metadata() (gas: 35610)
-[PASS] test_MintOnlyMinter() (gas: 43282)
-[PASS] test_MinterCanMint() (gas: 136668)
-[PASS] test_NoVotingPowerWithoutDelegation() (gas: 248201)
-[PASS] test_PastVotesAreFrozen() (gas: 358419)
-[PASS] test_TransferMovesVotes() (gas: 414733)
-Suite result: ok. 7 passed; 0 failed; 0 skipped; finished in 2.92s (3.96ms CPU time)
-
-Ran 8 tests for test/fuzz/CampusFund.fuzz.t.sol:CampusFundFuzzTest
-[PASS] testFuzz_ContributeMintsAtRate(uint256) (runs: 1000, μ: 569579, ~: 569279)
-[PASS] testFuzz_DurationBounds(uint256) (runs: 1000, μ: 151969, ~: 42018)
-[PASS] testFuzz_LateTokensNeverCount(uint256) (runs: 1000, μ: 1602267, ~: 1601967)
-[PASS] testFuzz_NoWithdrawWithoutVote(uint256,uint256) (runs: 1000, μ: 618872, ~: 630851)
-[PASS] testFuzz_QuorumRule(uint256) (runs: 1000, μ: 1158314, ~: 1159429)
-[PASS] testFuzz_RefundsNeverExceedRemaining(uint256,uint256,uint256) (runs: 1000, μ: 1625704, ~: 1755967)
-[PASS] testFuzz_TranchesSumToRaised(uint256,uint256) (runs: 1000, μ: 2236091, ~: 2087663)
-[PASS] testFuzz_TreasuryLargeNeedsTwo(uint256) (runs: 1000, μ: 1235138, ~: 1235223)
-Suite result: ok. 8 passed; 0 failed; 0 skipped; finished in 2.92s (16.38s CPU time)
+Suite result: ok. 61 passed; 0 failed; 0 skipped; finished in 3.19s (51.46ms CPU time)
 
 Ran 1 test for test/invariant/Invariants.t.sol:InvariantsTest
 [PASS]
@@ -188,36 +192,36 @@ InvariantsTest invariants:
 [PASS] invariant_SolventBalance
 [PASS] invariant_SupplyMatchesContributions
 [PASS] invariant_TreasuryGetsOnlyFees
- InvariantsTest invariants (runs: 256, calls: 25600, reverts: 2473)
+ InvariantsTest invariants (runs: 256, calls: 25600, reverts: 2356)
 
 ╭----------+-----------------+-------+---------+----------╮
 | Contract | Selector        | Calls | Reverts | Discards |
 +=========================================================+
-| Handler  | cancelStale     | 2068  | 0       | 0        |
+| Handler  | cancelStale     | 2136  | 0       | 0        |
 |----------+-----------------+-------+---------+----------|
-| Handler  | contribute      | 2108  | 503     | 0        |
+| Handler  | contribute      | 2165  | 488     | 0        |
 |----------+-----------------+-------+---------+----------|
-| Handler  | createCampaign  | 2146  | 0       | 0        |
+| Handler  | createCampaign  | 2027  | 0       | 0        |
 |----------+-----------------+-------+---------+----------|
-| Handler  | execute         | 2116  | 32      | 0        |
+| Handler  | execute         | 2097  | 24      | 0        |
 |----------+-----------------+-------+---------+----------|
-| Handler  | finalize        | 2102  | 11      | 0        |
+| Handler  | finalize        | 2112  | 3       | 0        |
 |----------+-----------------+-------+---------+----------|
-| Handler  | proposeFreeze   | 2145  | 574     | 0        |
+| Handler  | proposeFreeze   | 2142  | 509     | 0        |
 |----------+-----------------+-------+---------+----------|
-| Handler  | proposeRelease  | 2219  | 95      | 0        |
+| Handler  | proposeRelease  | 2128  | 90      | 0        |
 |----------+-----------------+-------+---------+----------|
-| Handler  | refund          | 2160  | 887     | 0        |
+| Handler  | refund          | 2089  | 846     | 0        |
 |----------+-----------------+-------+---------+----------|
-| Handler  | transferCFD     | 2169  | 0       | 0        |
+| Handler  | transferCFD     | 2134  | 0       | 0        |
 |----------+-----------------+-------+---------+----------|
-| Handler  | vote            | 2213  | 72      | 0        |
+| Handler  | vote            | 2227  | 93      | 0        |
 |----------+-----------------+-------+---------+----------|
-| Handler  | warp            | 2066  | 0       | 0        |
+| Handler  | warp            | 2219  | 0       | 0        |
 |----------+-----------------+-------+---------+----------|
-| Handler  | withdrawTranche | 2088  | 299     | 0        |
+| Handler  | withdrawTranche | 2124  | 303     | 0        |
 ╰----------+-----------------+-------+---------+----------╯
 
-Suite result: ok. 1 passed; 0 failed; 0 skipped; finished in 23.73s (23.71s CPU time)
+Suite result: ok. 1 passed; 0 failed; 0 skipped; finished in 28.85s (28.83s CPU time)
 
-Ran 9 test suites in 23.74s (32.81s CPU time): 157 tests passed, 0 failed, 0 skipped (157 total tests)
+Ran 9 test suites in 28.86s (40.38s CPU time): 159 tests passed, 0 failed, 0 skipped (159 total tests)

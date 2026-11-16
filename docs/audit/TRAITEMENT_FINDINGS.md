@@ -98,3 +98,6 @@ Sortie complète : [`slither-report-2026-11-15.txt`](slither-report-2026-11-15.t
 **13 résultats, exactement les mêmes détecteurs et les mêmes nombres** qu'au §3. Les nouvelles lignes de
 `Governance` relèvent des cas déjà traités : `block-timestamp` (fin du vote, §2.2) et `unused-return`
 (lecture de `milestoneProgress`, §2.3). Aucun nouveau type de finding, aucun High ou Medium.
+
+Relance du 16/11/2026, après l'exclusion du porteur des votes de déblocage : mêmes 13 résultats, mêmes
+détecteurs, aucun High ni Medium ([`slither-report-2026-11-16.txt`](slither-report-2026-11-16.txt)).
