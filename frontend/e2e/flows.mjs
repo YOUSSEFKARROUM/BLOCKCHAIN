@@ -184,6 +184,12 @@ async function main() {
   if (Number(await fund.campaignCount()) !== 5) throw new Error("La démo n'est pas dans son état initial (5 campagnes attendues).");
 
   const snapshot = await provider.send("evm_snapshot", []);
+  // Les votes de la démo durent 1 h en temps réel : un bloc miné maintenant dit s'ils sont encore ouverts.
+  await provider.send("evm_mine", []);
+  if (Number(await governance.state(OPEN_RELEASE_PROPOSAL)) !== 0) {
+    await provider.send("evm_revert", [snapshot]);
+    throw new Error("Les votes de la démo ont expiré (ils durent 1 h) : relancez scripts/demo-anvil.sh, puis npm run e2e.");
+  }
   const browser = await openBrowser();
   const page = new Page(browser);
   const results = [];
