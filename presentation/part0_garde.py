@@ -1,4 +1,4 @@
-"""Diapositive 0 : page de garde (école, titre, équipe, encadrant)."""
+"""Diapositive 0 : page de garde, dans le style de la présentation (fond blanc, palettes, accents dorés)."""
 
 from pathlib import Path
 
@@ -7,78 +7,90 @@ from manim import (
     LEFT,
     RIGHT,
     UP,
-    UR,
     UL,
+    UR,
+    Circle,
     Create,
-    Dot,
     FadeIn,
     GrowFromCenter,
     ImageMobject,
     LaggedStart,
     Line,
-    Rectangle,
-    Text,
+    RoundedRectangle,
     VGroup,
     config,
 )
 
 from base import CampusSlide
-from theme import BODY, DISPLAY
+from part1_contexte import flip_in
+from theme import AMBER, FLAP_AMBER, FLAP_INK, GRAY, INK, LINE, TILE_2, body, display, flap_word, kicker, mono
 
-NAVY = "#1B2242"
-RUST = "#C4552B"
-CREAM = "#F6F2EA"
-INK_SOFT = "#4A4A55"
-LOGO = Path(__file__).parent / "assets" / "ensa-logo.png"
-
-TEAM = ["Youssef AIT KARROUM", "Othmane ALIOUALI", "Saad-Eddine EL JARIDA"]
-SUPERVISOR = "Pr. Hamza TOUIL"
+ASSETS = Path(__file__).parent / "assets"
+TEAM = [("YK", "Youssef AIT KARROUM"), ("OA", "Othmane ALIOUALI"), ("SE", "Saad-Eddine EL JARIDA")]
+SUPERVISOR = ("HT", "Pr. Hamza TOUIL")
 
 
-def label(text: str, size: float, color: str = NAVY, weight: str = "NORMAL", font: str = BODY) -> Text:
-    return Text(text, font=font, font_size=size, color=color, weight=weight)
+def member_chip(initials: str, name: str, accent: bool = False) -> VGroup:
+    """Pastille d'un membre : initiales dans un disque sombre, puis le nom."""
+    disc = Circle(radius=0.3, fill_color="#232326", fill_opacity=1, stroke_color=FLAP_AMBER if accent else LINE, stroke_width=3)
+    letters = mono(initials, 17, color=FLAP_AMBER if accent else FLAP_INK, weight="BOLD").move_to(disc)
+    label = body(name, 26, color=INK)
+    content = VGroup(VGroup(disc, letters), label).arrange(RIGHT, buff=0.22)
+    box = RoundedRectangle(
+        corner_radius=0.38,
+        width=content.width + 0.45,
+        height=0.78,
+        fill_color=TILE_2,
+        fill_opacity=1,
+        stroke_color=AMBER if accent else LINE,
+        stroke_width=2 if accent else 1.5,
+    )
+    content.move_to(box)
+    return VGroup(box, content)
 
 
 class S00PageDeGarde(CampusSlide):
     index = 0
 
     def construct(self) -> None:
-        width, height = config.frame_width, config.frame_height
-        paper = Rectangle(width=width, height=height, fill_color=CREAM, fill_opacity=1, stroke_width=0)
-        self.add(paper)
+        width = config.frame_width
 
-        logo = ImageMobject(str(LOGO)).scale_to_fit_width(3.6).to_corner(UL, buff=0.35)
-        wordmark = VGroup(label("Campus", 46, NAVY, "BOLD", DISPLAY), label("Fund", 46, RUST, "BOLD", DISPLAY)).arrange(RIGHT, buff=0.05)
-        wordmark.to_corner(UR, buff=0.45)
-        self.play(FadeIn(logo, shift=DOWN * 0.15), FadeIn(wordmark, shift=DOWN * 0.15), run_time=0.8)
+        # En-tête : les deux établissements, séparés du contenu par un filet
+        ensa = ImageMobject(str(ASSETS / "ensa-logo.png")).scale_to_fit_height(0.95).to_corner(UL, buff=0.4)
+        usms = ImageMobject(str(ASSETS / "usms-logo.png")).scale_to_fit_height(1.45).to_corner(UR, buff=0.22)
+        header_rule = Line(LEFT * (width / 2 - 0.45), RIGHT * (width / 2 - 0.45), color=LINE, stroke_width=2).shift(UP * 2.35)
+        self.play(FadeIn(ensa, shift=DOWN * 0.15), FadeIn(usms, shift=DOWN * 0.15), Create(header_rule), run_time=0.9)
 
-        kicker = label("PROJET DE FIN DE MODULE BLOCKCHAIN", 26, INK_SOFT, "BOLD").shift(UP * 1.75)
-        dots = VGroup(*[Dot(radius=0.03, color=RUST) for _ in range(3)]).arrange(RIGHT, buff=0.08).next_to(kicker, DOWN, buff=0.3)
-        rule_left = Line(dots.get_left() + LEFT * 1.6, dots.get_left() + LEFT * 0.25, color=RUST, stroke_width=3)
-        rule_right = Line(dots.get_right() + RIGHT * 0.25, dots.get_right() + RIGHT * 1.6, color=RUST, stroke_width=3)
-        self.play(FadeIn(kicker, shift=UP * 0.1), GrowFromCenter(rule_left), GrowFromCenter(rule_right), FadeIn(dots), run_time=0.8)
+        # Titre : les palettes du site, sur une ligne
+        kick = kicker("Projet de fin de module · Blockchain").shift(UP * 1.85)
+        title = VGroup(flap_word("CAMPUS", size=0.98), flap_word("FUND", size=0.98, color=FLAP_AMBER)).arrange(RIGHT, buff=0.32)
+        title.next_to(kick, DOWN, buff=0.32)
+        self.play(FadeIn(kick, shift=DOWN * 0.1), run_time=0.4)
+        self.play(flip_in(VGroup(*title[0], *title[1]), lag=0.07))
 
-        title = Text("CAMPUSFUND", font=DISPLAY, font_size=150, weight="BOLD")
-        title.set_color_by_gradient(NAVY, "#5A3352", RUST)
-        if title.width > width - 1.6:
-            title.scale_to_fit_width(width - 1.6)
-        title.shift(UP * 0.05)
-        self.play(LaggedStart(*[FadeIn(letter, shift=UP * 0.25) for letter in title], lag_ratio=0.06), run_time=1.3)
+        tagline = display("Les fonds débloqués sur vote.", 34, color=INK).next_to(title, DOWN, buff=0.38)
+        underline = Line(tagline.get_corner(DOWN + LEFT), tagline.get_corner(DOWN + RIGHT), color=FLAP_AMBER, stroke_width=6).shift(DOWN * 0.12)
+        self.play(FadeIn(tagline, shift=UP * 0.12), run_time=0.5)
+        self.play(GrowFromCenter(underline), run_time=0.5)
 
-        made_by = VGroup(label("Réalisé par", 26, NAVY, "BOLD"), *[label(name, 26, NAVY) for name in TEAM])
-        made_by.arrange(DOWN, aligned_edge=LEFT, buff=0.14).to_edge(LEFT, buff=1.2).shift(DOWN * 2.05)
-        supervised = VGroup(label("Encadré par", 26, NAVY, "BOLD"), label(SUPERVISOR, 26, NAVY))
-        supervised.arrange(DOWN, aligned_edge=LEFT, buff=0.14).to_edge(RIGHT, buff=2.0).align_to(made_by, UP).shift(DOWN * 0.3)
-        self.play(
-            LaggedStart(*[FadeIn(line, shift=RIGHT * 0.15) for line in made_by], lag_ratio=0.15),
-            LaggedStart(*[FadeIn(line, shift=LEFT * 0.15) for line in supervised], lag_ratio=0.15),
-            run_time=1.2,
-        )
+        # Équipe et encadrant
+        team_label = mono("RÉALISÉ PAR", 16, color=AMBER, weight="BOLD")
+        chips = VGroup(*[member_chip(i, n, accent=(k == 0)) for k, (i, n) in enumerate(TEAM)]).arrange(RIGHT, buff=0.22)
+        team = VGroup(team_label, chips).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
+        sup_label = mono("ENCADRÉ PAR", 16, color=AMBER, weight="BOLD")
+        sup = VGroup(sup_label, member_chip(*SUPERVISOR)).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
+        people = VGroup(team, sup).arrange(RIGHT, buff=0.55, aligned_edge=DOWN)
+        if people.width > width - 0.9:
+            people.scale_to_fit_width(width - 0.9)
+        people.next_to(underline, DOWN, buff=0.85)
+        self.play(FadeIn(team_label), FadeIn(sup_label), run_time=0.3)
+        self.play(LaggedStart(*[FadeIn(c, shift=UP * 0.15) for c in [*chips, sup[1]]], lag_ratio=0.18), run_time=1.1)
 
-        bottom_rule = Line(LEFT * (width / 2 - 0.55), RIGHT * (width / 2 - 0.55), color=RUST, stroke_width=4).to_edge(DOWN, buff=0.62)
-        program = label("FILIÈRE INTELLIGENCE ARTIFICIELLE ET CYBERSÉCURITÉ", 17, INK_SOFT, "BOLD").next_to(bottom_rule, DOWN, buff=0.14).align_to(bottom_rule, LEFT)
-        year = label("ANNÉE UNIVERSITAIRE 2026/2027", 17, INK_SOFT, "BOLD").next_to(bottom_rule, DOWN, buff=0.14).align_to(bottom_rule, RIGHT)
-        self.play(Create(bottom_rule), FadeIn(program), FadeIn(year), run_time=0.8)
+        # Pied : filière et année
+        foot_rule = Line(LEFT * (width / 2 - 0.45), RIGHT * (width / 2 - 0.45), color=FLAP_AMBER, stroke_width=4).to_edge(DOWN, buff=0.62)
+        program = mono("FILIÈRE INTELLIGENCE ARTIFICIELLE ET CYBERSÉCURITÉ", 15, color=GRAY).next_to(foot_rule, DOWN, buff=0.14).align_to(foot_rule, LEFT)
+        year = mono("ANNÉE UNIVERSITAIRE 2026/2027", 15, color=GRAY).next_to(foot_rule, DOWN, buff=0.14).align_to(foot_rule, RIGHT)
+        self.play(Create(foot_rule), FadeIn(program), FadeIn(year), run_time=0.8)
         self.pause(
             "Bonjour. Nous sommes Youssef Ait Karroum, Othmane Aliouali et Saad-Eddine El Jarida, encadrés par le "
             "professeur Hamza Touil. Notre projet : CampusFund."
