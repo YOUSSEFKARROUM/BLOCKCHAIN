@@ -1,12 +1,21 @@
-"""Classe de base des diapositives : fond nuit, trame de points, numéro de page."""
+"""Classe de base des diapositives : fond blanc, trame de points, repère de section, numéro de page."""
 
-from manim import DOWN, LEFT, RIGHT, UP, Dot, FadeIn, FadeOut, Group, VGroup, config
+from manim import Dot, FadeOut, VGroup, config
 from manim_slides import Slide
 
 from theme import LINE, NIGHT, footer
 
-TOTAL_SLIDES = 14
+TOTAL_SLIDES = 16  # page de garde comprise
 config.background_color = NIGHT
+
+# Sections annoncées dans le sommaire (numéro, nom)
+PROBLEME = "01 · Problème et idée"
+ARCHITECTURE = "02 · Architecture"
+CYCLE = "03 · Cycle d'une campagne"
+SECURITE = "04 · Sécurité"
+PREUVES = "05 · Preuves et IA"
+DEMO = "06 · Démonstration"
+FIN = "07 · Limites et conclusion"
 
 
 def dot_grid() -> VGroup:
@@ -25,16 +34,17 @@ def dot_grid() -> VGroup:
 
 
 class CampusSlide(Slide):
-    """Diapositive au style CampusFund. `index` = numéro affiché en bas à droite."""
+    """Diapositive au style CampusFund. `index` = numéro de page (0 = aucun), `section` = repère en bas à gauche."""
 
     index = 0
+    section = ""
     skip_reversing = True
 
     def setup(self) -> None:
         super().setup()
         self.chrome = [dot_grid()]
         if self.index:
-            self.chrome.append(footer(self.index, TOTAL_SLIDES))
+            self.chrome.append(footer(self.index, TOTAL_SLIDES, self.section))
         self.add(*self.chrome)
 
     def clear_slide(self, keep: tuple = ()) -> None:
@@ -48,4 +58,4 @@ class CampusSlide(Slide):
         self.next_slide(notes=notes)
 
 
-__all__ = ["CampusSlide", "DOWN", "FadeIn", "Group", "LEFT", "RIGHT", "UP", "TOTAL_SLIDES"]
+__all__ = ["ARCHITECTURE", "CYCLE", "CampusSlide", "DEMO", "FIN", "PREUVES", "PROBLEME", "SECURITE", "TOTAL_SLIDES"]

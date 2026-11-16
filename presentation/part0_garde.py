@@ -23,7 +23,7 @@ from manim import (
 
 from base import CampusSlide
 from part1_contexte import flip_in
-from theme import AMBER, FLAP_AMBER, FLAP_INK, GRAY, INK, LINE, TILE_2, body, display, flap_word, kicker, mono
+from theme import AMBER, AMBER_TEXT, FLAP_AMBER, FLAP_INK, GRAY, INK, LINE, TILE_2, body, display, flap_word, kicker, mono
 
 ASSETS = Path(__file__).parent / "assets"
 TEAM = [("YK", "Youssef AIT KARROUM"), ("OA", "Othmane ALIOUALI"), ("SE", "Saad-Eddine EL JARIDA")]
@@ -74,10 +74,10 @@ class S00PageDeGarde(CampusSlide):
         self.play(GrowFromCenter(underline), run_time=0.5)
 
         # Équipe et encadrant
-        team_label = mono("RÉALISÉ PAR", 16, color=AMBER, weight="BOLD")
+        team_label = mono("RÉALISÉ PAR", 20, color=AMBER_TEXT, weight="BOLD")
         chips = VGroup(*[member_chip(i, n, accent=(k == 0)) for k, (i, n) in enumerate(TEAM)]).arrange(RIGHT, buff=0.22)
         team = VGroup(team_label, chips).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
-        sup_label = mono("ENCADRÉ PAR", 16, color=AMBER, weight="BOLD")
+        sup_label = mono("ENCADRÉ PAR", 20, color=AMBER_TEXT, weight="BOLD")
         sup = VGroup(sup_label, member_chip(*SUPERVISOR)).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
         people = VGroup(team, sup).arrange(RIGHT, buff=0.55, aligned_edge=DOWN)
         if people.width > width - 0.9:
@@ -88,8 +88,8 @@ class S00PageDeGarde(CampusSlide):
 
         # Pied : filière et année
         foot_rule = Line(LEFT * (width / 2 - 0.45), RIGHT * (width / 2 - 0.45), color=FLAP_AMBER, stroke_width=4).to_edge(DOWN, buff=0.62)
-        program = mono("FILIÈRE INTELLIGENCE ARTIFICIELLE ET CYBERSÉCURITÉ", 15, color=GRAY).next_to(foot_rule, DOWN, buff=0.14).align_to(foot_rule, LEFT)
-        year = mono("ANNÉE UNIVERSITAIRE 2026/2027", 15, color=GRAY).next_to(foot_rule, DOWN, buff=0.14).align_to(foot_rule, RIGHT)
+        program = body("Filière Intelligence artificielle et Cybersécurité", 24, color=GRAY, weight="BOLD").next_to(foot_rule, DOWN, buff=0.14).align_to(foot_rule, LEFT)
+        year = body("Année universitaire 2026/2027", 24, color=GRAY, weight="BOLD").next_to(foot_rule, DOWN, buff=0.14).align_to(foot_rule, RIGHT)
         self.play(Create(foot_rule), FadeIn(program), FadeIn(year), run_time=0.8)
         self.pause(
             "Bonjour. Nous sommes Youssef Ait Karroum, Othmane Aliouali et Saad-Eddine El Jarida, encadrés par le "
