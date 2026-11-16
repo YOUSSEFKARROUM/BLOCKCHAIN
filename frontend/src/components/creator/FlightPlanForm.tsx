@@ -131,7 +131,7 @@ export function FlightPlanForm() {
       </div>
 
       <div className="grid gap-5" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(240px, 100%), 1fr))" }}>
-        <NumberField id="cf-goal" label="02 · Objectif en ETH" unit="ETH" min="0" step="0.1" value={form.goal} onChange={(v) => set({ goal: v })} />
+        <NumberField id="cf-goal" label="02 · Objectif en ETH" unit="ETH" min="0" step="any" value={form.goal} onChange={(v) => set({ goal: v })} />
         <div className="flex flex-col gap-2.5">
           <NumberField id="cf-days" label="03 · Durée de la collecte" unit="JOURS" min="1" max="90" step="1" value={form.days} onChange={(v) => set({ days: v })} disabled={form.isDemoHour} />
           <button type="button" aria-pressed={form.isDemoHour} onClick={() => set({ isDemoHour: !form.isDemoHour })} className={`btn btn-sm self-start !min-h-[40px] ${form.isDemoHour ? "btn-amber" : "btn-ghost"}`}>

@@ -64,7 +64,7 @@ function ContributeForm({ campaignId, rate }: { campaignId: number; rate: number
             id="cf-amt"
             type="number"
             min="0"
-            step="0.01"
+            step="any"
             inputMode="decimal"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
