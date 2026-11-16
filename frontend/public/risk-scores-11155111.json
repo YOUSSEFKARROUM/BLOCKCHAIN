@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-16T15:58:02+00:00",
+  "generatedAt": "2026-11-16T16:53:38+00:00",
   "chainId": 11155111,
   "campusFund": "0x9ED175d941378C899576CE5B71103E6185B4a6Ee",
   "method": {
@@ -83,6 +83,40 @@
         "top_share": 0.0,
         "log_n": 0.6931,
         "n": 1,
+        "creator_linked": 0.0
+      },
+      "reasons": []
+    },
+    "4": {
+      "score": 0.0,
+      "level": "Faible",
+      "rulesScore": 0.0,
+      "forestScore": 0.0,
+      "features": {
+        "repeated": 0.0,
+        "linked": 0.0,
+        "fresh": 0.0,
+        "burst": 0.0,
+        "top_share": 0.0,
+        "log_n": 0.0,
+        "n": 0,
+        "creator_linked": 0.0
+      },
+      "reasons": []
+    },
+    "5": {
+      "score": 0.0,
+      "level": "Faible",
+      "rulesScore": 0.0,
+      "forestScore": 0.0,
+      "features": {
+        "repeated": 0.0,
+        "linked": 0.0,
+        "fresh": 0.0,
+        "burst": 0.0,
+        "top_share": 0.0,
+        "log_n": 0.0,
+        "n": 0,
         "creator_linked": 0.0
       },
       "reasons": []

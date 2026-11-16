@@ -1,0 +1,25 @@
+[
+  {
+    "slug": "echecs",
+    "name": "Tournoi d'échecs inter-écoles",
+    "club": "Club d'échecs ENSA Béni Mellal",
+    "category": "Événement",
+    "description": "Le club d'échecs organise un tournoi ouvert aux écoles de la région : location de la salle, jeux et pendules, trophées pour les trois premiers.",
+    "milestones": [
+      { "title": "Achat des jeux et des pendules", "description": "Facture du fournisseur publiée." },
+      { "title": "Remise des prix", "description": "Photos de la remise et liste des gagnants." }
+    ]
+  },
+  {
+    "slug": "solaire",
+    "name": "Station météo solaire du campus",
+    "club": "Club Énergies renouvelables",
+    "category": "Matériel",
+    "description": "Installation d'une station météo alimentée par un panneau solaire. Les mesures (température, vent, ensoleillement) seront publiées en ligne pour les projets des étudiants.",
+    "milestones": [
+      { "title": "Achat du panneau et des capteurs", "description": "Bon de commande et factures." },
+      { "title": "Installation sur le toit", "description": "Photos de l'installation et accord de l'école." },
+      { "title": "Mise en ligne des mesures", "description": "Lien vers le tableau de bord public." }
+    ]
+  }
+]
