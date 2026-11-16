@@ -49,7 +49,7 @@ export function BoardingPass({ campaign: c, proposals, metadata, now, feePercent
           <div className="flex items-center gap-[18px]">
             <div>
               <div className="font-display text-[13px] font-medium" style={{ color: INK_SOFT }}>Collecté</div>
-              <div className="display" style={{ fontSize: "clamp(40px, 6vw, 84px)", fontStretch: "70%", lineHeight: 0.85 }}>{eth(c.raised, 2)}</div>
+              <div className="display" style={{ fontSize: "clamp(30px, 6vw, 84px)", fontStretch: "70%", lineHeight: 0.85, overflowWrap: "normal", whiteSpace: "nowrap" }}>{eth(c.raised, 2)}</div>
             </div>
             {/* Le repère avance avec la collecte : à l'objectif, il arrive au bout de la ligne. */}
             <div className="flex min-w-[70px] flex-1 flex-col items-center gap-1">
@@ -62,7 +62,7 @@ export function BoardingPass({ campaign: c, proposals, metadata, now, feePercent
             </div>
             <div className="text-right">
               <div className="font-display text-[13px] font-medium" style={{ color: INK_SOFT }}>Objectif</div>
-              <div className="display" style={{ fontSize: "clamp(40px, 6vw, 84px)", fontStretch: "70%", lineHeight: 0.85 }}>{eth(c.goal, 2)} ETH</div>
+              <div className="display" style={{ fontSize: "clamp(30px, 6vw, 84px)", fontStretch: "70%", lineHeight: 0.85, overflowWrap: "normal", whiteSpace: "nowrap" }}>{eth(c.goal, 2)} ETH</div>
             </div>
           </div>
           <div className="mono grid gap-x-4 gap-y-[18px] text-[16px] font-bold" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(130px, 100%), 1fr))" }}>

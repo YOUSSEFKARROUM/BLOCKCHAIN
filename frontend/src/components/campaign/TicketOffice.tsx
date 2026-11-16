@@ -205,7 +205,7 @@ export function TicketOffice({ campaign: c, myContribution, now, rate }: TicketO
   const title = titleFor(c.status, canFinalize);
   return (
     <div className="on-amber flex flex-col gap-[22px] rounded-[18px] bg-amber px-7 py-[30px] text-night">
-      <h2 className="display text-[64px]" style={{ lineHeight: 0.85 }}>
+      <h2 className="display" style={{ fontSize: "clamp(40px, 11vw, 64px)", lineHeight: 0.85, overflowWrap: "normal" }}>
         {title}
       </h2>
       {isCancelled && <span className="tag-b -mt-3">Remboursement</span>}

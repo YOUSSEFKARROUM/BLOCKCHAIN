@@ -1,0 +1,91 @@
+{
+  "generatedAt": "2026-11-16T15:58:02+00:00",
+  "chainId": 11155111,
+  "campusFund": "0x9ED175d941378C899576CE5B71103E6185B4a6Ee",
+  "method": {
+    "rulesWeight": 0.6,
+    "forestWeight": 0.4,
+    "ruleWeights": {
+      "repeated": 25,
+      "linked": 30,
+      "fresh": 15,
+      "burst": 20,
+      "top_share": 10
+    },
+    "levels": {
+      "Faible": "< 35",
+      "Moyen": "35 - 50",
+      "Élevé": ">= 50"
+    }
+  },
+  "campaigns": {
+    "0": {
+      "score": 4.5,
+      "level": "Faible",
+      "rulesScore": 0.0,
+      "forestScore": 11.1,
+      "features": {
+        "repeated": 0.0,
+        "linked": 0.0,
+        "fresh": 0.0,
+        "burst": 0.0,
+        "top_share": 0.0,
+        "log_n": 0.6931,
+        "n": 1,
+        "creator_linked": 0.0
+      },
+      "reasons": []
+    },
+    "1": {
+      "score": 4.5,
+      "level": "Faible",
+      "rulesScore": 0.0,
+      "forestScore": 11.1,
+      "features": {
+        "repeated": 0.0,
+        "linked": 0.0,
+        "fresh": 0.0,
+        "burst": 0.0,
+        "top_share": 0.0,
+        "log_n": 0.6931,
+        "n": 1,
+        "creator_linked": 0.0
+      },
+      "reasons": []
+    },
+    "2": {
+      "score": 4.5,
+      "level": "Faible",
+      "rulesScore": 0.0,
+      "forestScore": 11.1,
+      "features": {
+        "repeated": 0.0,
+        "linked": 0.0,
+        "fresh": 0.0,
+        "burst": 0.0,
+        "top_share": 0.0,
+        "log_n": 0.6931,
+        "n": 1,
+        "creator_linked": 0.0
+      },
+      "reasons": []
+    },
+    "3": {
+      "score": 4.5,
+      "level": "Faible",
+      "rulesScore": 0.0,
+      "forestScore": 11.1,
+      "features": {
+        "repeated": 0.0,
+        "linked": 0.0,
+        "fresh": 0.0,
+        "burst": 0.0,
+        "top_share": 0.0,
+        "log_n": 0.6931,
+        "n": 1,
+        "creator_linked": 0.0
+      },
+      "reasons": []
+    }
+  }
+}

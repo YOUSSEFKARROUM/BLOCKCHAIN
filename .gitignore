@@ -19,6 +19,7 @@ deployments/test-deploy.json
 node_modules/
 frontend/.next/
 frontend/.next-build/
+frontend/.next-sepolia/
 frontend/out/
 frontend/next-env.d.ts
 frontend/public/local-ipfs/

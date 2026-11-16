@@ -1,8 +1,17 @@
 import { formatEther } from "ethers";
 
+const MAX_ETH_DIGITS = 6;
+
+/**
+ * Montant en ETH, à la française. `digits` est la précision habituelle ; un petit montant non nul garde
+ * au moins un chiffre significatif (0,002 ETH ne s'affiche jamais « 0 »).
+ */
 export function eth(wei: bigint, digits = 3): string {
   const n = Number(formatEther(wei));
-  return n.toLocaleString("fr-FR", { maximumFractionDigits: digits });
+  const abs = Math.abs(n);
+  const needed = abs > 0 && abs < 1 ? Math.ceil(-Math.log10(abs)) : 0;
+  const maximumFractionDigits = Math.min(MAX_ETH_DIGITS, Math.max(digits, needed));
+  return n.toLocaleString("fr-FR", { maximumFractionDigits });
 }
 
 export function cfd(amount: bigint): string {

@@ -171,16 +171,15 @@ présenter. Aucune vraie fraude n'a servi de test.
 
 9.1 Les 5 écrans. 📷 `docs/captures/anvil-home.png`, `anvil-campaign2.png`, `anvil-governance.png`, `anvil-creator.png`, `anvil-securite.png` et `anvil-home-mobile.png` (375 px).
 9.2 Gestion des cas d'erreur : MetaMask absent, mauvais réseau, transaction rejetée, erreurs Solidity traduites, CFD manquants avant un remboursement.
-9.3 **Déploiement Sepolia.** Adresses du déploiement actuel (bloc 12072327, vote de 1 h). **Il précède les
-changements de contrats du 15/11** : après le redéploiement (`scripts/deploy-sepolia.sh`), remplacer ce tableau
-par les nouvelles adresses **[À REMPLACER après redéploiement]**.
+9.3 **Déploiement Sepolia** (16/11/2026, bloc 12148292, vote de 1 h). Code vérifié sur Etherscan ; le
+déployeur ne garde que le rôle de pause. Quatre campagnes de démonstration (petits montants) y sont créées.
 
 | Contrat | Adresse Sepolia | Lien Etherscan |
 |---|---|---|
-| Treasury | `0xd56346AA32D6b91bb813ED356a10b2d8322acaB3` | https://sepolia.etherscan.io/address/0xd56346AA32D6b91bb813ED356a10b2d8322acaB3#code |
-| CFDToken | `0x5Ad0412DBd714AaC28F6627324d94Fb01E409Cc1` | https://sepolia.etherscan.io/address/0x5Ad0412DBd714AaC28F6627324d94Fb01E409Cc1#code |
-| CampusFund | `0xf2095C974371D742d27ab75B4B67B284a8095E7D` | https://sepolia.etherscan.io/address/0xf2095C974371D742d27ab75B4B67B284a8095E7D#code |
-| Governance | `0x353594F8a5568E3524276D2BE1cF077d624bDa9C` | https://sepolia.etherscan.io/address/0x353594F8a5568E3524276D2BE1cF077d624bDa9C#code |
+| Treasury | `0xC54160c9EBde7Ba4c9D9E0EB7B583F8CB3d71575` | https://sepolia.etherscan.io/address/0xC54160c9EBde7Ba4c9D9E0EB7B583F8CB3d71575#code |
+| CFDToken | `0x0C8baD1D5FCc1b47D757b0468b719B7E22521c31` | https://sepolia.etherscan.io/address/0x0C8baD1D5FCc1b47D757b0468b719B7E22521c31#code |
+| CampusFund | `0x9ED175d941378C899576CE5B71103E6185B4a6Ee` | https://sepolia.etherscan.io/address/0x9ED175d941378C899576CE5B71103E6185B4a6Ee#code |
+| Governance | `0xd61923C47c8f0059370d8C96404C325163DEa802` | https://sepolia.etherscan.io/address/0xd61923C47c8f0059370d8C96404C325163DEa802#code |
 
 📷 **Captures Sepolia à insérer** :
 1. Les 4 contrats sur Etherscan avec la coche « Contract Source Code Verified ».

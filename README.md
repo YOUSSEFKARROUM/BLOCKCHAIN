@@ -76,12 +76,21 @@ compte anvil (clés de test **publiques**, affichées au démarrage d'`anvil`). 
 
 ## Déploiement Sepolia
 
-**État au 15/11/2026.** Une version est déployée et vérifiée sur Sepolia (adresses dans
-[`deployments/11155111.json`](deployments/11155111.json), bloc 12072327, vote de 1 h). **Elle date d'avant les
-changements de contrats du 15/11** (vote de déblocage par campagne, une proposition ouverte à la fois, preuve
-obligatoire, paramètres figés). Le front compilé avec les nouvelles ABI ne lit plus correctement ces anciens
-contrats : **il faut redéployer** avant de montrer Sepolia. Cela demande **vos** clés, qui ne doivent jamais
-être partagées.
+**État au 16/11/2026.** Les contrats actuels sont déployés et **vérifiés** sur Sepolia (bloc 12148292, vote
+de 1 h ; adresses dans [`deployments/11155111.json`](deployments/11155111.json)). Le déployeur n'a gardé que le
+rôle de pause. Quatre campagnes de démonstration y ont été créées avec de très petits montants
+(`scripts/foundry/SeedSepolia.s.sol`), et les scores IA de Sepolia sont calculés.
+
+| Contrat | Adresse | Etherscan |
+|---|---|---|
+| Treasury | `0xC54160c9EBde7Ba4c9D9E0EB7B583F8CB3d71575` | https://sepolia.etherscan.io/address/0xC54160c9EBde7Ba4c9D9E0EB7B583F8CB3d71575#code |
+| CFDToken | `0x0C8baD1D5FCc1b47D757b0468b719B7E22521c31` | https://sepolia.etherscan.io/address/0x0C8baD1D5FCc1b47D757b0468b719B7E22521c31#code |
+| CampusFund | `0x9ED175d941378C899576CE5B71103E6185B4a6Ee` | https://sepolia.etherscan.io/address/0x9ED175d941378C899576CE5B71103E6185B4a6Ee#code |
+| Governance | `0xd61923C47c8f0059370d8C96404C325163DEa802` | https://sepolia.etherscan.io/address/0xd61923C47c8f0059370d8C96404C325163DEa802#code |
+
+Le déploiement s'était arrêté faute de fonds après les trois premiers contrats ;
+`scripts/foundry/ResumeDeploy.s.sol` l'a terminé (Governance, rôles, renoncements) sans redéployer le reste.
+Les clés ne doivent jamais être partagées. Pour refaire un déploiement complet :
 
 1. `cp .env.example .env`, puis remplir `SEPOLIA_RPC_URL`, `PRIVATE_KEY` (compte **de test** avec ~0,05 SepoliaETH),
    `ETHERSCAN_API_KEY` et `TREASURY_OWNER_1..3` (les adresses des 3 membres).
@@ -91,8 +100,8 @@ contrats : **il faut redéployer** avant de montrer Sepolia. Cela demande **vos*
 4. Créer une ou deux campagnes depuis « Créer une campagne » (upload IPFS réel), contribuer, voter. Durée de
    vote : `VOTING_PERIOD=3600` (1 h). Elle est **figée** au déploiement.
 5. Scores IA : `python scripts/anomaly_detection.py --rpc $SEPOLIA_RPC_URL --deployment deployments/11155111.json`
-   (écrit `frontend/public/risk-scores-11155111.json`). Il faut un RPC qui conserve l'historique des
-   événements : le RPC public `publicnode` répond « pruned history unavailable ».
+   (écrit `frontend/public/risk-scores-11155111.json`). Si le RPC refuse les anciens événements
+   (« pruned history unavailable »), utilisez un RPC qui conserve l'historique.
 6. Captures pour le rapport : liste dans [docs/RAPPORT.md](docs/RAPPORT.md) §9.3. Committer `deployments/11155111.json`.
 
 ## Tests de bout en bout
