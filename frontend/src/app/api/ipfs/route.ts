@@ -44,8 +44,13 @@ export async function POST(request: Request) {
   try {
     if (jwt) {
       const cid = await pinToPinata(jwt, content, metadata.name);
-      await writeLocal(cid, content); // cache : lecture immédiate sans attendre la passerelle
+      // Cache facultatif (lecture immédiate sans attendre la passerelle). Sur un hébergement au disque en
+      // lecture seule (Vercel), il échoue : la publication sur IPFS a réussi, on ne la fait pas échouer.
+      await writeLocal(cid, content).catch(() => undefined);
       return NextResponse.json({ cid, mode: "pinata" });
+    }
+    if (process.env.VERCEL) {
+      return NextResponse.json({ error: "Publication IPFS indisponible : PINATA_JWT n'est pas configuré sur le serveur." }, { status: 503 });
     }
     // Mode développement : pas de clé Pinata. Le CID est calculé localement (même algorithme qu'IPFS),
     // mais le fichier N'EST PAS publié sur le réseau IPFS. Clairement signalé à l'utilisateur.
