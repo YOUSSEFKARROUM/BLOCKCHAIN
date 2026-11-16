@@ -64,22 +64,50 @@ def lock_icon(color: str = AMBER, scale: float = 1.0) -> VGroup:
     return VGroup(shackle, body_box).scale(scale)
 
 
-class S01Ouverture(CampusSlide):
+AGENDA = [
+    ("01", "Le problème et l'idée", "Pourquoi un club ne doit pas tout recevoir d'un coup"),
+    ("02", "Architecture", "Quatre contrats, IPFS, le site et l'IA"),
+    ("03", "Le cycle d'une campagne", "Créer, contribuer, prouver, voter, retirer"),
+    ("04", "Sécurité", "The DAO et Beanstalk rejouées, puis bloquées"),
+    ("05", "Preuves et IA", "159 tests et un score de risque honnête"),
+    ("06", "Démonstration", "Le site en ligne sur Sepolia"),
+    ("07", "Limites et conclusion", "Ce qui reste à améliorer"),
+]
+
+
+def agenda_row(number: str, title: str, detail: str) -> VGroup:
+    """Une entrée du sommaire : le numéro en palettes, le titre, une ligne de détail."""
+    tiles = flap_word(number, size=0.72, color=FLAP_AMBER, gap=0.06)
+    texts = VGroup(display(title, 26), body(detail, 21, color=GRAY)).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+    return VGroup(tiles, texts).arrange(RIGHT, buff=0.32)
+
+
+class S01Sommaire(CampusSlide):
     index = 0
 
     def construct(self) -> None:
-        top = flap_word("CAMPUS", size=1.15)
-        bottom = flap_word("FUND", size=1.15, color=FLAP_AMBER)
-        word = VGroup(top, bottom).arrange(DOWN, buff=0.18).shift(UP * 0.9)
-        self.play(flip_in(VGroup(*top, *bottom)))
+        title = page_heading("Sommaire", "Le plan", "en sept étapes.")
+        self.play(FadeIn(title, shift=DOWN * 0.2))
 
-        tagline = display("Les fonds débloqués sur vote.", 44)
-        tagline.next_to(word, DOWN, buff=0.6)
-        info = mono("ENSA BÉNI MELLAL · IA & CYBERSÉCURITÉ · MINI-PROJET BLOCKCHAIN", size=18, color=GRAY)
-        info.next_to(tagline, DOWN, buff=0.35)
-        self.play(FadeIn(tagline, shift=UP * 0.2), run_time=0.8)
-        self.play(FadeIn(info), run_time=0.6)
-        self.pause("Bonjour. CampusFund : une plateforme de financement participatif pour les clubs étudiants, où l'argent n'est versé qu'après un vote.")
+        rows = [agenda_row(*item) for item in AGENDA]
+        left = VGroup(*rows[:4]).arrange(DOWN, aligned_edge=LEFT, buff=0.55)
+        right = VGroup(*rows[4:]).arrange(DOWN, aligned_edge=LEFT, buff=0.55)
+        columns = VGroup(left, right).arrange(RIGHT, buff=1.0, aligned_edge=UP)
+        if columns.width > 12.6:
+            columns.scale_to_fit_width(12.6)
+        # centré dans l'espace sous le titre
+        free_top, free_bottom = title.get_bottom()[1] - 0.3, -3.55
+        columns.move_to([0, (free_top + free_bottom) / 2, 0])
+        divider = Line(columns.get_top(), columns.get_bottom(), color=LINE, stroke_width=2).move_to(
+            [(left.get_right()[0] + right.get_left()[0]) / 2, columns.get_center()[1], 0]
+        )
+        self.play(Create(divider), run_time=0.4)
+        for row in rows:
+            self.play(flip_in(VGroup(*row[0]), lag=0.1), FadeIn(row[1], shift=RIGHT * 0.2), run_time=0.55)
+        self.pause(
+            "Voici notre plan : le problème et l'idée, l'architecture, le cycle d'une campagne sur un exemple, la "
+            "sécurité avec deux attaques rejouées, nos preuves et l'IA, la démonstration, puis les limites."
+        )
 
 
 class S02Probleme(CampusSlide):
