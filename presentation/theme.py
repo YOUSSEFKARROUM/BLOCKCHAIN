@@ -21,16 +21,27 @@ FONTS_DIR = Path(__file__).parent / "fonts"
 for font_file in FONTS_DIR.glob("*.ttf"):
     manimpango.register_font(str(font_file))
 
-# Palette du site
-NIGHT = "#09090A"
-AMBER = "#FFB800"
-TICKET = "#F2F0E8"
-TILE = "#232326"
-TILE_2 = "#1C1C1F"
-LINE = "#3A3A40"
-GRAY = "#A9A9B2"
-OK = "#4CD964"
-ALERT = "#FF6A3D"
+# Palette claire : fond blanc, encre sombre. Les accents sont assombris pour rester lisibles sur blanc
+# (contraste d'au moins 3:1 pour les grands textes). Les palettes d'affichage restent sombres.
+NIGHT = "#FFFFFF"  # fond de page
+INK = "#111114"  # texte principal
+AMBER = "#B87A00"  # accent (titres, pièces, cadres)
+AMBER_FILL = "#FFB800"  # ambre vif, uniquement en aplat avec du texte sombre
+TICKET = INK  # ancien « billet » clair : devient le texte principal
+TILE = "#ECECEF"  # aplat de carte
+TILE_2 = "#F6F6F8"  # fond de carte
+LINE = "#D4D4DA"  # bordures et trame
+GRAY = "#5A5A63"  # texte secondaire
+OK = "#1E9E45"
+ALERT = "#D9481B"
+PAPER = "#FFFFFF"
+
+# Palettes d'affichage (tuiles à charnière) : elles gardent le contraste du thème sombre
+FLAP_BG = "#232326"
+FLAP_BG_2 = "#1C1C1F"
+FLAP_INK = "#F2F0E8"
+FLAP_AMBER = "#FFB800"
+FLAP_OK = "#4CD964"
 
 DISPLAY = "Archivo"  # Archivo Black : grands titres
 BODY = "Archivo Narrow"  # texte courant
@@ -73,26 +84,26 @@ def page_heading(kick: str, main: str, accent: str = "") -> VGroup:
     return group.to_corner(UP + LEFT, buff=0.6)
 
 
-def flap(char: str, size: float = 1.0, color: str = TICKET) -> VGroup:
+def flap(char: str, size: float = 1.0, color: str = FLAP_INK) -> VGroup:
     """Une palette d'affichage : tuile sombre, charnière centrale, un caractère."""
     tile = RoundedRectangle(
-        corner_radius=0.08 * size, width=0.82 * size, height=1.05 * size, fill_color=TILE, fill_opacity=1, stroke_width=0
+        corner_radius=0.08 * size, width=0.82 * size, height=1.05 * size, fill_color=FLAP_BG, fill_opacity=1, stroke_width=0
     )
-    lower = Rectangle(width=0.82 * size, height=0.5 * size, fill_color=TILE_2, fill_opacity=1, stroke_width=0)
+    lower = Rectangle(width=0.82 * size, height=0.5 * size, fill_color=FLAP_BG_2, fill_opacity=1, stroke_width=0)
     lower.align_to(tile, DOWN)
-    hinge = Line(tile.get_left(), tile.get_right(), color=NIGHT, stroke_width=3 * size)
+    hinge = Line(tile.get_left(), tile.get_right(), color="#050506", stroke_width=3 * size)
     letter = mono(char, size=70 * size, color=color, weight="BOLD") if char.strip() else VGroup()
     if char.strip():
         letter.move_to(tile.get_center())
     return VGroup(tile, lower, hinge, letter)
 
 
-def flap_word(word: str, size: float = 1.0, color: str = TICKET, gap: float = 0.08) -> VGroup:
+def flap_word(word: str, size: float = 1.0, color: str = FLAP_INK, gap: float = 0.08) -> VGroup:
     tiles = VGroup(*[flap(c, size, color) for c in word]).arrange(RIGHT, buff=gap * size)
     return tiles
 
 
-def coin(radius: float = 0.16, color: str = AMBER) -> VGroup:
+def coin(radius: float = 0.16, color: str = AMBER_FILL) -> VGroup:
     """Une pièce stylisée (un peu d'ETH)."""
     outer = Circle(radius=radius, fill_color=color, fill_opacity=1, stroke_color="#B98500", stroke_width=2)
     inner = Circle(radius=radius * 0.6, stroke_color="#B98500", stroke_width=1.5)
@@ -121,7 +132,7 @@ def card(
     return VGroup(box, texts)
 
 
-def pill(text: str, color: str = AMBER, text_color: str = NIGHT, size: float = 20) -> VGroup:
+def pill(text: str, color: str = AMBER_FILL, text_color: str = INK, size: float = 20) -> VGroup:
     label = mono(text, size=size, color=text_color, weight="BOLD")
     box = RoundedRectangle(
         corner_radius=0.12, width=label.width + 0.4, height=label.height + 0.26, fill_color=color, fill_opacity=1, stroke_width=0
@@ -147,7 +158,13 @@ def footer(index: int, total: int) -> VGroup:
 
 __all__ = [
     "AMBER",
+    "AMBER_FILL",
     "ALERT",
+    "FLAP_AMBER",
+    "FLAP_INK",
+    "FLAP_OK",
+    "INK",
+    "PAPER",
     "BODY",
     "DISPLAY",
     "GRAY",

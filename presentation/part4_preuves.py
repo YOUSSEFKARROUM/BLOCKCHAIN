@@ -27,6 +27,9 @@ from part1_contexte import flip_in
 from theme import (
     ALERT,
     AMBER,
+    FLAP_AMBER,
+    FLAP_INK,
+    FLAP_OK,
     GRAY,
     LINE,
     OK,
@@ -62,12 +65,12 @@ class S11Tests(CampusSlide):
         title = page_heading("Preuves", "Testé,", "attaqué, audité.")
         self.play(FadeIn(title, shift=DOWN * 0.2))
         stats = [
-            ("159", "tests automatiques", AMBER),
-            ("100%", "des lignes exécutées", TICKET),
-            ("97%", "des branches testées", TICKET),
-            ("8000", "valeurs aléatoires (fuzz)", TICKET),
-            ("5", "invariants × 256 scénarios", TICKET),
-            ("6", "parcours testés dans le site", OK),
+            ("159", "tests automatiques", FLAP_AMBER),
+            ("100%", "des lignes exécutées", FLAP_INK),
+            ("97%", "des branches testées", FLAP_INK),
+            ("8000", "valeurs aléatoires (fuzz)", FLAP_INK),
+            ("5", "invariants × 256 scénarios", FLAP_INK),
+            ("6", "parcours testés dans le site", FLAP_OK),
         ]
         tiles = VGroup(*[stat_tile(value, caption, color) for value, caption, color in stats])
         tiles.arrange_in_grid(2, 3, buff=(0.35, 0.35)).shift(DOWN * 0.55)
@@ -163,7 +166,7 @@ class S13Demo(CampusSlide):
     index = 12
 
     def construct(self) -> None:
-        tiles = flap_word("DEMO", size=1.4, color=AMBER).shift(UP * 1.2)
+        tiles = flap_word("DEMO", size=1.4, color=FLAP_AMBER).shift(UP * 1.2)
         self.play(flip_in(tiles))
         url = mono("campusfund.vercel.app", 34, color=TICKET, weight="BOLD").next_to(tiles, DOWN, buff=0.6)
         network = mono("RÉSEAU SEPOLIA · CONTRATS VÉRIFIÉS SUR ETHERSCAN", 18, color=GRAY).next_to(url, DOWN, buff=0.25)
@@ -222,7 +225,7 @@ class S15Conclusion(CampusSlide):
             self.play(FadeIn(number), FadeIn(line, shift=RIGHT * 0.2), run_time=0.6)
         self.pause("En trois phrases : l'argent est bloqué dans un programme public ; il n'est versé qu'avec une preuve et un vote ; sinon, il est rendu.")
 
-        thanks = flap_word("MERCI", size=1.2, color=TICKET).shift(DOWN * 1.4)
+        thanks = flap_word("MERCI", size=1.2).shift(DOWN * 1.4)
         self.play(flip_in(thanks))
         questions = mono("VOS QUESTIONS", 22, color=AMBER).next_to(thanks, DOWN, buff=0.35)
         self.play(FadeIn(questions))

@@ -36,6 +36,7 @@ from theme import (
     LINE,
     NIGHT,
     OK,
+    PAPER,
     TICKET,
     TILE,
     TILE_2,
@@ -74,7 +75,7 @@ def person(initials: str, color: str = TICKET) -> VGroup:
 
 
 def document(name: str) -> VGroup:
-    sheet = RoundedRectangle(corner_radius=0.06, width=1.1, height=1.4, fill_color=TICKET, fill_opacity=1, stroke_width=0)
+    sheet = RoundedRectangle(corner_radius=0.06, width=1.1, height=1.4, fill_color=PAPER, fill_opacity=1, stroke_color=LINE, stroke_width=2)
     lines = VGroup(*[Line(LEFT * 0.35, RIGHT * 0.35, color=GRAY, stroke_width=3) for _ in range(4)]).arrange(DOWN, buff=0.17)
     lines.move_to(sheet.get_center() + UP * 0.1)
     label = mono(name, 14, color=AMBER, weight="BOLD").next_to(sheet, DOWN, buff=0.1)
@@ -142,7 +143,7 @@ class S05Cycle(CampusSlide):
         # 3. Clôturer : le résultat est figé
         self.play(ReplacementTransform(steps, timeline(2)))
         steps = self.mobjects[-1]
-        status = pill("COLLECTE", color=TICKET, size=20).next_to(vault[0], UP, buff=0.6)
+        status = pill("COLLECTE", color=TILE, size=20).next_to(vault[0], UP, buff=0.6)
         self.play(FadeIn(status, shift=DOWN * 0.2))
         funded = pill("FINANCÉE", color=OK, size=20).move_to(status)
         self.play(Transform(status, funded), Indicate(vault[0], color=OK, scale_factor=1.03))

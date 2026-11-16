@@ -26,6 +26,7 @@ from base import CampusSlide
 from theme import (
     ALERT,
     AMBER,
+    FLAP_AMBER,
     GRAY,
     LINE,
     NIGHT,
@@ -68,7 +69,7 @@ class S01Ouverture(CampusSlide):
 
     def construct(self) -> None:
         top = flap_word("CAMPUS", size=1.15)
-        bottom = flap_word("FUND", size=1.15, color=AMBER)
+        bottom = flap_word("FUND", size=1.15, color=FLAP_AMBER)
         word = VGroup(top, bottom).arrange(DOWN, buff=0.18).shift(UP * 0.9)
         self.play(flip_in(VGroup(*top, *bottom)))
 
