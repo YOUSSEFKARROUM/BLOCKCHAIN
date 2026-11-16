@@ -54,7 +54,9 @@ contract InvariantsTest is Test {
 
     /// @notice INVARIANT 2 - CFD en circulation = (total contribué - contributions remboursées) x 1000.
     function invariant_SupplyMatchesContributions() public view {
-        assertEq(token.totalSupply(), (fund.totalContributed() - fund.totalRefundedPrincipal()) * token.RATE());
+        assertEq(
+            token.totalSupply(), (fund.totalContributed() - fund.totalRefundedPrincipal()) * token.RATE()
+        );
     }
 
     /// @notice INVARIANT 3 - Aucune tranche sans vote : pour chaque campagne,
@@ -84,7 +86,9 @@ contract InvariantsTest is Test {
         console.log("campagnes", fund.campaignCount(), "contributions", handler.done("contribute"));
         console.log("reussies", handler.done("success"), "echouees", handler.done("failed"));
         console.log("votes", handler.done("vote"), "deblocages executes", handler.done("execRelease"));
-        console.log("tranches retirees", handler.done("withdraw"), "gels executes", handler.done("execFreeze"));
+        console.log(
+            "tranches retirees", handler.done("withdraw"), "gels executes", handler.done("execFreeze")
+        );
         console.log("remboursements", handler.done("refund"), "cancelStale", handler.done("cancelStale"));
     }
 }

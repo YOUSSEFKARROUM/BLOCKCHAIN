@@ -61,7 +61,9 @@ contract FlashLoanGovernanceTest is GovernanceBase {
 
         vm.warp(block.timestamp + VOTING_PERIOD + 1);
         naive.execute(pid);
-        assertEq(uint8(fund.campaignStatus(campaignId)), uint8(ICampusFund.Status.Cancelled), "campagne gelee !");
+        assertEq(
+            uint8(fund.campaignStatus(campaignId)), uint8(ICampusFund.Status.Cancelled), "campagne gelee !"
+        );
     }
 
     /// @notice AVEC snapshot : même attaque, mais l'attaquant avait 0 vote au bloc du snapshot.

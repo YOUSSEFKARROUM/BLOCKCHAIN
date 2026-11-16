@@ -179,7 +179,8 @@ contract CampusFundFuzzTest is GovernanceBase {
         _endVote();
         uint256 supply = (20 ether + voterAmount) * 1000;
         bool quorum = voterAmount * 1000 >= supply / 10;
-        Governance.ProposalState expected = quorum ? Governance.ProposalState.Succeeded : Governance.ProposalState.Defeated;
+        Governance.ProposalState expected =
+            quorum ? Governance.ProposalState.Succeeded : Governance.ProposalState.Defeated;
         assertEq(uint8(governance.state(pid)), uint8(expected));
     }
 }

@@ -14,7 +14,9 @@ contract CFDTokenTest is BaseTest {
 
     function test_MintOnlyMinter() public {
         vm.expectRevert(
-            abi.encodeWithSelector(IAccessControl.AccessControlUnauthorizedAccount.selector, alice, token.MINTER_ROLE())
+            abi.encodeWithSelector(
+                IAccessControl.AccessControlUnauthorizedAccount.selector, alice, token.MINTER_ROLE()
+            )
         );
         vm.prank(alice);
         token.mint(alice, 1);
@@ -22,7 +24,9 @@ contract CFDTokenTest is BaseTest {
 
     function test_BurnOnlyBurner() public {
         vm.expectRevert(
-            abi.encodeWithSelector(IAccessControl.AccessControlUnauthorizedAccount.selector, alice, token.BURNER_ROLE())
+            abi.encodeWithSelector(
+                IAccessControl.AccessControlUnauthorizedAccount.selector, alice, token.BURNER_ROLE()
+            )
         );
         vm.prank(alice);
         token.burn(bob, 1);

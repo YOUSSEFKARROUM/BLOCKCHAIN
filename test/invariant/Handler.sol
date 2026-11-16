@@ -76,13 +76,18 @@ contract Handler is Test {
         uint256 n = 2 + (nSeed % 4);
         uint16[] memory m = new uint16[](n);
         uint256 share = 10_000 / n;
-        for (uint256 i; i < n; ++i) m[i] = uint16(share);
+        for (uint256 i; i < n; ++i) {
+            m[i] = uint16(share);
+        }
         m[n - 1] = uint16(10_000 - share * (n - 1));
         vm.prank(_actor(actorSeed));
         fund.createCampaign(goal, duration, beneficiaries[actorSeed % beneficiaries.length], "bafyDemoCID", m);
     }
 
-    function contribute(uint256 actorSeed, uint256 campaignSeed, uint256 amount) external countCall("contribute") {
+    function contribute(uint256 actorSeed, uint256 campaignSeed, uint256 amount)
+        external
+        countCall("contribute")
+    {
         (uint256 id, bool ok) = _find(campaignSeed, ICampusFund.Status.Active);
         if (!ok) return;
         amount = bound(amount, 0.01 ether, 3 ether);
@@ -108,7 +113,9 @@ contract Handler is Test {
         uint256 deadline = fund.getCampaign(id).deadline;
         if (block.timestamp < deadline) _advance(deadline - block.timestamp);
         fund.finalize(id);
-        done[fund.campaignStatus(id) == ICampusFund.Status.Successful ? bytes32("success") : bytes32("failed")]++;
+        done[
+            fund.campaignStatus(id) == ICampusFund.Status.Successful ? bytes32("success") : bytes32("failed")
+        ]++;
     }
 
     function proposeRelease(uint256 campaignSeed) external countCall("proposeRelease") {
@@ -124,8 +131,9 @@ contract Handler is Test {
         external
         countCall("proposeFreeze")
     {
-        (uint256 id, bool ok) =
-            _find(campaignSeed, targetActive ? ICampusFund.Status.Active : ICampusFund.Status.Successful);
+        (uint256 id, bool ok) = _find(
+            campaignSeed, targetActive ? ICampusFund.Status.Active : ICampusFund.Status.Successful
+        );
         if (!ok) return;
         vm.prank(_actor(actorSeed));
         governance.proposeFreeze(id, "gel");
@@ -139,7 +147,9 @@ contract Handler is Test {
         address voter = _actor(actorSeed);
         for (uint256 k; k < n; ++k) {
             uint256 pid = (proposalSeed + k) % n;
-            if (governance.state(pid) != Governance.ProposalState.Active || governance.hasVoted(pid, voter)) continue;
+            if (governance.state(pid) != Governance.ProposalState.Active || governance.hasVoted(pid, voter)) {
+                continue;
+            }
             vm.prank(voter);
             governance.castVote(pid, supportSeed % 4 != 0);
             done["vote"]++;
@@ -161,7 +171,11 @@ contract Handler is Test {
             // execute revert si la proposition est périmée (ex. jalon déjà approuvé, campagne gelée)
             governance.execute(pid);
             if (p.ptype == Governance.ProposalType.MilestoneRelease) ghost_executedReleases[p.campaignId]++;
-            done[p.ptype == Governance.ProposalType.MilestoneRelease ? bytes32("execRelease") : bytes32("execFreeze")]++;
+            done[
+                p.ptype == Governance.ProposalType.MilestoneRelease
+                    ? bytes32("execRelease")
+                    : bytes32("execFreeze")
+            ]++;
             return;
         }
     }

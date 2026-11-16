@@ -303,7 +303,12 @@ contract CampusFund is ICampusFund, AccessControl, ReentrancyGuard, Pausable {
         return _campaigns[id].status;
     }
 
-    function campaignParties(uint256 id) external view exists(id) returns (address creator, address beneficiary) {
+    function campaignParties(uint256 id)
+        external
+        view
+        exists(id)
+        returns (address creator, address beneficiary)
+    {
         Campaign storage c = _campaigns[id];
         return (c.creator, c.beneficiary);
     }

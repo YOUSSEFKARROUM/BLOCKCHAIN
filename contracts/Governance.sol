@@ -104,7 +104,13 @@ contract Governance is IVoting, AccessControl {
     error ProposalAlreadyOpen(uint256 id);
     error MissingProof();
 
-    constructor(address admin, CFDToken token_, ICampusFund fund_, uint256 votingPeriod_, uint256 threshold_) {
+    constructor(
+        address admin,
+        CFDToken token_,
+        ICampusFund fund_,
+        uint256 votingPeriod_,
+        uint256 threshold_
+    ) {
         token = token_;
         fund = fund_;
         _setVotingPeriod(votingPeriod_);
@@ -134,7 +140,9 @@ contract Governance is IVoting, AccessControl {
     /// @notice Tout détenteur d'au moins `proposalThreshold` votes peut demander le gel d'une campagne.
     function proposeFreeze(uint256 campaignId, string calldata description) external returns (uint256 id) {
         ICampusFund.Status s = fund.campaignStatus(campaignId);
-        if (s != ICampusFund.Status.Active && s != ICampusFund.Status.Successful) revert CampaignNotFreezable();
+        if (s != ICampusFund.Status.Active && s != ICampusFund.Status.Successful) {
+            revert CampaignNotFreezable();
+        }
         uint256 votes = token.getPastVotes(msg.sender, block.number - 1);
         if (votes < proposalThreshold) revert BelowProposalThreshold(votes, proposalThreshold);
         id = _createProposal(ProposalType.FreezeCampaign, campaignId, 0, description);
@@ -144,10 +152,12 @@ contract Governance is IVoting, AccessControl {
     ///      (ou dans la même transaction) n'est pas compté.
     ///      Anti-harcèlement : pas de nouvelle proposition du même type pour la même campagne tant que la
     ///      précédente est en vote ou adoptée sans être exécutée (sinon on relance jusqu'à un vote creux).
-    function _createProposal(ProposalType ptype, uint256 campaignId, uint8 milestoneIndex, string calldata description)
-        private
-        returns (uint256 id)
-    {
+    function _createProposal(
+        ProposalType ptype,
+        uint256 campaignId,
+        uint8 milestoneIndex,
+        string calldata description
+    ) private returns (uint256 id) {
         uint256 last = _lastProposal[campaignId][ptype];
         if (last != 0) {
             ProposalState previous = state(last - 1);
@@ -168,11 +178,13 @@ contract Governance is IVoting, AccessControl {
         p.voteEnd = voteEnd;
         p.quadratic = quadraticVoting;
         uint256 base = ptype == ProposalType.MilestoneRelease
-            ? fund.raisedOf(campaignId) * token.RATE() // CFD émis par la campagne
+            ? fund.raisedOf(campaignId) * token.RATE()  // CFD émis par la campagne
             : token.getPastTotalSupply(snapshot); // offre totale au snapshot
         p.quorum = (base * QUORUM_BPS) / BPS;
         p.description = description;
-        emit ProposalCreated(id, ptype, campaignId, milestoneIndex, msg.sender, snapshot, voteEnd, description);
+        emit ProposalCreated(
+            id, ptype, campaignId, milestoneIndex, msg.sender, snapshot, voteEnd, description
+        );
     }
 
     // ================================================================== Vote

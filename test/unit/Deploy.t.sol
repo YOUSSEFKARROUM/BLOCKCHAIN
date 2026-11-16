@@ -25,7 +25,9 @@ contract DeployTest is Test {
         assertFalse(d.fund.hasRole(d.fund.GOVERNANCE_ROLE(), d.deployer));
         // paramètres de vote figés : plus personne ne peut les changer ni redonner le rôle
         assertFalse(d.governance.hasRole(d.governance.PARAMS_ROLE(), d.deployer), "parametres figes");
-        assertFalse(d.governance.hasRole(d.governance.DEFAULT_ADMIN_ROLE(), d.deployer), "admin gouvernance abandonne");
+        assertFalse(
+            d.governance.hasRole(d.governance.DEFAULT_ADMIN_ROLE(), d.deployer), "admin gouvernance abandonne"
+        );
         vm.expectRevert();
         vm.prank(d.deployer);
         d.governance.setQuadraticVoting(true);

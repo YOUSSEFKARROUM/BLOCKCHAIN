@@ -83,7 +83,9 @@ contract ReentrancyTest is BaseTest {
         assertEq(address(vault).balance, 0, "coffre vide");
         assertEq(attackerEOA.balance, 11 ether, "l'attaquant a vole 10 ETH");
         assertEq(attacker.reentries(), 10);
-        assertEq(vault.balances(alice), 5 ether, "la comptabilite dit encore 5 ETH a alice... qui n'existent plus");
+        assertEq(
+            vault.balances(alice), 5 ether, "la comptabilite dit encore 5 ETH a alice... qui n'existent plus"
+        );
     }
 
     /// @notice Version corrigée : la même attaque échoue, l'attaquant ne récupère rien de plus.

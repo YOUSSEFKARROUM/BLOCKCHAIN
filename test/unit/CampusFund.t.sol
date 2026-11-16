@@ -84,7 +84,9 @@ contract CampusFundTest is BaseTest {
 
     function test_CreateCampaign_RevertsOnSixMilestones() public {
         uint16[] memory m = new uint16[](6);
-        for (uint256 i; i < 5; ++i) m[i] = 1500;
+        for (uint256 i; i < 5; ++i) {
+            m[i] = 1500;
+        }
         m[5] = 2500;
         vm.expectRevert(CampusFund.InvalidMilestones.selector);
         fund.createCampaign(GOAL, DURATION, beneficiary, CID, m);
@@ -163,7 +165,9 @@ contract CampusFundTest is BaseTest {
 
     function test_Contribute_RevertsWhenNotActive() public {
         uint256 id = _successfulCampaign();
-        vm.expectRevert(abi.encodeWithSelector(CampusFund.WrongStatus.selector, ICampusFund.Status.Successful));
+        vm.expectRevert(
+            abi.encodeWithSelector(CampusFund.WrongStatus.selector, ICampusFund.Status.Successful)
+        );
         vm.prank(carol);
         fund.contribute{value: 1 ether}(id);
     }
@@ -188,7 +192,9 @@ contract CampusFundTest is BaseTest {
 
     function test_Finalize_RevertsTwice() public {
         uint256 id = _successfulCampaign();
-        vm.expectRevert(abi.encodeWithSelector(CampusFund.WrongStatus.selector, ICampusFund.Status.Successful));
+        vm.expectRevert(
+            abi.encodeWithSelector(CampusFund.WrongStatus.selector, ICampusFund.Status.Successful)
+        );
         fund.finalize(id);
     }
 
@@ -258,7 +264,9 @@ contract CampusFundTest is BaseTest {
 
     function test_Refund_RevertsWhenSuccessful() public {
         uint256 id = _successfulCampaign();
-        vm.expectRevert(abi.encodeWithSelector(CampusFund.WrongStatus.selector, ICampusFund.Status.Successful));
+        vm.expectRevert(
+            abi.encodeWithSelector(CampusFund.WrongStatus.selector, ICampusFund.Status.Successful)
+        );
         vm.prank(alice);
         fund.refund(id);
     }
@@ -395,7 +403,9 @@ contract CampusFundTest is BaseTest {
     function test_Approve_OnlyGovernance() public {
         uint256 id = _successfulCampaign();
         vm.expectRevert(
-            abi.encodeWithSelector(IAccessControl.AccessControlUnauthorizedAccount.selector, admin, fund.GOVERNANCE_ROLE())
+            abi.encodeWithSelector(
+                IAccessControl.AccessControlUnauthorizedAccount.selector, admin, fund.GOVERNANCE_ROLE()
+            )
         );
         vm.prank(admin); // même l'admin ne peut pas débloquer seul
         fund.approveMilestone(id, 0);
@@ -451,7 +461,9 @@ contract CampusFundTest is BaseTest {
     function test_Freeze_OnlyGovernance() public {
         uint256 id = _createCampaign();
         vm.expectRevert(
-            abi.encodeWithSelector(IAccessControl.AccessControlUnauthorizedAccount.selector, alice, fund.GOVERNANCE_ROLE())
+            abi.encodeWithSelector(
+                IAccessControl.AccessControlUnauthorizedAccount.selector, alice, fund.GOVERNANCE_ROLE()
+            )
         );
         vm.prank(alice);
         fund.freezeCampaign(id);
@@ -544,7 +556,9 @@ contract CampusFundTest is BaseTest {
 
     function test_Pause_OnlyPauser() public {
         vm.expectRevert(
-            abi.encodeWithSelector(IAccessControl.AccessControlUnauthorizedAccount.selector, alice, fund.PAUSER_ROLE())
+            abi.encodeWithSelector(
+                IAccessControl.AccessControlUnauthorizedAccount.selector, alice, fund.PAUSER_ROLE()
+            )
         );
         vm.prank(alice);
         fund.pause();
@@ -554,7 +568,9 @@ contract CampusFundTest is BaseTest {
         vm.prank(admin);
         fund.pause();
         vm.expectRevert(
-            abi.encodeWithSelector(IAccessControl.AccessControlUnauthorizedAccount.selector, alice, fund.PAUSER_ROLE())
+            abi.encodeWithSelector(
+                IAccessControl.AccessControlUnauthorizedAccount.selector, alice, fund.PAUSER_ROLE()
+            )
         );
         vm.prank(alice);
         fund.unpause();

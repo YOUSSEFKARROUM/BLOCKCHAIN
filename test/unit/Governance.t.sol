@@ -119,7 +119,9 @@ contract GovernanceTest is GovernanceBase {
         vm.prank(bob);
         fund.contribute{value: 0.05 ether}(id); // 50 CFD < 100
         _nextBlock();
-        vm.expectRevert(abi.encodeWithSelector(Governance.BelowProposalThreshold.selector, 50 ether, THRESHOLD));
+        vm.expectRevert(
+            abi.encodeWithSelector(Governance.BelowProposalThreshold.selector, 50 ether, THRESHOLD)
+        );
         vm.prank(bob);
         governance.proposeFreeze(id, "x");
     }
@@ -388,7 +390,9 @@ contract GovernanceTest is GovernanceBase {
         governance.castVote(pid, true);
         _endVote();
         assertEq(uint8(governance.state(pid)), uint8(Governance.ProposalState.Defeated));
-        vm.expectRevert(abi.encodeWithSelector(Governance.NotSucceeded.selector, Governance.ProposalState.Defeated));
+        vm.expectRevert(
+            abi.encodeWithSelector(Governance.NotSucceeded.selector, Governance.ProposalState.Defeated)
+        );
         governance.execute(pid);
     }
 
@@ -457,7 +461,9 @@ contract GovernanceTest is GovernanceBase {
         uint256 pid = _proposeRelease(id);
         vm.prank(alice);
         governance.castVote(pid, true);
-        vm.expectRevert(abi.encodeWithSelector(Governance.NotSucceeded.selector, Governance.ProposalState.Active));
+        vm.expectRevert(
+            abi.encodeWithSelector(Governance.NotSucceeded.selector, Governance.ProposalState.Active)
+        );
         governance.execute(pid);
     }
 
@@ -465,7 +471,9 @@ contract GovernanceTest is GovernanceBase {
         uint256 id = _successfulCampaign();
         uint256 pid = _passRelease(id);
         assertEq(uint8(governance.state(pid)), uint8(Governance.ProposalState.Executed));
-        vm.expectRevert(abi.encodeWithSelector(Governance.NotSucceeded.selector, Governance.ProposalState.Executed));
+        vm.expectRevert(
+            abi.encodeWithSelector(Governance.NotSucceeded.selector, Governance.ProposalState.Executed)
+        );
         governance.execute(pid);
     }
 
@@ -591,6 +599,10 @@ contract GovernanceTest is GovernanceBase {
         governance.setQuadraticVoting(true);
         vm.prank(alice);
         governance.castVote(pid, true);
-        assertEq(governance.getProposal(pid).forVotes, 6000 ether, "le changement ne s'applique pas en cours de vote");
+        assertEq(
+            governance.getProposal(pid).forVotes,
+            6000 ether,
+            "le changement ne s'applique pas en cours de vote"
+        );
     }
 }

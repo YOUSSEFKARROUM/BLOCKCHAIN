@@ -40,7 +40,11 @@ contract Deploy is Script {
                 vm.envOr("TREASURY_OWNER_2", ANVIL_1),
                 vm.envOr("TREASURY_OWNER_3", ANVIL_2)
             ]
-            : [vm.envAddress("TREASURY_OWNER_1"), vm.envAddress("TREASURY_OWNER_2"), vm.envAddress("TREASURY_OWNER_3")];
+            : [
+                vm.envAddress("TREASURY_OWNER_1"),
+                vm.envAddress("TREASURY_OWNER_2"),
+                vm.envAddress("TREASURY_OWNER_3")
+            ];
         uint256 votingPeriod = vm.envOr("VOTING_PERIOD", uint256(1 hours));
 
         vm.startBroadcast();
@@ -74,9 +78,13 @@ contract Deploy is Script {
         d = Deployment(deployer, token, fund, governance, treasury);
     }
 
-    function _writeDeployment(address token, address fund, address governance, address treasury, uint256 votingPeriod)
-        internal
-    {
+    function _writeDeployment(
+        address token,
+        address fund,
+        address governance,
+        address treasury,
+        uint256 votingPeriod
+    ) internal {
         string memory key = "deployment";
         vm.serializeUint(key, "chainId", block.chainid);
         vm.serializeUint(key, "deployBlock", block.number);
