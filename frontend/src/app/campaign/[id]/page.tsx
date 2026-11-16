@@ -44,7 +44,7 @@ function Description({ text }: { text: string }) {
   );
 }
 
-/** Fiche d'une campagne : carte d'embarquement, piste des jalons, scanner et guichet (maquette Campaign). */
+/** Fiche d'une campagne : résumé, jalons, score de risque IA et panneau d'action. */
 export default function CampaignPage() {
   const params = useParams<{ id: string }>();
   const id = Number(params.id);
@@ -78,6 +78,7 @@ export default function CampaignPage() {
     return (
       <main className="wrap flex flex-col gap-6 pb-28 pt-5">
         <BackLink />
+        <h1 className="sr-only">{error ? "Campagne introuvable" : "Chargement de la campagne"}</h1>
         {error ? <ErrorPanel title="Campagne introuvable">{error}</ErrorPanel> : <LoadingFlaps label="Lecture de la campagne sur la chaîne" />}
       </main>
     );
@@ -98,7 +99,7 @@ export default function CampaignPage() {
         <Description text={metadata?.description ?? "Métadonnées IPFS indisponibles."} />
       </div>
 
-      {/* Sur téléphone, le guichet suit la carte d'embarquement ; sur grand écran, il reste à droite. */}
+      {/* Sur téléphone, le panneau d'action suit le résumé ; sur grand écran, il reste à droite. */}
       <div className="grid items-start gap-x-9 gap-y-12 min-[1100px]:grid-cols-[minmax(0,1fr)_380px]">
         <BoardingPass campaign={c} proposals={proposals ?? []} metadata={metadata} now={now} feePercent={rules.feePercent} />
         <aside className="flex min-w-0 flex-col gap-6 min-[1100px]:col-start-2 min-[1100px]:row-span-3 min-[1100px]:row-start-1">

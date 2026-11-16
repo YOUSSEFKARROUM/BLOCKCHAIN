@@ -51,8 +51,8 @@ Les deux polices sont téléchargées au build et servies par le site : aucun ap
 
 | Route | Contenu |
 |---|---|
-| `/` | Titre en palettes, horloge, tableau des départs filtrable, quatre portes (cycle de vie), appel à l'action. |
-| `/campaign/[id]` | Carte d'embarquement (collecté, objectif, itinéraire des jalons), jalons et vote en cours avec sa preuve, scanner IA, guichet de contribution. |
+| `/` | Titre en palettes, horloge, tableau des campagnes filtrable, quatre étapes (cycle de vie), appel à l'action. |
+| `/campaign/[id]` | Résumé de la campagne (collecté, objectif, statut), frise des jalons et vote en cours avec sa preuve, score de risque IA, panneau de contribution. |
 | `/governance` | Pouvoir de vote, radar et résumé chiffré, règles du vote, propositions avec barres Pour / Contre / quorum. |
 | `/creator` | Formulaire de création (jalons réglés par pas de 5 %, total exactement 100 %), campagnes du compte. |
 | `/securite` | Tests, attaques rejouées, scanner IA et contrats déployés, avec la date de mesure. |
@@ -77,5 +77,5 @@ Les deux polices sont téléchargées au build et servies par le site : aucun ap
 - Le formulaire de création garde les champs exigés par IPFS et le contrat (club, catégorie, description,
   bénéficiaire, intitulé et preuve de chaque jalon), et une durée « 1 h · démo ».
 - Délégation et proposition de gel conservées en gouvernance.
-- Titre de l'accueil fixe (« Les fonds décollent sur vote. ») au lieu d'une alternance toutes les 4 s.
+- Titre de l'accueil fixe (« Les fonds débloqués sur vote. ») au lieu d'une alternance toutes les 4 s.
 - Sécurité, scanner et contrats déplacés de l'accueil vers `/securite`.

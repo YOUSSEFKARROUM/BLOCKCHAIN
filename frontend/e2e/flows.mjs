@@ -183,6 +183,9 @@ async function main() {
   if (appStatus !== 200) throw new Error(`Le serveur de dev ne répond pas sur ${APP}.`);
   if (Number(await fund.campaignCount()) !== 5) throw new Error("La démo n'est pas dans son état initial (5 campagnes attendues).");
 
+  // evm_revert restaure l'état mais pas l'horloge d'anvil : on note l'avance de la chaîne sur l'horloge du PC
+  // pour la rétablir à la fin. Sinon chaque lancement avancerait la démo d'une heure et fermerait ses votes.
+  const chainAhead = (await provider.getBlock("latest")).timestamp - Math.floor(Date.now() / 1000);
   const snapshot = await provider.send("evm_snapshot", []);
   // Les votes de la démo durent 1 h en temps réel : un bloc miné maintenant dit s'ils sont encore ouverts.
   await provider.send("evm_mine", []);
@@ -255,6 +258,7 @@ async function main() {
   } finally {
     await browser.close();
     const reverted = await provider.send("evm_revert", [snapshot]);
+    await provider.send("evm_setTime", [Math.floor(Date.now() / 1000) + chainAhead]);
     console.log(reverted ? "Démo restaurée à son état initial." : "ATTENTION : la démo n'a pas pu être restaurée, relancez scripts/demo-anvil.sh.");
   }
 

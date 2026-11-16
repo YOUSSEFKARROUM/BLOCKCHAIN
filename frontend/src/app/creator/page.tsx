@@ -5,7 +5,7 @@ import { MyFlights } from "@/components/creator/MyFlights";
 import { useCampaigns, useChainTime, useProposals } from "@/lib/hooks";
 import { useProtocol } from "@/lib/useProtocol";
 
-/** Plan de vol = espace porteur : créer une campagne et piloter ses vols (maquette Creator). */
+/** Espace porteur : créer une campagne et suivre les siennes. */
 export default function CreatorPage() {
   const { data: campaigns } = useCampaigns();
   const { data: proposals } = useProposals();

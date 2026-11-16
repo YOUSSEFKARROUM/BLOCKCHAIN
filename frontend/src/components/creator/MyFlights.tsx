@@ -135,7 +135,7 @@ function protocolRules(feePercent: number): { title: string; text: string }[] {
   ];
 }
 
-/** Colonne « Mes vols en cours » : les campagnes dont le compte est porteur ou bénéficiaire. */
+/** Colonne « Mes campagnes » : les campagnes dont le compte est porteur ou bénéficiaire. */
 export function MyFlights({ campaigns, proposals, now, feePercent }: { campaigns: Campaign[] | null; proposals: Proposal[]; now: number; feePercent: number }) {
   const { account } = useWeb3();
   const me = account?.toLowerCase();

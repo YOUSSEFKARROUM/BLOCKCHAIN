@@ -177,7 +177,7 @@ CampusFund. L'enum `Status` y est défini : `Active` (0, En cours), `Successful`
 | `lib/hooks.ts` | Chargement des campagnes, propositions, métadonnées IPFS et scores IA. Rechargement après chaque transaction. |
 | `app/api/ipfs/route.ts` | Envoi des métadonnées sur Pinata **côté serveur** (le JWT n'atteint jamais le navigateur), avec validation, limite de taille et limite de débit. |
 | `app/api/ipfs/[cid]/route.ts` | Lecture d'un CID (cache local puis passerelle IPFS). Le CID est validé par une expression régulière, ce qui empêche `../` (path traversal). |
-| `app/page.tsx` | Écran 1 : tableau des départs (cartes sous 768 px), fonctionnement en quatre portes. |
+| `app/page.tsx` | Écran 1 : tableau des campagnes (cartes sous 768 px), fonctionnement en quatre étapes. |
 | `app/campaign/[id]/page.tsx` | Écran 2 : détail, contribution, clôture, remboursement. |
 | `app/governance/page.tsx` | Écran 3 : pouvoir de vote, délégation (gels), propositions avec preuve, quorum, vote, exécution, gel. |
 | `app/creator/page.tsx` | Écran 4 : création (IPFS puis transaction), demande de déblocage avec preuve, retrait. |

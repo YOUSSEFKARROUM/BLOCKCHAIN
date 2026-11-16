@@ -9,7 +9,7 @@ import { VotingPower } from "@/components/governance/VotingPower";
 import { useCampaigns, useChainTime, useProposals } from "@/lib/hooks";
 import { formatPeriod, useProtocol } from "@/lib/useProtocol";
 
-/** Tour de contrôle = gouvernance de la DAO (maquette Governance). */
+/** Gouvernance de la DAO : pouvoir de vote, règles et propositions. */
 export default function GovernancePage() {
   const { data: proposals, error, isLoading } = useProposals();
   const { data: campaigns } = useCampaigns();

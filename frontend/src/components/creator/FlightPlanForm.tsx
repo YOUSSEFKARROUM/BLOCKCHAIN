@@ -69,7 +69,7 @@ function NumberField({ id, label, unit, value, onChange, hint, ...rest }: { id: 
   );
 }
 
-/** Plan de vol = création d'une campagne : métadonnées sur IPFS, puis createCampaign. */
+/** Création d'une campagne : métadonnées sur IPFS, puis createCampaign. */
 export function FlightPlanForm() {
   const { account } = useWeb3();
   const { status, send, busy } = useTx();
