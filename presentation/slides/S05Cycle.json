@@ -1,0 +1,51 @@
+{
+  "slides": [
+    {
+      "loop": false,
+      "auto_next": false,
+      "playback_rate": 1.0,
+      "reversed_playback_rate": 1.0,
+      "notes": "",
+      "dedent_notes": true,
+      "skip_animations": false,
+      "src": null,
+      "type": "video",
+      "direction": "horizontal",
+      "file": "slides\\files\\S05Cycle\\d96c8dac2e9548f5.mp4",
+      "rev_file": "slides\\files\\S05Cycle\\d96c8dac2e9548f5.mp4"
+    },
+    {
+      "loop": false,
+      "auto_next": false,
+      "playback_rate": 1.0,
+      "reversed_playback_rate": 1.0,
+      "notes": "Étape 1 : le club crée la campagne. Chaque jalon a une part de l'argent et une preuve promise. Le texte va sur IPFS, son empreinte sur la blockchain : la promesse ne peut plus changer.",
+      "dedent_notes": true,
+      "skip_animations": false,
+      "src": null,
+      "type": "video",
+      "direction": "horizontal",
+      "file": "slides\\files\\S05Cycle\\73c022285081fa4c.mp4",
+      "rev_file": "slides\\files\\S05Cycle\\73c022285081fa4c.mp4"
+    },
+    {
+      "loop": false,
+      "auto_next": false,
+      "playback_rate": 1.0,
+      "reversed_playback_rate": 1.0,
+      "notes": "Étape 2 : chacun contribue. L'argent ne va pas au club : il reste bloqué dans le contrat. En échange, on reçoit des jetons CFD : ce sont ses voix.",
+      "dedent_notes": true,
+      "skip_animations": false,
+      "src": null,
+      "type": "video",
+      "direction": "horizontal",
+      "file": "slides\\files\\S05Cycle\\2b4f8b44ba0a25fc.mp4",
+      "rev_file": "slides\\files\\S05Cycle\\2b4f8b44ba0a25fc.mp4"
+    }
+  ],
+  "resolution": [
+    1280,
+    720
+  ],
+  "background_color": "white"
+}

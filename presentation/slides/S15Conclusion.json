@@ -1,0 +1,37 @@
+{
+  "slides": [
+    {
+      "loop": false,
+      "auto_next": false,
+      "playback_rate": 1.0,
+      "reversed_playback_rate": 1.0,
+      "notes": "",
+      "dedent_notes": true,
+      "skip_animations": false,
+      "src": null,
+      "type": "video",
+      "direction": "horizontal",
+      "file": "slides\\files\\S15Conclusion\\716cb7fa5a653cc2.mp4",
+      "rev_file": "slides\\files\\S15Conclusion\\716cb7fa5a653cc2.mp4"
+    },
+    {
+      "loop": false,
+      "auto_next": false,
+      "playback_rate": 1.0,
+      "reversed_playback_rate": 1.0,
+      "notes": "En trois phrases : l'argent est bloqué dans un programme public ; il n'est versé qu'avec une preuve et un vote ; sinon, il est rendu.",
+      "dedent_notes": true,
+      "skip_animations": false,
+      "src": null,
+      "type": "video",
+      "direction": "horizontal",
+      "file": "slides\\files\\S15Conclusion\\c9c9cc6c07a2c6c4.mp4",
+      "rev_file": "slides\\files\\S15Conclusion\\c9c9cc6c07a2c6c4.mp4"
+    }
+  ],
+  "resolution": [
+    1280,
+    720
+  ],
+  "background_color": "white"
+}

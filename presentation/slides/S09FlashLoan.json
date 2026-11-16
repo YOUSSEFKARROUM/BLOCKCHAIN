@@ -1,0 +1,37 @@
+{
+  "slides": [
+    {
+      "loop": false,
+      "auto_next": false,
+      "playback_rate": 1.0,
+      "reversed_playback_rate": 1.0,
+      "notes": "",
+      "dedent_notes": true,
+      "skip_animations": false,
+      "src": null,
+      "type": "video",
+      "direction": "horizontal",
+      "file": "slides\\files\\S09FlashLoan\\cb49f65190552082.mp4",
+      "rev_file": "slides\\files\\S09FlashLoan\\cb49f65190552082.mp4"
+    },
+    {
+      "loop": false,
+      "auto_next": false,
+      "playback_rate": 1.0,
+      "reversed_playback_rate": 1.0,
+      "notes": "En 2022, un attaquant a emprunté une énorme quantité de jetons, a voté, puis les a rendus, le tout dans la même transaction. Il a pris 182 millions de dollars.",
+      "dedent_notes": true,
+      "skip_animations": false,
+      "src": null,
+      "type": "video",
+      "direction": "horizontal",
+      "file": "slides\\files\\S09FlashLoan\\73e5b2a44f1f849b.mp4",
+      "rev_file": "slides\\files\\S09FlashLoan\\73e5b2a44f1f849b.mp4"
+    }
+  ],
+  "resolution": [
+    1280,
+    720
+  ],
+  "background_color": "white"
+}

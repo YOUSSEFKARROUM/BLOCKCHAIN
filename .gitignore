@@ -38,6 +38,5 @@ broadcast/**/*.lock
 
 # Présentation : fichiers générés (vidéos, export HTML)
 presentation/media/
-presentation/slides/
 presentation/__pycache__/
 frontend/e2e/demo-video/frames/

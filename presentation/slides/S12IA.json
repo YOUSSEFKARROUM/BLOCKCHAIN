@@ -1,0 +1,37 @@
+{
+  "slides": [
+    {
+      "loop": false,
+      "auto_next": false,
+      "playback_rate": 1.0,
+      "reversed_playback_rate": 1.0,
+      "notes": "",
+      "dedent_notes": true,
+      "skip_animations": false,
+      "src": null,
+      "type": "video",
+      "direction": "horizontal",
+      "file": "slides\\files\\S12IA\\6d4836b36840ad86.mp4",
+      "rev_file": "slides\\files\\S12IA\\6d4836b36840ad86.mp4"
+    },
+    {
+      "loop": false,
+      "auto_next": false,
+      "playback_rate": 1.0,
+      "reversed_playback_rate": 1.0,
+      "notes": "Un script analyse les contributions et donne une note de risque. Ici, huit comptes neufs, tous financés par la même source, versent exactement le même montant : 92 sur 100.",
+      "dedent_notes": true,
+      "skip_animations": false,
+      "src": null,
+      "type": "video",
+      "direction": "horizontal",
+      "file": "slides\\files\\S12IA\\9fc2a577ace5d047.mp4",
+      "rev_file": "slides\\files\\S12IA\\9fc2a577ace5d047.mp4"
+    }
+  ],
+  "resolution": [
+    1280,
+    720
+  ],
+  "background_color": "white"
+}

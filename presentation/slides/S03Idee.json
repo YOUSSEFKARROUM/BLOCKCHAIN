@@ -1,0 +1,51 @@
+{
+  "slides": [
+    {
+      "loop": false,
+      "auto_next": false,
+      "playback_rate": 1.0,
+      "reversed_playback_rate": 1.0,
+      "notes": "",
+      "dedent_notes": true,
+      "skip_animations": false,
+      "src": null,
+      "type": "video",
+      "direction": "horizontal",
+      "file": "slides\\files\\S03Idee\\45c09ae0535b0874.mp4",
+      "rev_file": "slides\\files\\S03Idee\\45c09ae0535b0874.mp4"
+    },
+    {
+      "loop": false,
+      "auto_next": false,
+      "playback_rate": 1.0,
+      "reversed_playback_rate": 1.0,
+      "notes": "L'argent n'est pas donné au club. Il est gardé par un programme public, découpé en jalons.",
+      "dedent_notes": true,
+      "skip_animations": false,
+      "src": null,
+      "type": "video",
+      "direction": "horizontal",
+      "file": "slides\\files\\S03Idee\\8c1cc0fc0af19e2a.mp4",
+      "rev_file": "slides\\files\\S03Idee\\8c1cc0fc0af19e2a.mp4"
+    },
+    {
+      "loop": false,
+      "auto_next": false,
+      "playback_rate": 1.0,
+      "reversed_playback_rate": 1.0,
+      "notes": "Chaque tranche ne part que si les contributeurs votent que le jalon est atteint, preuve à l'appui.",
+      "dedent_notes": true,
+      "skip_animations": false,
+      "src": null,
+      "type": "video",
+      "direction": "horizontal",
+      "file": "slides\\files\\S03Idee\\26de79ff57da6da2.mp4",
+      "rev_file": "slides\\files\\S03Idee\\26de79ff57da6da2.mp4"
+    }
+  ],
+  "resolution": [
+    1280,
+    720
+  ],
+  "background_color": "white"
+}

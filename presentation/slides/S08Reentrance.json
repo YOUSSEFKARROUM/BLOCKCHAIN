@@ -1,0 +1,37 @@
+{
+  "slides": [
+    {
+      "loop": false,
+      "auto_next": false,
+      "playback_rate": 1.0,
+      "reversed_playback_rate": 1.0,
+      "notes": "",
+      "dedent_notes": true,
+      "skip_animations": false,
+      "src": null,
+      "type": "video",
+      "direction": "horizontal",
+      "file": "slides\\files\\S08Reentrance\\20d7fa710006a6bc.mp4",
+      "rev_file": "slides\\files\\S08Reentrance\\20d7fa710006a6bc.mp4"
+    },
+    {
+      "loop": false,
+      "auto_next": false,
+      "playback_rate": 1.0,
+      "reversed_playback_rate": 1.0,
+      "notes": "En 2016, The DAO a perdu des millions : le contrat envoyait l'argent avant de mettre le solde à zéro. L'attaquant rappelait la fonction en boucle et vidait le coffre.",
+      "dedent_notes": true,
+      "skip_animations": false,
+      "src": null,
+      "type": "video",
+      "direction": "horizontal",
+      "file": "slides\\files\\S08Reentrance\\c5c1bfc9c40737c6.mp4",
+      "rev_file": "slides\\files\\S08Reentrance\\c5c1bfc9c40737c6.mp4"
+    }
+  ],
+  "resolution": [
+    1280,
+    720
+  ],
+  "background_color": "white"
+}

@@ -1,0 +1,65 @@
+{
+  "slides": [
+    {
+      "loop": false,
+      "auto_next": false,
+      "playback_rate": 1.0,
+      "reversed_playback_rate": 1.0,
+      "notes": "",
+      "dedent_notes": true,
+      "skip_animations": false,
+      "src": null,
+      "type": "video",
+      "direction": "horizontal",
+      "file": "slides\\files\\S06Vote\\b81907b4e2874297.mp4",
+      "rev_file": "slides\\files\\S06Vote\\b81907b4e2874297.mp4"
+    },
+    {
+      "loop": false,
+      "auto_next": false,
+      "playback_rate": 1.0,
+      "reversed_playback_rate": 1.0,
+      "notes": "Étape 4 : le club a acheté les jeux. Il demande le déblocage du jalon 1, avec la facture. Sans preuve, le contrat refuse : pas d'argent sans justificatif.",
+      "dedent_notes": true,
+      "skip_animations": false,
+      "src": null,
+      "type": "video",
+      "direction": "horizontal",
+      "file": "slides\\files\\S06Vote\\8bf8711bb88b81ef.mp4",
+      "rev_file": "slides\\files\\S06Vote\\8bf8711bb88b81ef.mp4"
+    },
+    {
+      "loop": false,
+      "auto_next": false,
+      "playback_rate": 1.0,
+      "reversed_playback_rate": 1.0,
+      "notes": "Étape 5 : les contributeurs regardent la facture et votent. Seuls ceux qui ont payé votent, avec le poids de leur mise. Le club ne vote pas pour lui-même. Il faut 10 % de participation et plus de pour que de contre.",
+      "dedent_notes": true,
+      "skip_animations": false,
+      "src": null,
+      "type": "video",
+      "direction": "horizontal",
+      "file": "slides\\files\\S06Vote\\6b48cc341522a84e.mp4",
+      "rev_file": "slides\\files\\S06Vote\\6b48cc341522a84e.mp4"
+    },
+    {
+      "loop": false,
+      "auto_next": false,
+      "playback_rate": 1.0,
+      "reversed_playback_rate": 1.0,
+      "notes": "Étape 6 : à la fin du vote, n'importe qui clique sur Exécuter : la décision est appliquée, le jalon 1 est approuvé.",
+      "dedent_notes": true,
+      "skip_animations": false,
+      "src": null,
+      "type": "video",
+      "direction": "horizontal",
+      "file": "slides\\files\\S06Vote\\bc1fecbca0371272.mp4",
+      "rev_file": "slides\\files\\S06Vote\\bc1fecbca0371272.mp4"
+    }
+  ],
+  "resolution": [
+    1280,
+    720
+  ],
+  "background_color": "white"
+}
