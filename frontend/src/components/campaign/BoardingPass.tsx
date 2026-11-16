@@ -1,12 +1,12 @@
 import { PlaneIcon } from "@/components/board/Icons";
 import { deployment } from "@/lib/contracts";
-import { boardStatus, ESCALE_LABELS, type EscaleState, escaleStates, flightCode } from "@/lib/campaignView";
-import { type Campaign, type Proposal, STATUS_LABELS, trancheAmounts } from "@/lib/data";
+import { boardStatus, flightCode, fundingPercent } from "@/lib/campaignView";
+import { type Campaign, type Proposal, STATUS_LABELS } from "@/lib/data";
 import { dateTime, eth, relative, shortAddress } from "@/lib/format";
 import type { CampaignMetadata } from "@/lib/metadata";
 
 const INK_SOFT = "#55554F"; // gris sur billet : contraste 6,6:1
-const INK_OK = "#0B6B2A";
+const PLANE_SIZE = 34;
 
 /** `isRaw` : valeur affichée telle quelle (une adresse Ethereum ne se met pas en capitales). */
 function Field({ label, children, isRaw = false }: { label: string; children: React.ReactNode; isRaw?: boolean }) {
@@ -16,53 +16,6 @@ function Field({ label, children, isRaw = false }: { label: string; children: Re
         {label}
       </div>
       <div className={`break-words ${isRaw ? "" : "uppercase"}`}>{children}</div>
-    </div>
-  );
-}
-
-function EscaleDot({ state }: { state: EscaleState }) {
-  const fill = state === "paid" ? "var(--night)" : state === "locked" ? "var(--ticket)" : "var(--amber)";
-  return (
-    <span
-      className={`box-border h-6 w-6 rounded-full border-[3px] border-night ${state === "voting" ? "db-blink" : ""}`}
-      style={{ background: fill }}
-    />
-  );
-}
-
-function EscaleStateText({ state }: { state: EscaleState }) {
-  if (state === "paid") return <span className="font-bold" style={{ color: INK_OK }}>VERSÉE</span>;
-  if (state === "locked") return <span style={{ color: INK_SOFT }}>VERROUILLÉE</span>;
-  return <span className="bg-amber px-1.5 font-bold uppercase">{ESCALE_LABELS[state]}</span>;
-}
-
-/** Itinéraire des escales : trait plein jusqu'à l'avion, pointillés ensuite. */
-function Itinerary({ campaign: c, states, metadata }: { campaign: Campaign; states: EscaleState[]; metadata: CampaignMetadata | null }) {
-  const n = states.length;
-  const tranches = trancheAmounts(c);
-  const firstUnpaid = states.findIndex((s) => s !== "paid");
-  const current = firstUnpaid === -1 ? n - 1 : firstUnpaid;
-  const center = (i: number) => `${((i + 0.5) / n) * 100}%`;
-  const edge = `${(0.5 / n) * 100}%`;
-  const summary = states.map((s, i) => `jalon ${i + 1} ${ESCALE_LABELS[s].toLowerCase()}`).join(", ");
-  return (
-    <div className="relative pt-[34px]" role="img" aria-label={`${n} jalons : ${summary}`}>
-      <div className="absolute top-[45px] border-t-[3px] border-night" style={{ left: edge, right: edge }} />
-      {current < n - 1 && <div className="absolute top-[45px] border-t-[3px] border-dashed border-ticket" style={{ left: center(current), right: edge }} />}
-      <PlaneIcon className="db-bob absolute top-0 text-night" style={{ left: center(current) }} />
-      <div className="mono relative grid text-center text-[12px]" style={{ gridTemplateColumns: `repeat(${n}, minmax(0, 1fr))` }}>
-        {states.map((s, i) => (
-          <div key={i} className="flex flex-col items-center gap-2 px-1">
-            <EscaleDot state={s} />
-            <strong className="text-[14px]">JALON {i + 1}</strong>
-            <span className="hidden sm:inline">{metadata?.milestones[i]?.title ?? `Jalon ${i + 1}`}</span>
-            <span>
-              {c.milestonesBps[i] / 100} % · {eth(tranches[i], 2)} ETH
-            </span>
-            <EscaleStateText state={s} />
-          </div>
-        ))}
-      </div>
     </div>
   );
 }
@@ -78,7 +31,8 @@ interface BoardingPassProps {
 /** Carte d'embarquement : la campagne résumée sur un billet (maquette Campaign). */
 export function BoardingPass({ campaign: c, proposals, metadata, now, feePercent }: BoardingPassProps) {
   const status = boardStatus(c, proposals, now);
-  const states = escaleStates(c, proposals);
+  const funded = fundingPercent(c);
+  const planeAt = Math.min(100, funded);
   const toClub = (c.released * BigInt(10_000 - Math.round(feePercent * 100))) / 10_000n;
   const escrow = c.raised - c.released - c.refunded;
   return (
@@ -98,10 +52,14 @@ export function BoardingPass({ campaign: c, proposals, metadata, now, feePercent
               <div className="font-display text-[13px] font-medium" style={{ color: INK_SOFT }}>Collecté</div>
               <div className="display" style={{ fontSize: "clamp(40px, 6vw, 84px)", fontStretch: "70%", lineHeight: 0.85 }}>{eth(c.raised, 2)}</div>
             </div>
-            <div aria-hidden="true" className="flex min-w-[60px] flex-1 items-center gap-2">
-              <span className="flex-1 border-t-2 border-dashed border-night" />
-              <PlaneIcon size={34} />
-              <span className="flex-1 border-t-2 border-dashed border-night" />
+            {/* L'avion avance avec la collecte : à l'objectif, il arrive au bout de la ligne. */}
+            <div className="flex min-w-[70px] flex-1 flex-col items-center gap-1">
+              <div aria-hidden="true" className="relative w-full" style={{ height: PLANE_SIZE }}>
+                <span className="absolute inset-x-0 top-1/2 border-t-2 border-dashed border-night" />
+                <span className="db-bar absolute left-0 top-1/2 -mt-px border-t-[4px] border-night" style={{ width: `${planeAt}%` }} />
+                <PlaneIcon size={PLANE_SIZE} className="absolute top-0" style={{ left: `clamp(0px, calc(${planeAt}% - ${PLANE_SIZE / 2}px), calc(100% - ${PLANE_SIZE}px))` }} />
+              </div>
+              <span className="mono text-[13px] font-bold">{funded} %</span>
             </div>
             <div className="text-right">
               <div className="font-display text-[13px] font-medium" style={{ color: INK_SOFT }}>Objectif</div>
@@ -118,7 +76,6 @@ export function BoardingPass({ campaign: c, proposals, metadata, now, feePercent
             </Field>
             <Field label="Bénéficiaire" isRaw>{shortAddress(c.beneficiary)}</Field>
           </div>
-          <Itinerary campaign={c} states={states} metadata={metadata} />
         </div>
       </div>
       <div className="flex flex-[1_1_190px] flex-col justify-between gap-4 border-l-[3px] border-dashed border-night px-6 py-[26px]">

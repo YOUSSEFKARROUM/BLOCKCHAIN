@@ -4,6 +4,7 @@ import { formatEther, parseEther } from "ethers";
 import { useEffect, useState } from "react";
 import { FlapText } from "@/components/board/Flap";
 import { TxStrip } from "@/components/board/Feedback";
+import { CheckIcon, ShieldIcon } from "@/components/board/Icons";
 import { getContracts } from "@/lib/contracts";
 import type { Campaign } from "@/lib/data";
 import { cfd, eth, shortAddress } from "@/lib/format";
@@ -105,12 +106,17 @@ function ContributeForm({ campaignId, rate }: { campaignId: number; rate: number
       <button type="submit" disabled={!wei || busy} className="btn btn-dark !min-h-[64px] !text-[16px]">
         {busy ? "Transaction en cours…" : wei ? `Contribuer ${eth(wei, 4)} ETH` : "Montant invalide"}
       </button>
-      <p className="m-0 text-[14px] font-medium">
-        {!hasWallet && "Lecture seule : installez MetaMask pour contribuer. "}
-        {hasWallet && !account && "MetaMask vous demandera d'abord de connecter un compte. "}
-        Vous votez sur chaque tranche de cette campagne avec votre mise. Si elle échoue ou est gelée, vous récupérez votre mise :{" "}
-        <strong>gardez vos CFD</strong>, ils sont repris au remboursement.
-      </p>
+      <ul className="m-0 flex list-none flex-col gap-2 p-0 text-[14px] font-semibold">
+        <li className="flex items-center gap-2.5">
+          <CheckIcon />
+          Votre mise = vos voix sur chaque tranche
+        </li>
+        <li className="flex items-center gap-2.5">
+          <ShieldIcon />
+          Échec ou gel : le reste vous est rendu. Gardez vos CFD.
+        </li>
+      </ul>
+      {!account && <p className="m-0 text-[14px] font-medium">{hasWallet ? "MetaMask vous demandera d'abord de connecter un compte." : "Lecture seule : installez MetaMask pour contribuer."}</p>}
       <TxStrip status={status} />
     </form>
   );

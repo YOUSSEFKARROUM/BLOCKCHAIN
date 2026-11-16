@@ -12,6 +12,8 @@ export interface Campaign {
   released: bigint;
   refunded: bigint;
   deadline: number;
+  /** Dernière avancée (clôture ou jalon approuvé) : point de départ du délai d'annulation. */
+  lastProgressAt: number;
   status: StatusIndex;
   milestoneCount: number;
   approvedMilestones: number;
@@ -52,6 +54,7 @@ export async function loadCampaign(fund: Contract, id: number): Promise<Campaign
     released: c.released,
     refunded: c.refunded,
     deadline: Number(c.deadline),
+    lastProgressAt: Number(c.lastProgressAt),
     status: Number(c.status) as StatusIndex,
     milestoneCount: Number(c.milestoneCount),
     approvedMilestones: Number(c.approvedMilestones),

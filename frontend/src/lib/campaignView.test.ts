@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { boardStatus, escaleStates, fallbackName, flightCode, releaseProposalFor } from "./campaignView";
+import { boardStatus, escaleStates, fallbackName, flightCode, fundingPercent, releaseProposalFor, staleDaysLeft } from "./campaignView";
 import type { Campaign, Proposal } from "./data";
 import { demoProofName, proofHref } from "./proof";
 
@@ -15,6 +15,7 @@ function campaign(overrides: Partial<Campaign> = {}): Campaign {
     released: 0n,
     refunded: 0n,
     deadline: NOW + 3_600,
+    lastProgressAt: 0,
     status: 0,
     milestoneCount: 3,
     approvedMilestones: 0,
@@ -145,5 +146,34 @@ describe("demoProofName", () => {
   it("ignore les vraies preuves et les preuves fictives sans nom", () => {
     expect(demoProofName("https://exemple.org/facture.pdf")).toBeNull();
     expect(demoProofName("demo://")).toBeNull();
+  });
+});
+
+describe("fundingPercent", () => {
+  it("donne la part de l'objectif collectée, sans plafond", () => {
+    expect(fundingPercent(campaign({ goal: 10n, raised: 8n }))).toBe(80);
+    expect(fundingPercent(campaign({ goal: 3n, raised: 4n }))).toBe(133);
+  });
+
+  it("vaut 0 sans objectif lisible", () => {
+    expect(fundingPercent(campaign({ goal: 0n }))).toBe(0);
+  });
+});
+
+describe("staleDaysLeft", () => {
+  const DAY = 86_400;
+
+  it("compte les jours restants avant l'annulation possible d'une campagne financée", () => {
+    const c = campaign({ status: 1, lastProgressAt: NOW - 3 * DAY });
+    expect(staleDaysLeft(c, NOW)).toBe(87);
+  });
+
+  it("vaut 0 une fois le délai dépassé", () => {
+    expect(staleDaysLeft(campaign({ status: 1, lastProgressAt: NOW - 91 * DAY }), NOW)).toBe(0);
+  });
+
+  it("ne s'applique ni aux campagnes en collecte ni à celles dont tous les jalons sont approuvés", () => {
+    expect(staleDaysLeft(campaign({ status: 0 }), NOW)).toBeNull();
+    expect(staleDaysLeft(campaign({ status: 1, approvedMilestones: 3 }), NOW)).toBeNull();
   });
 });

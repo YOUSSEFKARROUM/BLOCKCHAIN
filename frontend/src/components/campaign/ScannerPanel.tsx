@@ -1,50 +1,61 @@
+import { FlipNote } from "@/components/board/FlipNote";
 import { RISK_COLORS, RiskScale } from "@/components/board/RiskScale";
 import type { RiskEntry } from "@/lib/hooks";
 
-/** Score de risque IA de la campagne (scripts/anomaly_detection.py), placé sur l'échelle 0-35-50-100. */
+/** Part d'un détecteur dans le score : une barre de 0 à 100. */
+function DetectorBar({ label, score }: { label: string; score: number }) {
+  const value = Math.round(score);
+  return (
+    <div className="flex flex-col gap-1.5">
+      <div className="flex items-baseline justify-between gap-3 text-[14px]">
+        <span className="text-soft">{label}</span>
+        <span className="mono font-bold">{value}</span>
+      </div>
+      <div className="h-1.5 overflow-hidden rounded-[3px] bg-[#2A2A2E]" aria-hidden="true">
+        <div className="db-bar h-full bg-ticket" style={{ width: `${Math.min(100, Math.max(0, value))}%` }} />
+      </div>
+    </div>
+  );
+}
+
+/** Score de risque IA de la campagne (scripts/anomaly_detection.py). Le mode de calcul est au verso. */
 export function ScannerPanel({ risk, thresholdCfd }: { risk: RiskEntry | undefined; thresholdCfd: number }) {
   const color = risk ? RISK_COLORS[risk.level] : "var(--gray)";
+  const back = risk
+    ? `Score = 60 % de règles lisibles + 40 % d'Isolation Forest, calculé hors chaîne par scripts/anomaly_detection.py. C'est un signal, pas une preuve : geler une campagne reste une décision de la DAO, proposée par tout détenteur d'au moins ${thresholdCfd} CFD.`
+    : "Lancez scripts/anomaly_detection.py pour calculer le score de cette campagne.";
   return (
-    <section
-      aria-labelledby="scanner-title"
-      className="panel grid items-center gap-8"
-      style={{ padding: "clamp(22px, 3vw, 36px)", gridTemplateColumns: "repeat(auto-fit, minmax(min(260px, 100%), 1fr))" }}
-    >
-      <div className="flex flex-col gap-2.5">
-        <h2 id="scanner-title" className="tag m-0">
-          Scanner IA · Score de risque
-        </h2>
+    <section aria-label="Scanner IA : score de risque">
+      <FlipNote label="Scanner IA · Score de risque" back={back} variant="fade" className="panel">
         {risk ? (
-          <div className="flex items-center gap-4">
-            <span className="db-tile mono rounded-lg px-[18px] py-1.5 text-[96px] font-bold leading-[1.05]" style={{ color }}>
-              {Math.round(risk.score)}
-            </span>
-            <span className="display text-[36px]" style={{ fontStretch: "72%", lineHeight: 1 }}>
-              {risk.level}
-            </span>
+          <div className="grid items-center gap-x-8 gap-y-6" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(240px, 100%), 1fr))" }}>
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+              <span className="db-tile mono rounded-lg px-[18px] py-1.5 font-bold leading-[1.05]" style={{ color, fontSize: "clamp(64px, 18vw, 96px)" }}>
+                {Math.round(risk.score)}
+              </span>
+              <span className="display text-[36px]" style={{ fontStretch: "72%", lineHeight: 1, overflowWrap: "normal" }}>
+                {risk.level}
+              </span>
+            </div>
+            <div className="flex flex-col gap-4">
+              <RiskScale score={risk.score} />
+              <DetectorBar label="Règles" score={risk.rulesScore} />
+              <DetectorBar label="Isolation Forest" score={risk.forestScore} />
+            </div>
+            {risk.reasons.length > 0 && (
+              <ul className="m-0 flex list-none flex-wrap gap-2 p-0" style={{ gridColumn: "1 / -1" }}>
+                {risk.reasons.map((reason) => (
+                  <li key={reason} className="rounded-[4px] border px-2.5 py-1.5 text-[13px] font-medium" style={{ borderColor: color, color: "var(--ticket)" }}>
+                    {reason}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         ) : (
           <p className="mono m-0 text-[18px] font-bold text-gray">SCORE NON CALCULÉ</p>
         )}
-        <span className="text-[14px] text-[#C9C7C0]">
-          {risk
-            ? `${Math.round(risk.rulesScore)} aux règles (60 %), ${Math.round(risk.forestScore)} à l'Isolation Forest (40 %), calculé hors chaîne.`
-            : "Lancez scripts/anomaly_detection.py pour calculer le score de cette campagne."}
-        </span>
-      </div>
-      <div className="flex flex-col gap-3.5">
-        <RiskScale score={risk?.score} />
-        {risk && risk.reasons.length > 0 && (
-          <ul className="m-0 flex list-disc flex-col gap-1 pl-5 text-[15px] text-ticket">
-            {risk.reasons.map((r) => (
-              <li key={r}>{r}</li>
-            ))}
-          </ul>
-        )}
-        <p className="m-0 text-[15px] text-soft">
-          Le score est un signal. Geler une campagne reste une décision de la DAO, proposée par tout détenteur d&apos;au moins {thresholdCfd} CFD.
-        </p>
-      </div>
+      </FlipNote>
     </section>
   );
 }

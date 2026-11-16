@@ -95,3 +95,23 @@ export function escaleStates(c: Campaign, proposals: Proposal[]): EscaleState[] 
 export function releaseProposalFor(proposals: Proposal[], campaignId: number, milestoneIndex: number): Proposal | undefined {
   return proposals.find((p) => p.campaignId === campaignId && p.ptype === 0 && p.milestoneIndex === milestoneIndex && p.state === 0);
 }
+
+/** Part de l'objectif déjà collectée, en pourcentage entier (peut dépasser 100). */
+export function fundingPercent(c: Campaign): number {
+  if (c.goal <= 0n) return 0;
+  return Number((c.raised * 100n) / c.goal);
+}
+
+/** Délai du contrat (`STALE_PERIOD`) : sans jalon approuvé pendant ce temps, n'importe qui peut annuler. */
+export const STALE_PERIOD_DAYS = 90;
+const SECONDS_PER_DAY = 86_400;
+
+/**
+ * Jours restants avant qu'une campagne financée puisse être annulée faute d'avancée.
+ * Null si la règle ne s'applique pas (campagne non financée, ou tous les jalons approuvés).
+ */
+export function staleDaysLeft(c: Campaign, now: number): number | null {
+  if (c.status !== 1 || c.approvedMilestones >= c.milestoneCount) return null;
+  const staleAt = c.lastProgressAt + STALE_PERIOD_DAYS * SECONDS_PER_DAY;
+  return Math.max(0, Math.ceil((staleAt - now) / SECONDS_PER_DAY));
+}

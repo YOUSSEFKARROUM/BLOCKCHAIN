@@ -134,6 +134,81 @@ input[type="number"]::-webkit-inner-spin-button {
     background: #1c1c1f;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 6px 14px rgba(0, 0, 0, 0.6);
   }
+  /* ---------- Bloc à deux faces : visuel au recto, explication au verso ---------- */
+  .flip {
+    perspective: 1000px;
+  }
+  .flip-inner {
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(0.2, 0.9, 0.25, 1);
+  }
+  .flip[data-flipped="true"] .flip-inner {
+    transform: rotateX(180deg);
+  }
+  /* La face cachée sort du flux : le bloc prend la hauteur de la face visible, pas de la plus haute. */
+  .flip:not([data-flipped="true"]) .flip-back,
+  .flip[data-flipped="true"] .flip-front {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+  .flip-face {
+    min-width: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  .flip-back {
+    transform: rotateX(180deg);
+  }
+  /* Variante sans rotation, pour les grands blocs : fondu entre les deux faces */
+  .flip-fade .flip-inner {
+    transform: none !important;
+    transition: none;
+  }
+  .flip-fade .flip-face {
+    transition: opacity 0.2s ease, visibility 0.2s;
+  }
+  .flip-fade .flip-back {
+    transform: none;
+  }
+  .flip-fade[data-flipped="true"] .flip-front,
+  .flip-fade:not([data-flipped="true"]) .flip-back {
+    opacity: 0;
+    visibility: hidden;
+  }
+  .flip-toggle {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--gray);
+    font: 700 14px/1 var(--font-mono), ui-monospace, monospace;
+    cursor: pointer;
+  }
+  .flip-toggle > span {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border: 1.5px solid currentColor;
+    border-radius: 50%;
+    transition: transform 0.1s ease-out, color 0.15s ease;
+  }
+  .flip-toggle:hover,
+  .flip-toggle[aria-expanded="true"] {
+    color: var(--amber);
+  }
+  .flip-toggle:active > span {
+    transform: scale(0.88);
+  }
   .db-flap {
     display: flex;
     align-items: center;
@@ -516,6 +591,19 @@ input[type="number"]::-webkit-inner-spin-button {
 
 /* Mouvement réduit : plus aucune animation, seuls restent les changements de couleur */
 @media (prefers-reduced-motion: reduce) {
+  /* Bloc à deux faces : fondu au lieu de la rotation */
+  .flip .flip-inner {
+    transform: none !important;
+    transition: none;
+  }
+  .flip .flip-back {
+    transform: none;
+  }
+  .flip[data-flipped="true"] .flip-front,
+  .flip:not([data-flipped="true"]) .flip-back {
+    opacity: 0;
+    visibility: hidden;
+  }
   html {
     scroll-behavior: auto;
   }

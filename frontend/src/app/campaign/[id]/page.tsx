@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { ErrorPanel, LoadingFlaps } from "@/components/board/Feedback";
 import { ArrowIcon } from "@/components/board/Icons";
 import { BoardingPass } from "@/components/campaign/BoardingPass";
-import { Escales } from "@/components/campaign/Escales";
+import { Runway } from "@/components/campaign/Runway";
 import { ScannerPanel } from "@/components/campaign/ScannerPanel";
 import { FlightInfo, TicketOffice } from "@/components/campaign/TicketOffice";
 import { deployment, getContracts } from "@/lib/contracts";
@@ -26,7 +26,25 @@ function BackLink() {
   );
 }
 
-/** Fiche d'une campagne : carte d'embarquement, escales, scanner et guichet (maquette Campaign). */
+const LONG_DESCRIPTION = 140;
+
+/** Description de la campagne : deux lignes, le reste à la demande. */
+function Description({ text }: { text: string }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const isLong = text.length > LONG_DESCRIPTION;
+  return (
+    <div className="mt-1.5 flex max-w-[700px] flex-col items-start">
+      <p className={`m-0 whitespace-pre-line text-[19px] text-soft ${isLong && !isOpen ? "line-clamp-2" : ""}`}>{text}</p>
+      {isLong && (
+        <button type="button" aria-expanded={isOpen} onClick={() => setIsOpen((v) => !v)} className="tag min-h-[44px] cursor-pointer border-0 bg-transparent p-0 text-amber underline underline-offset-4">
+          {isOpen ? "Réduire" : "Lire la suite"}
+        </button>
+      )}
+    </div>
+  );
+}
+
+/** Fiche d'une campagne : carte d'embarquement, piste des jalons, scanner et guichet (maquette Campaign). */
 export default function CampaignPage() {
   const params = useParams<{ id: string }>();
   const id = Number(params.id);
@@ -77,19 +95,18 @@ export default function CampaignPage() {
         <h1 className="display" style={{ fontSize: "clamp(48px, 9.6vw, 156px)", lineHeight: 0.82, fontStretch: "66%" }}>
           {head} <span className="text-amber">{tail}</span>
         </h1>
-        <p className="m-0 mt-1.5 max-w-[700px] whitespace-pre-line text-[19px] text-soft">{metadata?.description ?? "Métadonnées IPFS indisponibles."}</p>
+        <Description text={metadata?.description ?? "Métadonnées IPFS indisponibles."} />
       </div>
 
-      <div className="flex flex-wrap items-start gap-9">
-        <div className="flex min-w-0 flex-[999_1_600px] flex-col gap-14">
-          <BoardingPass campaign={c} proposals={proposals ?? []} metadata={metadata} now={now} feePercent={rules.feePercent} />
-          <Escales campaign={c} proposals={proposals ?? []} metadata={metadata} feePercent={rules.feePercent} />
-          <ScannerPanel risk={risk} thresholdCfd={rules.proposalThresholdCfd} />
-        </div>
-        <aside className="flex min-w-0 flex-[1_1_380px] flex-col gap-6">
+      {/* Sur téléphone, le guichet suit la carte d'embarquement ; sur grand écran, il reste à droite. */}
+      <div className="grid items-start gap-x-9 gap-y-12 min-[1100px]:grid-cols-[minmax(0,1fr)_380px]">
+        <BoardingPass campaign={c} proposals={proposals ?? []} metadata={metadata} now={now} feePercent={rules.feePercent} />
+        <aside className="flex min-w-0 flex-col gap-6 min-[1100px]:col-start-2 min-[1100px]:row-span-3 min-[1100px]:row-start-1">
           <TicketOffice campaign={c} myContribution={myContribution} now={now} rate={rules.rate} />
           <FlightInfo campaign={c} />
         </aside>
+        <Runway campaign={c} proposals={proposals ?? []} metadata={metadata} feePercent={rules.feePercent} now={now} />
+        <ScannerPanel risk={risk} thresholdCfd={rules.proposalThresholdCfd} />
       </div>
     </main>
   );
