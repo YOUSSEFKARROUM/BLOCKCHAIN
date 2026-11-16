@@ -35,3 +35,10 @@ Thumbs.db
 frontend/.local-ipfs/
 *.tsbuildinfo
 broadcast/**/*.lock
+
+# Présentation : fichiers générés (vidéos, export HTML)
+presentation/media/
+presentation/slides/
+presentation/campusfund.html
+presentation/campusfund_assets/
+presentation/__pycache__/
