@@ -11,9 +11,9 @@ const mono = Space_Mono({ subsets: ["latin"], weight: ["400", "700"], variable: 
 const display = Archivo({ subsets: ["latin"], axes: ["wdth"], variable: "--font-display", display: "swap" });
 
 export const metadata: Metadata = {
-  title: { default: "CampusFund : les fonds décollent sur vote", template: "%s | CampusFund" },
+  title: { default: "CampusFund : les fonds débloqués sur vote", template: "%s | CampusFund" },
   description:
-    "CampusFund finance les projets des clubs étudiants. Les ETH restent à quai : une tranche ne part vers le club que lorsque les contributeurs ont voté son départ.",
+    "CampusFund finance les projets des clubs étudiants. Les ETH restent bloqués dans le contrat : une tranche n'est versée au club que lorsque les contributeurs l'ont votée.",
   applicationName: "CampusFund",
 };
 

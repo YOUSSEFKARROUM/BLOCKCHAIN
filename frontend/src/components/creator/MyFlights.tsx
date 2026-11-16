@@ -54,7 +54,7 @@ function FlightTicket({ campaign: c, proposals, now, feePercent }: FlightTicketP
   return (
     <article className="on-ticket overflow-hidden rounded-[14px] bg-ticket text-night">
       <div className="tag-b flex justify-between gap-3 bg-amber px-[22px] py-3">
-        <span>Vol {flightCode(c.id)}</span>
+        <span>{flightCode(c.id)}</span>
         <span>{boardStatus(c, proposals, now).label}</span>
       </div>
       <div className="flex flex-col gap-4 p-[22px]">
@@ -129,7 +129,7 @@ function FlightTicket({ campaign: c, proposals, now, feePercent }: FlightTicketP
 
 function protocolRules(feePercent: number): { title: string; text: string }[] {
   return [
-    { title: "Ordre des escales", text: "Les jalons sont approuvés dans l'ordre. Le dernier récupère la poussière d'arrondi." },
+    { title: "Ordre des jalons", text: "Les jalons sont approuvés dans l'ordre. Le dernier récupère la poussière d'arrondi." },
     { title: "Frais", text: `${feePercent} % prélevés sur chaque tranche au moment du déblocage, rien à la contribution.` },
     { title: "90 jours sans approbation", text: "N'importe qui peut annuler la campagne : les contributeurs sont remboursés." },
   ];
@@ -143,10 +143,10 @@ export function MyFlights({ campaigns, proposals, now, feePercent }: { campaigns
   return (
     <aside className="flex min-w-0 flex-[1_1_380px] flex-col gap-5">
       <h2 className="display text-[52px]">
-        Mes vols <span className="text-amber">en cours</span>
+        Mes <span className="text-amber">campagnes</span>
       </h2>
       {!account && <EmptyPanel title="Portefeuille non connecté">Connectez MetaMask pour voir les campagnes dont vous êtes porteur ou bénéficiaire.</EmptyPanel>}
-      {account && campaigns && mine.length === 0 && <EmptyPanel title="Aucun vol pour ce compte">Votre première campagne apparaîtra ici après sa publication.</EmptyPanel>}
+      {account && campaigns && mine.length === 0 && <EmptyPanel title="Aucune campagne pour ce compte">Votre première campagne apparaîtra ici après sa publication.</EmptyPanel>}
       {mine.map((c) => (
         <FlightTicket key={c.id} campaign={c} proposals={proposals} now={now} feePercent={feePercent} />
       ))}

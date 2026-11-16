@@ -27,7 +27,7 @@ export function BoardRow({ row, delay }: { row: BoardRowData; delay: number }) {
       href={row.href}
       className={ROW_CLASS}
       style={{ gridTemplateColumns: BOARD_GRID, background: BOARD_ROW_BG, animationDelay: `${delay}s` }}
-      aria-label={`Vol ${row.flight}, ${row.name}, ${row.club}, ${row.status}`}
+      aria-label={`Campagne ${row.flight}, ${row.name}, ${row.club}, ${row.status}`}
     >
       <span className="text-gray">{row.flight}</span>
       <span className="truncate font-display text-[18px] tracking-normal">{row.name}</span>
@@ -49,7 +49,7 @@ export function BoardCard({ row, delay }: { row: BoardRowData; delay: number }) 
       href={row.href}
       className="db-row flex flex-col gap-2 rounded-md border border-[#2A2A2E] bg-[#151517] px-4 py-3.5 text-ticket no-underline"
       style={{ animationDelay: `${delay}s` }}
-      aria-label={`Vol ${row.flight}, ${row.name}, ${row.club}, ${row.status}`}
+      aria-label={`Campagne ${row.flight}, ${row.name}, ${row.club}, ${row.status}`}
     >
       <span className="mono flex items-center justify-between gap-3 text-[13px] font-bold">
         <span className="text-gray">{row.flight}</span>

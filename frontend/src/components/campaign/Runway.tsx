@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { FlipNote } from "@/components/board/FlipNote";
-import { ArrowIcon, PlaneIcon } from "@/components/board/Icons";
+import { ArrowIcon } from "@/components/board/Icons";
 import { ProofLink } from "@/components/governance/ProposalCard";
 import { COLORS, ESCALE_LABELS, type EscaleState, escaleStates, releaseProposalFor, STALE_PERIOD_DAYS, staleDaysLeft } from "@/lib/campaignView";
 import { type Campaign, type Proposal, trancheAmounts } from "@/lib/data";
@@ -11,7 +11,7 @@ const STATE_COLOR: Record<EscaleState, string> = { paid: COLORS.ok, approved: CO
 const TRACK_OFF = "#3A3A40";
 const EDGE_MARKS = `repeating-linear-gradient(90deg, ${TRACK_OFF} 0, ${TRACK_OFF} 18px, transparent 18px, transparent 36px)`;
 
-/** Balise de piste : allumée (versée, approuvée, en vote) ou éteinte (verrouillée). */
+/** Voyant d'un jalon : allumé (versée, approuvée, en vote) ou éteinte (verrouillée). */
 function Beacon({ state }: { state: EscaleState }) {
   const color = STATE_COLOR[state];
   const isLit = state !== "locked";
@@ -96,7 +96,7 @@ interface RunwayProps {
   now: number;
 }
 
-/** Piste des jalons : une balise par jalon, allumée quand la tranche part. Les règles sont au verso des trois blocs. */
+/** Frise des jalons : un voyant par jalon, allumé quand la tranche est versée. Les règles sont au verso des trois blocs. */
 export function Runway({ campaign: c, proposals, metadata, feePercent, now }: RunwayProps) {
   const states = escaleStates(c, proposals);
   const tranches = trancheAmounts(c);
@@ -111,7 +111,7 @@ export function Runway({ campaign: c, proposals, metadata, feePercent, now }: Ru
   return (
     <section aria-labelledby="piste-title" className="flex flex-col gap-5">
       <h2 id="piste-title" className="display display-m">
-        Piste <span className="text-amber">des jalons</span>
+        Les <span className="text-amber">jalons</span>
       </h2>
 
       <div className="relative overflow-hidden rounded-[14px] border border-[#2A2A2E] bg-[#111113] px-5 py-8 md:px-4 md:pb-9 md:pt-14">
@@ -131,7 +131,7 @@ export function Runway({ campaign: c, proposals, metadata, feePercent, now }: Ru
                     <span aria-hidden="true" className="absolute left-1/2 top-[12px] hidden w-full md:block" style={{ borderTop: `3px ${isDone ? "solid" : "dashed"} ${isDone ? COLORS.ok : TRACK_OFF}` }} />
                   </>
                 )}
-                {i === current && <PlaneIcon size={26} className="db-bob absolute -top-9 left-1/2 hidden text-amber md:block" style={{ marginLeft: -13 }} />}
+                {i === current && <span aria-hidden="true" className="db-bob absolute -top-7 left-1/2 hidden h-0 w-0 md:block" style={{ marginLeft: -9, borderLeft: "9px solid transparent", borderRight: "9px solid transparent", borderTop: `13px solid ${COLORS.amber}` }} />}
                 <Beacon state={state} />
                 <div className="flex min-w-0 flex-col gap-1 md:items-center">
                   <span className="mono text-[12px] font-bold tracking-[.14em] text-gray">JALON {String(i + 1).padStart(2, "0")}</span>

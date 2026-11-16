@@ -77,15 +77,15 @@ export function DeparturesBoard() {
   const isFirstLoad = isLoading && !campaigns;
 
   return (
-    <section id="departs" aria-labelledby="departs-title" className="wrap flex flex-col gap-[22px] pb-24 pt-10">
+    <section id="campagnes" aria-labelledby="campagnes-title" className="wrap flex flex-col gap-[22px] pb-24 pt-10">
       <div className="flex flex-wrap items-end justify-between gap-[18px]">
-        <h2 id="departs-title" className="display display-m">
-          Départs <span className="text-amber">des tranches</span>
+        <h2 id="campagnes-title" className="display display-m">
+          Les <span className="text-amber">campagnes</span>
         </h2>
         <FilterTabs value={filter} onChange={setFilter} />
       </div>
       {error && <ErrorPanel title="Tableau indisponible">{error}</ErrorPanel>}
-      <ul className="m-0 flex list-none flex-col gap-[5px] p-0 md:hidden" aria-label="Départs">
+      <ul className="m-0 flex list-none flex-col gap-[5px] p-0 md:hidden" aria-label="Campagnes">
         {isFirstLoad && [0, 1, 2].map((i) => <li key={i}><BoardRowPlaceholder delay={i * 0.18} /></li>)}
         {rows.map((c, i) => (
           <li key={c.id}>
@@ -93,7 +93,7 @@ export function DeparturesBoard() {
           </li>
         ))}
       </ul>
-      <div className="hidden overflow-x-auto pb-1.5 md:block" tabIndex={0} aria-label="Tableau des départs, défilement horizontal">
+      <div className="hidden overflow-x-auto pb-1.5 md:block" tabIndex={0} aria-label="Tableau des campagnes, défilement horizontal">
         <div className="flex min-w-[1040px] flex-col gap-[5px]" style={{ perspective: 1400 }}>
           <div className="mono grid gap-x-5 px-5 pb-1.5 text-[12px] tracking-[.18em] text-amber" style={{ gridTemplateColumns: BOARD_GRID }}>
             <span>N°</span>
@@ -110,13 +110,10 @@ export function DeparturesBoard() {
         </div>
       </div>
       {!isFirstLoad && !error && rows.length === 0 && (
-        <EmptyPanel title={campaigns?.length ? "Aucun vol dans cette catégorie" : "Aucun départ prévu"}>
+        <EmptyPanel title={campaigns?.length ? "Aucune campagne dans cette catégorie" : "Aucune campagne"}>
           {campaigns?.length ? "Changez de filtre pour voir les autres campagnes." : "Aucune campagne n'a encore été créée sur ce réseau."}
         </EmptyPanel>
       )}
-      <p className="tag m-0">
-        Vol = campagne · Escale = jalon
-      </p>
     </section>
   );
 }

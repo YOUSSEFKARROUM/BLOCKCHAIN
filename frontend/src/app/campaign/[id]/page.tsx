@@ -19,9 +19,9 @@ import { useWeb3 } from "@/lib/web3";
 
 function BackLink() {
   return (
-    <Link href="/#departs" className="tag inline-flex min-h-[44px] items-center gap-2.5 self-start no-underline hover:text-amber">
+    <Link href="/#campagnes" className="tag inline-flex min-h-[44px] items-center gap-2.5 self-start no-underline hover:text-amber">
       <ArrowIcon size={16} back />
-      Tous les départs
+      Toutes les campagnes
     </Link>
   );
 }
@@ -78,7 +78,7 @@ export default function CampaignPage() {
     return (
       <main className="wrap flex flex-col gap-6 pb-28 pt-5">
         <BackLink />
-        {error ? <ErrorPanel title="Vol introuvable">{error}</ErrorPanel> : <LoadingFlaps label="Lecture de la campagne sur la chaîne" />}
+        {error ? <ErrorPanel title="Campagne introuvable">{error}</ErrorPanel> : <LoadingFlaps label="Lecture de la campagne sur la chaîne" />}
       </main>
     );
   }

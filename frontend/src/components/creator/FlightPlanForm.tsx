@@ -170,7 +170,7 @@ export function FlightPlanForm() {
 
       <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
         <button type="submit" disabled={!isValid || isSending} className="btn btn-amber !min-h-[68px] !px-[34px] !text-[16px]">
-          {upload.state === "uploading" ? "Envoi sur IPFS…" : busy ? "Transaction en cours…" : status.kind === "success" ? "Plan de vol déposé" : "Publier la campagne"}
+          {upload.state === "uploading" ? "Envoi sur IPFS…" : busy ? "Transaction en cours…" : status.kind === "success" ? "Campagne publiée" : "Publier la campagne"}
         </button>
         <span className="flex-[1_1_280px] text-[15px] text-[#C9C7C0]" aria-live="polite">
           {note}

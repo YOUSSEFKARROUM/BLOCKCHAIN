@@ -10,11 +10,11 @@ import { DevTimeTravel } from "../DevTimeTravel";
 import { Logo } from "./Logo";
 import { StatusLamp } from "./StatusLamp";
 
-/** Terme imagé + terme réel, toujours visibles ensemble. */
+/** Navigation : le terme réel, avec une précision dessous. */
 const NAV = [
-  { href: "/#departs", label: "Départs", real: "Campagnes", match: (p: string) => p === "/" || p.startsWith("/campaign") },
-  { href: "/governance", label: "Tour de contrôle", real: "Gouvernance", match: (p: string) => p.startsWith("/governance") },
-  { href: "/creator", label: "Plan de vol", real: "Créer une campagne", match: (p: string) => p.startsWith("/creator") },
+  { href: "/#campagnes", label: "Campagnes", real: "Toutes les collectes", match: (p: string) => p === "/" || p.startsWith("/campaign") },
+  { href: "/governance", label: "Gouvernance", real: "Votes de la DAO", match: (p: string) => p.startsWith("/governance") },
+  { href: "/creator", label: "Créer", real: "Nouvelle campagne", match: (p: string) => p.startsWith("/creator") },
   { href: "/securite", label: "Sécurité", real: "Audit et tests", match: (p: string) => p.startsWith("/securite") },
 ];
 

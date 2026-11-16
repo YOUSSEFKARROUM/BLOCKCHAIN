@@ -148,7 +148,7 @@ function Actions({ proposal: p, campaign, mine, feePercent }: { proposal: Propos
       <ResultTile title="DÉBLOQUÉE" text={tranche !== undefined ? `${eth(tranche - fee, 3)} ETH AU CLUB · ${eth(fee, 3)} ETH DE FRAIS` : "JALON APPROUVÉ"} />
     );
   } else if (p.state === 1) {
-    body = <ResultTile title="REJETÉE" text="LES FONDS RESTENT À QUAI" isOk={false} />;
+    body = <ResultTile title="REJETÉE" text="LES FONDS RESTENT BLOQUÉS" isOk={false} />;
   }
 
   return (

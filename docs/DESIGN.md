@@ -1,24 +1,14 @@
 # Design — « Tableau des départs »
 
-L'interface reprend un tableau d'aéroport à palettes : chaque campagne est un **vol**, chaque jalon une
-**escale**, chaque déblocage un **décollage**. La métaphore sert l'idée centrale du projet : l'argent reste
-à quai et ne part qu'au signal, c'est-à-dire après un vote.
+L'interface reprend le **style visuel** d'un tableau d'affichage à palettes (tuiles à charnière, ambre sur
+fond nuit). Depuis le 16/11/2026, **les textes n'utilisent plus la métaphore du vol** : titres, boutons,
+statuts et navigation emploient le vocabulaire du contrat (campagne, jalon, tranche, gouvernance, déblocage).
 
-## Règle de lecture : la métaphore dans les titres, le vrai terme dans les actions
+## Peu de texte : le visuel d'abord, l'explication au verso
 
-Un jury ou un contributeur doit comprendre sans traduire. La métaphore reste dans les grands titres et
-l'ambiance (« Tour de contrôle », « Monter à bord »). Les boutons, les statuts et les données utilisent le
-vocabulaire du contrat : « Voter pour », « Exécuter le déblocage », « Créer une campagne », « Jalon 2 »,
-« Tranche à retirer ». La navigation montre les deux : « Tour de contrôle » avec « Gouvernance » dessous.
-
-| Interface | Contrat |
-|---|---|
-| Vol, départ | Campagne |
-| Escale | Jalon |
-| Décollage | Déblocage d'une tranche |
-| Tour de contrôle | Gouvernance (DAO) |
-| Plan de vol | Création d'une campagne |
-| Scanner | Score de risque IA |
+Les règles sont montrées par des visuels (frise des jalons, barre des frais, compte à rebours du garde-fou,
+barres du score IA). La phrase complète est au verso du bloc, derrière un bouton « ? » (`FlipNote`) : le bloc
+se retourne comme une palette ; avec `prefers-reduced-motion`, il passe en fondu.
 
 ## Palette
 
@@ -52,7 +42,8 @@ Les deux polices sont téléchargées au build et servies par le site : aucun ap
 | `BoardRow`, `BoardCard` | Ligne du tableau des départs (≥ 768 px) et carte équivalente (< 768 px). |
 | `StatusLamp` | Voyant coloré, fixe ou clignotant, toujours accompagné d'un texte. |
 | `SignPanel` | Panneau ambre (règles, appel à l'action). |
-| `Header`, `Logo`, `Clock` | En-tête avec terme réel sous chaque lien, logo en deux palettes C et F, horloge en palettes. |
+| `FlipNote` | Bloc à deux faces : visuel au recto, explication au verso, bouton « ? » accessible (`aria-expanded`). |
+| `Header`, `Logo`, `Clock` | En-tête avec une précision sous chaque lien, logo en deux palettes C et F, horloge en palettes. |
 | `RiskScale` | Échelle 0 · 35 · 50 · 100 du score de risque. |
 | `Feedback` | États de transaction (signature, minage, confirmée, refusée), chargement, liste vide, erreur. |
 

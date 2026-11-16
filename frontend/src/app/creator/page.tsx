@@ -18,12 +18,12 @@ export default function CreatorPage() {
           Espace porteur · nouvelle campagne
         </span>
         <h1 className="display display-hero">
-          Déposez votre
+          Créez votre
           <br />
-          <span className="text-amber">plan de vol.</span>
+          <span className="text-amber">campagne.</span>
         </h1>
         <p className="m-0 mt-1.5 max-w-[620px] text-[20px] text-soft">
-          Fixez l&apos;objectif, la durée et les escales. Chaque escale est un jalon : sa tranche ne partira qu&apos;après un vote de la DAO.
+          Fixez l&apos;objectif, la durée et les jalons. La tranche de chaque jalon n&apos;est versée qu&apos;après un vote.
         </p>
       </div>
       <div className="flex flex-wrap items-start gap-9">

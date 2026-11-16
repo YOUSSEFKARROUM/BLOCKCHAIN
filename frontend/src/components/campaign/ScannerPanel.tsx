@@ -25,8 +25,8 @@ export function ScannerPanel({ risk, thresholdCfd }: { risk: RiskEntry | undefin
     ? `Score = 60 % de règles lisibles + 40 % d'Isolation Forest, calculé hors chaîne par scripts/anomaly_detection.py. C'est un signal, pas une preuve : geler une campagne reste une décision de la DAO, proposée par tout détenteur d'au moins ${thresholdCfd} CFD.`
     : "Lancez scripts/anomaly_detection.py pour calculer le score de cette campagne.";
   return (
-    <section aria-label="Scanner IA : score de risque">
-      <FlipNote label="Scanner IA · Score de risque" back={back} variant="fade" className="panel">
+    <section aria-label="Score de risque IA">
+      <FlipNote label="Score de risque IA" back={back} variant="fade" className="panel">
         {risk ? (
           <div className="grid items-center gap-x-8 gap-y-6" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(240px, 100%), 1fr))" }}>
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2">

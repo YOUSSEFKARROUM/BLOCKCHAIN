@@ -10,10 +10,10 @@ type ContractKey = "CFDToken" | "CampusFund" | "Governance" | "Treasury";
 
 function gates(r: ProtocolRules): { gate: string; name: ContractKey; text: string }[] {
   return [
-    { gate: "A1", name: "CFDToken", text: "Jeton de vote ERC20Votes." },
-    { gate: "A2", name: "CampusFund", text: "Campagnes, jalons, remboursements." },
-    { gate: "A3", name: "Governance", text: `DAO à snapshot, quorum ${r.quorumPercent} %, vote de ${formatPeriod(r.votingPeriodSeconds)}.` },
-    { gate: "A4", name: "Treasury", text: "Multisig 2 sur 3." },
+    { gate: "01", name: "CFDToken", text: "Jeton de vote ERC20Votes." },
+    { gate: "02", name: "CampusFund", text: "Campagnes, jalons, remboursements." },
+    { gate: "03", name: "Governance", text: `DAO à snapshot, quorum ${r.quorumPercent} %, vote de ${formatPeriod(r.votingPeriodSeconds)}.` },
+    { gate: "04", name: "Treasury", text: "Multisig 2 sur 3." },
   ];
 }
 
@@ -21,13 +21,13 @@ function explorerUrl(address: string): string | null {
   return CHAIN.explorer ? `${CHAIN.explorer}/address/${address}#code` : null;
 }
 
-/** Les quatre contrats déployés, présentés comme les portes du terminal. */
+/** Les quatre contrats déployés, une carte par contrat. */
 export function TerminalSection({ rules }: { rules: ProtocolRules }) {
   return (
     <section aria-labelledby="terminal-title" className="wrap flex flex-col gap-8 pb-24 pt-[72px]">
       <div className="flex flex-wrap items-end justify-between gap-5">
         <h2 id="terminal-title" className="display display-l">
-          Terminal <span className="text-amber">{CHAIN.name}.</span>
+          Contrats <span className="text-amber">sur {CHAIN.name}.</span>
         </h2>
         {deployment && (
           <span className="tag">
@@ -42,7 +42,7 @@ export function TerminalSection({ rules }: { rules: ProtocolRules }) {
           return (
             <div key={g.gate} className="on-amber flex min-h-[230px] flex-col gap-3 rounded-[10px] bg-amber p-6 text-night">
               <div className="flex items-start justify-between">
-                <span className="tag-b">Porte</span>
+                <span className="tag-b">Contrat</span>
                 <span className="display text-[64px]" style={{ lineHeight: 0.8, fontStretch: "70%" }}>
                   {g.gate}
                 </span>
@@ -76,7 +76,7 @@ export function FinalCta() {
           Votre club a un projet. La DAO a un vote.
         </h2>
         <div className="flex flex-wrap gap-3">
-          <a href="#departs" className="btn btn-dark !min-h-[64px] !text-[15px]">
+          <a href="#campagnes" className="btn btn-dark !min-h-[64px] !text-[15px]">
             Voir les campagnes
             <ArrowIcon />
           </a>

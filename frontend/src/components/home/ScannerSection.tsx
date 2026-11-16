@@ -14,7 +14,7 @@ export function ScannerSection() {
     >
       <div className="flex flex-col gap-[22px]">
         <h2 id="ia-title" className="display display-l">
-          Le scanner signale.
+          L&apos;IA signale.
           <br />
           <span className="text-amber">La DAO décide.</span>
         </h2>

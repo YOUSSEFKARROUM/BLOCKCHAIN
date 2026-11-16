@@ -189,23 +189,20 @@ interface TicketOfficeProps {
   rate: number;
 }
 
-/** Guichet : contribuer, clôturer ou se faire rembourser selon l'état de la campagne. */
+/** Titre du panneau d'action, selon l'état de la campagne. */
+function titleFor(status: Campaign["status"], canFinalize: boolean): string {
+  if (status === 2) return "Objectif manqué";
+  if (status === 3) return "Campagne annulée";
+  if (status === 1) return "Campagne financée";
+  return canFinalize ? "Collecte terminée" : "Contribuer";
+}
+
+/** Panneau d'action : contribuer, clôturer ou se faire rembourser selon l'état de la campagne. */
 export function TicketOffice({ campaign: c, myContribution, now, rate }: TicketOfficeProps) {
   const isActive = c.status === 0;
   const canFinalize = isActive && now >= c.deadline;
   const isCancelled = c.status === 2 || c.status === 3;
-  const title = isCancelled ? (
-    <>
-      Vol
-      <br />
-      annulé
-    </>
-  ) : (
-    <>
-      Monter
-      <br />à bord
-    </>
-  );
+  const title = titleFor(c.status, canFinalize);
   return (
     <div className="on-amber flex flex-col gap-[22px] rounded-[18px] bg-amber px-7 py-[30px] text-night">
       <h2 className="display text-[64px]" style={{ lineHeight: 0.85 }}>

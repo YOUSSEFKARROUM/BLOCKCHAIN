@@ -9,7 +9,7 @@ import { CHAIN } from "@/config/chain";
 /** Le titre se retourne une seule fois à l'arrivée : une boucle détournerait l'attention de la lecture. */
 const HEADLINE = [
   { text: "LES FONDS", color: "var(--ticket)" },
-  { text: "DÉCOLLENT", color: "var(--ticket)" },
+  { text: "DÉBLOQUÉS", color: "var(--ticket)" },
   { text: "SUR VOTE.", color: "var(--amber)" },
 ];
 
@@ -25,7 +25,7 @@ function HeroRow({ text, color, delayOf }: { text: string; color: string; delayO
 
 function FlapHeadline() {
   return (
-    <h1 aria-label="Les fonds décollent sur vote." className="m-0 flex flex-col gap-2" style={{ perspective: 900 }}>
+    <h1 aria-label="Les fonds débloqués sur vote." className="m-0 flex flex-col gap-2" style={{ perspective: 900 }}>
       {HEADLINE.map((row, ri) => (
         <HeroRow key={row.text} text={row.text} color={row.color} delayOf={(ci) => 0.15 + ri * 0.28 + ci * 0.07} />
       ))}
@@ -43,14 +43,14 @@ export function Hero() {
           <span className="tag">
             Heure locale
             <br />
-            Terminal {CHAIN.name}
+            Réseau {CHAIN.name}
           </span>
         </div>
         <p className="m-0 max-w-[540px] text-[21px] leading-[1.45] text-soft" style={{ textWrap: "pretty" }}>
-          Les ETH restent à quai. Chaque tranche part vers le club après le vote des contributeurs.
+          Les ETH restent bloqués dans le contrat. Chaque tranche est versée au club après le vote des contributeurs.
         </p>
         <div className="flex flex-wrap gap-3">
-          <a href="#departs" className="btn btn-amber !text-[15px]">
+          <a href="#campagnes" className="btn btn-amber !text-[15px]">
             Voir les campagnes
             <ArrowIcon />
           </a>

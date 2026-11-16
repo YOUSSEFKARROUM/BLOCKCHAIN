@@ -15,7 +15,7 @@ export default function SecurityPage() {
         <h1 className="display display-hero">
           Vérifiez
           <br />
-          <span className="text-amber">avant de monter.</span>
+          <span className="text-amber">avant de contribuer.</span>
         </h1>
         <p className="m-0 max-w-[560px] text-[19px] text-soft">Tests, attaques rejouées, score de risque et adresses des contrats.</p>
       </div>

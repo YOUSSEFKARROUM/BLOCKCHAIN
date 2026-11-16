@@ -3,7 +3,7 @@ import { ImageResponse } from "next/og";
 // Image affichée quand le lien du site est partagé (réseaux sociaux, messageries).
 // Runtime « edge » : avec le runtime Node, next/og échoue sous Windows (chemin de police invalide).
 export const runtime = "edge";
-export const alt = "CampusFund : les fonds décollent sur vote, par jalon";
+export const alt = "CampusFund : les fonds débloqués sur vote, par jalon";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 

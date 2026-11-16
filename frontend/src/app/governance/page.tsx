@@ -32,9 +32,9 @@ export default function GovernancePage() {
             Gouvernance · DAO à snapshot
           </span>
           <h1 className="display display-hero">
-            Tour de
+            Les votes
             <br />
-            <span className="text-amber">contrôle.</span>
+            <span className="text-amber">de la DAO.</span>
           </h1>
           <p className="m-0 max-w-[560px] text-[20px] text-soft" style={{ textWrap: "pretty" }}>
             Les contributeurs d&apos;une campagne votent ses tranches. Toute la communauté vote les gels, avec les CFD délégués avant la
@@ -62,10 +62,10 @@ export default function GovernancePage() {
       </SignPanel>
 
       <div className="wrap flex flex-col gap-16 pb-28 pt-[88px]">
-        <section aria-labelledby="approche-title" className="flex flex-col gap-6">
+        <section aria-labelledby="propositions-title" className="flex flex-col gap-6">
           <div className="flex flex-wrap items-end justify-between gap-3">
-            <h2 id="approche-title" className="display display-l">
-              Demandes <span className="text-amber">en approche</span>
+            <h2 id="propositions-title" className="display display-l">
+              Les <span className="text-amber">propositions</span>
             </h2>
             <span className="tag">
               Propositions de la DAO, les plus récentes d&apos;abord
@@ -75,7 +75,7 @@ export default function GovernancePage() {
           {isLoading && !proposals && <LoadingFlaps label="Lecture des propositions" />}
           {error && <ErrorPanel title="Propositions indisponibles">{error}</ErrorPanel>}
           {proposals?.length === 0 && (
-            <EmptyPanel title="Ciel dégagé">Aucune proposition pour l&apos;instant. Un porteur ouvre un vote depuis son plan de vol.</EmptyPanel>
+            <EmptyPanel title="Aucune proposition">Un porteur ouvre un vote depuis la page « Créer ».</EmptyPanel>
           )}
           {list.map((p) => (
             <ProposalCard key={p.id} proposal={p} campaign={campaigns?.[p.campaignId]} now={now} quorumPercent={rules.quorumPercent} feePercent={rules.feePercent} />
