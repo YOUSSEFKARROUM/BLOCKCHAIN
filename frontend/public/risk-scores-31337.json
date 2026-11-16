@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-11-16T15:29:03+00:00",
+  "generatedAt": "2026-11-16T20:39:37+00:00",
   "chainId": 31337,
-  "campusFund": "0x2bdCC0de6bE1f7D2ee689a0342D76F52E8EFABa3",
+  "campusFund": "0x1fA02b2d6A771842690194Cf62D91bdd92BfE28d",
   "method": {
     "rulesWeight": 0.6,
     "forestWeight": 0.4,
