@@ -141,11 +141,15 @@ contract SeedDemo is Script {
 
         // Astronomie : demande de déblocage du jalon 1, votes favorables
         vm.startBroadcast(_key(4));
-        uint256 p0 = governance.proposeMilestoneRelease(ASTRONOMIE, "Telescope commande : facture du fournisseur", "demo://facture-telescope.pdf");
+        uint256 p0 = governance.proposeMilestoneRelease(
+            ASTRONOMIE, unicode"Télescope commandé : facture du fournisseur", "demo://facture-telescope.pdf"
+        );
         vm.stopBroadcast();
         // Robotique : demande de déblocage du jalon 1, un vote contre
         vm.startBroadcast(_key(3));
-        uint256 p1 = governance.proposeMilestoneRelease(ROBOTIQUE, "Composants achetes : factures en ligne", "demo://factures-composants.pdf");
+        uint256 p1 = governance.proposeMilestoneRelease(
+            ROBOTIQUE, unicode"Composants achetés : factures en ligne", "demo://factures-composants.pdf"
+        );
         vm.stopBroadcast();
 
         _vote(5, p0, true);
@@ -176,11 +180,14 @@ contract SeedDemo is Script {
         vm.startBroadcast(_key(3));
         fund.withdrawTranche(ROBOTIQUE);
         // Propositions laissées OUVERTES pour la démo en direct
-        governance.proposeMilestoneRelease(ROBOTIQUE, "Prototype termine : video de l'homologation", "demo://video-homologation.mp4");
+        governance.proposeMilestoneRelease(
+            ROBOTIQUE, unicode"Prototype terminé : vidéo de l'homologation", "demo://video-homologation.mp4"
+        );
         vm.stopBroadcast();
 
         vm.startBroadcast(_key(5));
-        uint256 freeze = governance.proposeFreeze(MATERIEL, "Adresses toutes financees par le meme compte");
+        uint256 freeze =
+            governance.proposeFreeze(MATERIEL, unicode"Adresses toutes financées par le même compte");
         governance.castVote(freeze, true);
         vm.stopBroadcast();
         console.log("step3 : propositions ouvertes 2 et", freeze);

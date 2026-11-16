@@ -18,3 +18,12 @@ export function proofHref(proof: string): string | null {
     return null;
   }
 }
+
+const DEMO_SCHEME = "demo://";
+
+/** Nom du fichier d'une preuve fictive des données de démonstration (`demo://facture.pdf`), sinon null. */
+export function demoProofName(proof: string): string | null {
+  const value = proof.trim();
+  if (!value.startsWith(DEMO_SCHEME)) return null;
+  return value.slice(DEMO_SCHEME.length) || null;
+}

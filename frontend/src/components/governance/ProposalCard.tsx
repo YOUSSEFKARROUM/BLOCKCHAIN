@@ -8,7 +8,7 @@ import { getContracts } from "@/lib/contracts";
 import { type Campaign, type Proposal, trancheAmounts } from "@/lib/data";
 import { cfd, dateTime, eth, relative, shortAddress } from "@/lib/format";
 import { useMetadata } from "@/lib/hooks";
-import { proofHref } from "@/lib/proof";
+import { demoProofName, proofHref } from "@/lib/proof";
 import { useTx } from "@/lib/useTx";
 import { useWeb3 } from "@/lib/web3";
 
@@ -68,6 +68,7 @@ function VoteBars({ proposal: p, supply }: { proposal: Proposal; supply: bigint 
 /** Preuve du jalon : lien seulement si l'adresse est sûre (https ou IPFS), sinon texte brut. */
 export function ProofLink({ proof }: { proof: string }) {
   const href = proofHref(proof);
+  const demoName = demoProofName(proof);
   return (
     <p className="m-0 text-[15px]">
       <span className="text-gray">Preuve : </span>
@@ -75,6 +76,10 @@ export function ProofLink({ proof }: { proof: string }) {
         <a href={href} target="_blank" rel="noopener noreferrer" className="break-all text-amber underline underline-offset-4">
           {proof}
         </a>
+      ) : demoName ? (
+        <span className="text-soft">
+          <span className="mono break-all">{demoName}</span> · preuve fictive de démonstration
+        </span>
       ) : (
         <span className="mono break-all text-soft">{proof}</span>
       )}

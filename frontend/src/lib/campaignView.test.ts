@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { boardStatus, escaleStates, fallbackName, flightCode, releaseProposalFor } from "./campaignView";
 import type { Campaign, Proposal } from "./data";
-import { proofHref } from "./proof";
+import { demoProofName, proofHref } from "./proof";
 
 const NOW = 1_000_000;
 
@@ -134,5 +134,16 @@ describe("proofHref", () => {
     expect(proofHref("http://exemple.org")).toBeNull();
     expect(proofHref("demo://video.mp4")).toBeNull();
     expect(proofHref("une simple phrase")).toBeNull();
+  });
+});
+
+describe("demoProofName", () => {
+  it("extrait le nom d'une preuve fictive de démonstration", () => {
+    expect(demoProofName("demo://facture-telescope.pdf")).toBe("facture-telescope.pdf");
+  });
+
+  it("ignore les vraies preuves et les preuves fictives sans nom", () => {
+    expect(demoProofName("https://exemple.org/facture.pdf")).toBeNull();
+    expect(demoProofName("demo://")).toBeNull();
   });
 });
