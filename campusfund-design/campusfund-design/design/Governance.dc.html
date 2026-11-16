@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>CampusFund — Tour de contrôle</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Archivo:wdth,wght@62..125,400..900&display=swap">
+<style>
+body{margin:0;background:#09090A}
+a{color:#F2F0E8}a:hover{color:#FFB800}
+.db-tile{background:linear-gradient(#2A2A2E 0,#232326 48.5%,#050506 48.5%,#050506 51.5%,#1C1C1F 51.5%,#17171A 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 6px 14px rgba(0,0,0,.6)}
+.db-blink{animation:dbblink 1s steps(2,jump-none) infinite}
+.db-btn{transition:transform .15s ease,filter .15s ease}
+.db-btn:hover{transform:translateY(-3px);filter:brightness(1.15)}
+.db-ghost:hover{border-color:#FFB800 !important;color:#FFB800 !important}
+.db-bar{transition:width .7s cubic-bezier(.2,.7,.2,1)}
+.db-sweep{animation:dbsweep 4s linear infinite}
+.db-ping{animation:dbping 4s ease-out infinite}
+@keyframes dbblink{0%{opacity:1}100%{opacity:.2}}
+@keyframes dbsweep{to{transform:rotate(360deg)}}
+@keyframes dbping{0%,100%{opacity:.25;transform:scale(.8)}12%{opacity:1;transform:scale(1.5)}40%{opacity:.6;transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.db-blink,.db-sweep,.db-ping{animation:none}.db-bar{transition:none}}
+</style>
+</helmet>
+<div style="background-color: #09090A; background-image: radial-gradient(rgba(255,255,255,.05) 1px, transparent 1px); background-size: 14px 14px; color: #F2F0E8; font-family: Archivo, system-ui, sans-serif; font-size: 17px; line-height: 1.5; overflow-x: hidden">
+
+<header style="max-width: 1328px; margin: 0 auto; padding: 26px 28px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<a href="Main.dc.html" aria-label="CampusFund, accueil" style="display: flex; align-items: center; gap: 14px; text-decoration: none; color: #F2F0E8">
+<span aria-hidden="true" style="display: flex; gap: 4px">
+<span style="width: 38px; height: 50px; border-radius: 5px; background: linear-gradient(#FFC42E 0, #FFC42E 48%, #09090A 48%, #09090A 52%, #F0A800 52%); color: #09090A; font: 700 34px 'Space Mono', monospace; display: flex; align-items: center; justify-content: center">C</span>
+<span style="width: 38px; height: 50px; border-radius: 5px; background: linear-gradient(#2A2A2E 0, #2A2A2E 48%, #09090A 48%, #09090A 52%, #1D1D20 52%); color: #FFB800; font: 700 34px 'Space Mono', monospace; display: flex; align-items: center; justify-content: center">F</span>
+</span>
+<span aria-hidden="true" style="font: 700 18px 'Space Mono', monospace; letter-spacing: .22em">CAMPUSFUND</span>
+</a>
+<nav aria-label="Navigation principale" style="display: flex; flex-wrap: wrap; gap: 8px 34px; font: 400 14px 'Space Mono', monospace; letter-spacing: .1em">
+<a href="Main.dc.html" style="text-decoration: none; padding: 14px 0">DÉPARTS</a>
+<a href="Governance.dc.html" style="text-decoration: none; padding: 14px 0; color: #FFB800">TOUR DE CONTRÔLE</a>
+<a href="Creator.dc.html" style="text-decoration: none; padding: 14px 0">PLAN DE VOL</a>
+</nav>
+<span style="display: inline-flex; align-items: center; min-height: 48px; padding: 0 18px; border-radius: 6px; background: #1C1C1F; font: 400 13px 'Space Mono', monospace">[0x… VOTRE ADRESSE]</span>
+</header>
+
+<!-- HERO -->
+<section style="max-width: 1328px; margin: 0 auto; padding: 28px 28px 72px; display: flex; flex-wrap: wrap; gap: 48px; align-items: center">
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 26px">
+<span style="font: 400 13px 'Space Mono', monospace; letter-spacing: .14em; color: #FFB800">GOUVERNANCE · DAO À SNAPSHOT</span>
+<h1 style="margin: 0; font: 900 clamp(60px, 10.4vw, 170px)/.8 Archivo, system-ui, sans-serif; font-stretch: 64%; text-transform: uppercase">Tour de<br><span style="color: #FFB800">contrôle.</span></h1>
+<p style="margin: 0; max-width: 560px; font-size: 20px; color: #D9D7CF; text-wrap: pretty">Aucune tranche ne décolle sans votre autorisation. Vous votez avec les CFD que vous déteniez au bloc qui précède la proposition : des jetons achetés ou empruntés après coup ne comptent pas.</p>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span style="font: 400 12px 'Space Mono', monospace; letter-spacing: .14em; color: #A9A9B2">VOTRE POUVOIR DE VOTE · 1,2 ETH CONTRIBUÉS</span>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 5px" role="img" aria-label="1 200 CFD">
+<span aria-hidden="true" class="db-tile" style="width: clamp(48px, 6vw, 76px); height: clamp(64px, 8vw, 100px); border-radius: 7px; color: #FFB800; font: 700 clamp(40px, 5.4vw, 70px) 'Space Mono', monospace; display: flex; align-items: center; justify-content: center">1</span>
+<span aria-hidden="true" class="db-tile" style="width: clamp(48px, 6vw, 76px); height: clamp(64px, 8vw, 100px); border-radius: 7px; color: #FFB800; font: 700 clamp(40px, 5.4vw, 70px) 'Space Mono', monospace; display: flex; align-items: center; justify-content: center">2</span>
+<span aria-hidden="true" class="db-tile" style="width: clamp(48px, 6vw, 76px); height: clamp(64px, 8vw, 100px); border-radius: 7px; color: #FFB800; font: 700 clamp(40px, 5.4vw, 70px) 'Space Mono', monospace; display: flex; align-items: center; justify-content: center">0</span>
+<span aria-hidden="true" class="db-tile" style="width: clamp(48px, 6vw, 76px); height: clamp(64px, 8vw, 100px); border-radius: 7px; color: #FFB800; font: 700 clamp(40px, 5.4vw, 70px) 'Space Mono', monospace; display: flex; align-items: center; justify-content: center">0</span>
+<span aria-hidden="true" style="font: 700 22px 'Space Mono', monospace; margin-left: 10px">CFD</span>
+</div>
+</div>
+</div>
+
+<!-- radar -->
+<div style="flex: 1 1 360px; display: flex; justify-content: center">
+<div role="img" aria-label="Radar : trois propositions en approche" style="position: relative; width: min(420px, 82vw); aspect-ratio: 1; border-radius: 50%; overflow: hidden; background-color: #06140B; background-image: repeating-radial-gradient(circle at 50% 50%, transparent 0, transparent calc(16.6% - 1.5px), rgba(76,217,100,.35) calc(16.6% - 1.5px), rgba(76,217,100,.35) 16.6%), linear-gradient(rgba(76,217,100,.3), rgba(76,217,100,.3)), linear-gradient(rgba(76,217,100,.3), rgba(76,217,100,.3)); background-size: 100% 100%, 1.5px 100%, 100% 1.5px; background-position: center, center, center; background-repeat: no-repeat; border: 3px solid #1F5A2E; box-shadow: 0 0 80px rgba(76,217,100,.18)">
+<div class="db-sweep" aria-hidden="true" style="position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(from 0deg, rgba(76,217,100,0) 0deg, rgba(76,217,100,0) 290deg, rgba(76,217,100,.55) 359deg, rgba(76,217,100,0) 360deg)"></div>
+<span class="db-ping" aria-hidden="true" style="position: absolute; left: 66%; top: 28%; width: 16px; height: 16px; border-radius: 50%; background: #FFB800; box-shadow: 0 0 18px #FFB800"></span>
+<span class="db-ping" aria-hidden="true" style="position: absolute; left: 30%; top: 62%; width: 16px; height: 16px; border-radius: 50%; background: #FF6A3D; box-shadow: 0 0 18px #FF6A3D; animation-delay: 2.3s"></span>
+<span class="db-ping" aria-hidden="true" style="position: absolute; left: 58%; top: 70%; width: 14px; height: 14px; border-radius: 50%; background: #4CD964; box-shadow: 0 0 18px #4CD964; animation-delay: 3.1s"></span>
+<span aria-hidden="true" style="position: absolute; left: 66%; top: 28%; margin: -22px 0 0 22px; font: 700 12px 'Space Mono', monospace; color: #FFB800">CF 02</span>
+<span aria-hidden="true" style="position: absolute; left: 30%; top: 62%; margin: -22px 0 0 22px; font: 700 12px 'Space Mono', monospace; color: #FF9B7A">CF 05</span>
+<span aria-hidden="true" style="position: absolute; left: 58%; top: 70%; margin: 16px 0 0 18px; font: 700 12px 'Space Mono', monospace; color: #6BE584">CF 03</span>
+</div>
+</div>
+</section>
+
+<!-- RULES signage -->
+<section style="background: #FFB800; color: #09090A">
+<div style="max-width: 1328px; margin: 0 auto; padding: 30px 28px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 22px 32px">
+<div><div style="font: 900 52px/.9 Archivo, system-ui, sans-serif; font-stretch: 70%">10 %</div><div style="font-size: 15px; font-weight: 600">de quorum, sur l'offre au snapshot</div></div>
+<div><div style="font: 900 52px/.9 Archivo, system-ui, sans-serif; font-stretch: 70%">POUR &gt; CONTRE</div><div style="font-size: 15px; font-weight: 600">majorité stricte, l'égalité vaut rejet</div></div>
+<div><div style="font: 900 52px/.9 Archivo, system-ui, sans-serif; font-stretch: 70%">1 H À 14 J</div><div style="font-size: 15px; font-weight: 600">de vote, 1 h sur ce déploiement Sepolia</div></div>
+<div><div style="font: 900 52px/.9 Archivo, system-ui, sans-serif; font-stretch: 70%">100 CFD</div><div style="font-size: 15px; font-weight: 600">minimum pour proposer un gel</div></div>
+</div>
+</section>
+
+<main style="max-width: 1328px; margin: 0 auto; padding: 88px 28px 112px; display: flex; flex-direction: column; gap: 64px">
+
+<section style="display: flex; flex-direction: column; gap: 24px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 12px">
+<h2 style="margin: 0; font: 900 clamp(44px, 6.4vw, 96px)/.86 Archivo, system-ui, sans-serif; font-stretch: 68%; text-transform: uppercase">Demandes <span style="color: #FFB800">en approche</span></h2>
+<span style="font: 400 12px 'Space Mono', monospace; letter-spacing: .1em; color: #A9A9B2">PROPOSITIONS D'EXEMPLE : VOTEZ POUR VOIR LES COMPTEURS RÉAGIR</span>
+</div>
+
+<sc-for list="{{ proposals }}" as="p" hint-placeholder-count="3">
+<article style="border: 1.5px solid {{ p.bd }}; border-radius: 10px; background: #0E0E10; padding: clamp(20px, 2.6vw, 32px); display: flex; flex-wrap: wrap; gap: 32px">
+
+<div style="flex: 1 1 340px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px; font: 700 12px 'Space Mono', monospace; letter-spacing: .12em">
+<span style="display: inline-flex; align-items: center; gap: 10px; color: {{ p.tagFg }}"><span class="{{ p.lamp }}" style="width: 12px; height: 12px; border-radius: 50%; background: {{ p.tagFg }}; box-shadow: 0 0 12px {{ p.tagFg }}"></span>{{ p.tag }}</span>
+<span style="color: #A9A9B2">PROPOSITION #{{ p.id }}</span>
+</div>
+<h3 style="margin: 0; font: 900 clamp(30px, 3.4vw, 46px)/.95 Archivo, system-ui, sans-serif; font-stretch: 72%; text-transform: uppercase">{{ p.title }}</h3>
+<p style="margin: 0; font-size: 16px; color: #D9D7CF">{{ p.desc }}</p>
+<div style="display: flex; flex-wrap: wrap; gap: 6px 20px; font: 400 12px 'Space Mono', monospace; letter-spacing: .06em; color: #A9A9B2; margin-top: auto; padding-top: 8px">
+<span>OFFRE AU SNAPSHOT : {{ p.supply }} CFD</span>
+<span>{{ p.timing }}</span>
+</div>
+</div>
+
+<div style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; font: 700 13px 'Space Mono', monospace; letter-spacing: .12em"><span>POUR</span><span style="font-size: 26px; letter-spacing: 0; color: #FFB800">{{ p.forTxt }}</span></div>
+<div style="height: 18px; border-radius: 3px; background: #2A2A2E; overflow: hidden"><div class="db-bar" style="height: 100%; width: {{ p.forW }}; background: #FFB800"></div></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; font: 700 13px 'Space Mono', monospace; letter-spacing: .12em"><span>CONTRE</span><span style="font-size: 26px; letter-spacing: 0">{{ p.againstTxt }}</span></div>
+<div style="height: 18px; border-radius: 3px; background: #2A2A2E; overflow: hidden"><div class="db-bar" style="height: 100%; width: {{ p.againstW }}; background: #D9D7CF"></div></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px; padding-top: 4px">
+<div style="display: flex; justify-content: space-between; font: 400 12px 'Space Mono', monospace; letter-spacing: .06em"><span style="color: #D9D7CF">QUORUM · {{ p.quorumTxt }} CFD REQUIS</span><span style="font-weight: 700; color: {{ p.qFg }}">{{ p.qLabel }}</span></div>
+<div style="height: 6px; border-radius: 3px; background: #2A2A2E; overflow: hidden"><div class="db-bar" style="height: 100%; width: {{ p.qW }}; background: {{ p.qFg }}"></div></div>
+</div>
+</div>
+
+<div style="flex: 0 1 250px; min-width: 210px; display: flex; flex-direction: column; justify-content: center; gap: 8px">
+<sc-if value="{{ p.canVote }}" hint-placeholder-val="{{ true }}">
+<button type="button" class="db-btn" onClick="{{ p.voteFor }}" style="min-height: 60px; border: 0; border-radius: 6px; background: #FFB800; color: #09090A; font: 700 14px 'Space Mono', monospace; letter-spacing: .08em; cursor: pointer">POUR · AUTORISER</button>
+<button type="button" class="db-btn" onClick="{{ p.voteAgainst }}" style="min-height: 60px; border: 1.5px solid #5A5A62; border-radius: 6px; background: #1C1C1F; color: #F2F0E8; font: 700 14px 'Space Mono', monospace; letter-spacing: .08em; cursor: pointer">CONTRE · REFUSER</button>
+<span style="font: 400 12px 'Space Mono', monospace; color: #A9A9B2; text-align: center">VOTRE POIDS : 1 200 CFD</span>
+</sc-if>
+<sc-if value="{{ p.voted }}" hint-placeholder-val="{{ false }}">
+<div class="db-tile" style="border-radius: 8px; padding: 20px 16px; display: flex; flex-direction: column; gap: 6px; text-align: center">
+<span style="font: 400 12px 'Space Mono', monospace; letter-spacing: .12em; color: #A9A9B2">VOTRE VOTE</span>
+<span style="font: 700 40px/1.1 'Space Mono', monospace; color: #FFB800">{{ p.myVote }}</span>
+<span style="font: 400 12px 'Space Mono', monospace; color: #D9D7CF">1 200 CFD COMPTÉS</span>
+</div>
+</sc-if>
+<sc-if value="{{ p.canExec }}" hint-placeholder-val="{{ false }}">
+<button type="button" class="db-btn" onClick="{{ p.exec }}" style="min-height: 60px; border: 0; border-radius: 6px; background: #4CD964; color: #09090A; font: 700 14px 'Space Mono', monospace; letter-spacing: .08em; cursor: pointer">EXÉCUTER · DÉCOLLAGE</button>
+<span style="font: 400 12px 'Space Mono', monospace; color: #A9A9B2; text-align: center">N'IMPORTE QUI PEUT EXÉCUTER UNE PROPOSITION ADOPTÉE</span>
+</sc-if>
+<sc-if value="{{ p.executed }}" hint-placeholder-val="{{ false }}">
+<div style="border-radius: 8px; padding: 20px 16px; display: flex; flex-direction: column; gap: 6px; text-align: center; background: #0F2E17">
+<span style="font: 700 30px/1.1 'Space Mono', monospace; color: #6BE584">DÉCOLLÉ</span>
+<span style="font: 400 12px 'Space Mono', monospace; color: #D9D7CF">1,225 ETH AU CLUB · 0,025 ETH DE FRAIS</span>
+</div>
+</sc-if>
+</div>
+
+</article>
+</sc-for>
+</section>
+
+<div style="background: #FFB800; color: #09090A; border-radius: 10px; padding: clamp(28px, 4vw, 52px); display: flex; flex-direction: column; gap: 14px">
+<h2 style="margin: 0; font: 900 clamp(40px, 5.4vw, 80px)/.86 Archivo, system-ui, sans-serif; font-stretch: 68%; text-transform: uppercase">Pourquoi un snapshot ?</h2>
+<p style="margin: 0; font-size: 19px; font-weight: 500; max-width: 760px">Un attaquant qui emprunte des CFD par flash loan les obtient dans le bloc courant. Le vote lit le bloc précédent : son poids est nul.</p>
+</div>
+
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2500}}'>
+class Component extends DCLogic {
+renderVals() {
+var self = this;
+var s = this.state || {};
+var votes = s.votes || {};
+var executed = !!s.executed;
+var W = 1200;
+var fr = function (x) { return x.toLocaleString('fr-FR'); };
+var base = [
+{ id: 7, kind: 'release', open: true, title: 'CF 02 · Débloquer le jalon 2 du Hackathon IA 24 h', desc: 'Le Club IA demande la deuxième tranche, soit 25 % de la collecte (1,50 ETH).', f: 3720, a: 1080, supply: 14300, timing: 'SE TERMINE DANS 38 MIN' },
+{ id: 8, kind: 'freeze', open: true, title: 'CF 05 · Geler la campagne « Voyage express »', desc: 'Score de risque IA de 78, niveau Élevé. Si le gel est adopté, chaque contributeur récupère 100 % de sa mise.', f: 900, a: 250, supply: 17600, timing: 'SE TERMINE DANS 52 MIN' },
+{ id: 6, kind: 'release', open: false, title: 'CF 03 · Débloquer le jalon 1 du Capture The Flag', desc: 'Le Club Cybersécurité demande la première tranche, soit 50 % de la collecte (1,25 ETH).', f: 2500, a: 0, supply: 9000, timing: 'VOTE CLOS' }
+];
+var proposals = base.map(function (p) {
+var mine = votes[p.id];
+var f = p.f + (mine === 'for' ? W : 0);
+var a = p.a + (mine === 'against' ? W : 0);
+var total = f + a;
+var quorum = Math.ceil(p.supply / 10);
+var reached = total >= quorum;
+var max = Math.max(f, a, 1);
+var passed = !p.open && reached && f > a;
+var freeze = p.kind === 'freeze' && p.open;
+return {
+id: p.id, title: p.title, desc: p.desc, timing: p.timing,
+supply: fr(p.supply), forTxt: fr(f), againstTxt: fr(a), quorumTxt: fr(quorum),
+forW: (f / max * 100) + '%', againstW: (a / max * 100) + '%',
+qW: Math.min(100, total / quorum * 100) + '%',
+qLabel: reached ? 'ATTEINT' : fr(total) + ' / ' + fr(quorum),
+qFg: reached ? '#4CD964' : '#FF9B7A',
+tag: p.open ? (freeze ? 'DEMANDE DE GEL · VOTE EN COURS' : 'DEMANDE DE DÉBLOCAGE · VOTE EN COURS') : (executed ? 'EXÉCUTÉE' : 'ADOPTÉE · PRÊTE AU DÉCOLLAGE'),
+tagFg: freeze ? '#FF9B7A' : (p.open ? '#FFB800' : '#6BE584'),
+lamp: p.open ? 'db-blink' : '',
+bd: freeze ? '#FF6A3D' : (p.open ? '#FFB800' : '#3A3A40'),
+canVote: p.open && !mine,
+voted: p.open && !!mine,
+myVote: mine === 'for' ? 'POUR' : 'CONTRE',
+canExec: passed && !executed,
+executed: passed && executed,
+voteFor: function () { var v = Object.assign({}, votes); v[p.id] = 'for'; self.setState({ votes: v }); },
+voteAgainst: function () { var v = Object.assign({}, votes); v[p.id] = 'against'; self.setState({ votes: v }); },
+exec: function () { self.setState({ executed: true }); }
+};
+});
+return { proposals: proposals };
+}
+}
+</script>
+</body>
+</html>

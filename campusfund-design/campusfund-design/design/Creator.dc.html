@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>CampusFund — Plan de vol (espace porteur)</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Archivo:wdth,wght@62..125,400..900&display=swap">
+<style>
+body{margin:0;background:#09090A}
+a{color:#F2F0E8}a:hover{color:#FFB800}
+.db-tile{background:linear-gradient(#2A2A2E 0,#232326 48.5%,#050506 48.5%,#050506 51.5%,#1C1C1F 51.5%,#17171A 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 6px 14px rgba(0,0,0,.6)}
+.db-blink{animation:dbblink 1s steps(2,jump-none) infinite}
+.db-btn{transition:transform .15s ease,filter .15s ease}
+.db-btn:hover{transform:translateY(-3px);filter:brightness(1.15)}
+.db-ghost:hover{border-color:#FFB800 !important;color:#FFB800 !important}
+.db-step:hover{background:#FFB800 !important;color:#09090A !important}
+.db-seg{transition:flex-grow .4s cubic-bezier(.2,.7,.2,1)}
+.db-in:focus{outline:3px solid #FFB800;outline-offset:2px}
+@keyframes dbblink{0%{opacity:1}100%{opacity:.2}}
+@media (prefers-reduced-motion:reduce){.db-blink{animation:none}.db-seg{transition:none}}
+</style>
+</helmet>
+<div style="background-color: #09090A; background-image: radial-gradient(rgba(255,255,255,.05) 1px, transparent 1px); background-size: 14px 14px; color: #F2F0E8; font-family: Archivo, system-ui, sans-serif; font-size: 17px; line-height: 1.5; overflow-x: hidden">
+
+<header style="max-width: 1328px; margin: 0 auto; padding: 26px 28px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<a href="Main.dc.html" aria-label="CampusFund, accueil" style="display: flex; align-items: center; gap: 14px; text-decoration: none; color: #F2F0E8">
+<span aria-hidden="true" style="display: flex; gap: 4px">
+<span style="width: 38px; height: 50px; border-radius: 5px; background: linear-gradient(#FFC42E 0, #FFC42E 48%, #09090A 48%, #09090A 52%, #F0A800 52%); color: #09090A; font: 700 34px 'Space Mono', monospace; display: flex; align-items: center; justify-content: center">C</span>
+<span style="width: 38px; height: 50px; border-radius: 5px; background: linear-gradient(#2A2A2E 0, #2A2A2E 48%, #09090A 48%, #09090A 52%, #1D1D20 52%); color: #FFB800; font: 700 34px 'Space Mono', monospace; display: flex; align-items: center; justify-content: center">F</span>
+</span>
+<span aria-hidden="true" style="font: 700 18px 'Space Mono', monospace; letter-spacing: .22em">CAMPUSFUND</span>
+</a>
+<nav aria-label="Navigation principale" style="display: flex; flex-wrap: wrap; gap: 8px 34px; font: 400 14px 'Space Mono', monospace; letter-spacing: .1em">
+<a href="Main.dc.html" style="text-decoration: none; padding: 14px 0">DÉPARTS</a>
+<a href="Governance.dc.html" style="text-decoration: none; padding: 14px 0">TOUR DE CONTRÔLE</a>
+<a href="Creator.dc.html" style="text-decoration: none; padding: 14px 0; color: #FFB800">PLAN DE VOL</a>
+</nav>
+<span style="display: inline-flex; align-items: center; min-height: 48px; padding: 0 18px; border-radius: 6px; background: #1C1C1F; font: 400 13px 'Space Mono', monospace">[0x… ADRESSE DU CLUB]</span>
+</header>
+
+<main style="max-width: 1328px; margin: 0 auto; padding: 20px 28px 112px; display: flex; flex-direction: column; gap: 48px">
+
+<div style="display: flex; flex-direction: column; gap: 18px">
+<span style="font: 400 13px 'Space Mono', monospace; letter-spacing: .14em; color: #FFB800">ESPACE PORTEUR · NOUVELLE CAMPAGNE</span>
+<h1 style="margin: 0; font: 900 clamp(60px, 10.4vw, 170px)/.8 Archivo, system-ui, sans-serif; font-stretch: 64%; text-transform: uppercase">Déposez votre<br><span style="color: #FFB800">plan de vol.</span></h1>
+<p style="margin: 6px 0 0; max-width: 620px; font-size: 20px; color: #D9D7CF">Fixez l'objectif, la durée et les escales. Chaque escale est un jalon : sa tranche ne partira qu'après un vote de la DAO.</p>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 36px; align-items: flex-start">
+
+<!-- FORM -->
+<form style="flex: 999 1 600px; min-width: 0; display: flex; flex-direction: column; gap: 32px; margin: 0">
+
+<div style="display: flex; flex-direction: column; gap: 10px">
+<label for="cf-title" style="font: 700 12px 'Space Mono', monospace; letter-spacing: .14em; color: #A9A9B2">01 · NOM DE LA CAMPAGNE</label>
+<input id="cf-title" class="db-in db-tile" type="text" placeholder="EX. HACKATHON IA 24 H" value="{{ title }}" onChange="{{ onTitle }}" style="height: 72px; border: 0; border-radius: 8px; padding: 0 20px; font: 700 26px 'Space Mono', monospace; letter-spacing: .04em; color: #F2F0E8; text-transform: uppercase; min-width: 0">
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 20px">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<label for="cf-goal" style="font: 700 12px 'Space Mono', monospace; letter-spacing: .14em; color: #A9A9B2">02 · OBJECTIF EN ETH</label>
+<div class="db-tile" style="display: flex; align-items: center; gap: 12px; border-radius: 8px; padding: 0 20px">
+<input id="cf-goal" class="db-in" type="number" min="0" step="0.1" inputmode="decimal" value="{{ goal }}" onChange="{{ onGoal }}" style="flex: 1 1 0; min-width: 0; height: 72px; border: 0; background: transparent; font: 700 40px 'Space Mono', monospace; color: #FFB800">
+<span style="font: 700 16px 'Space Mono', monospace">ETH</span>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<label for="cf-days" style="font: 700 12px 'Space Mono', monospace; letter-spacing: .14em; color: #A9A9B2">03 · DURÉE DE LA COLLECTE</label>
+<div class="db-tile" style="display: flex; align-items: center; gap: 12px; border-radius: 8px; padding: 0 20px">
+<input id="cf-days" class="db-in" type="number" min="1" max="90" step="1" inputmode="numeric" value="{{ days }}" onChange="{{ onDays }}" style="flex: 1 1 0; min-width: 0; height: 72px; border: 0; background: transparent; font: 700 40px 'Space Mono', monospace; color: #FFB800">
+<span style="font: 700 16px 'Space Mono', monospace">JOURS</span>
+</div>
+<span style="font: 400 12px 'Space Mono', monospace; color: #A9A9B2">DE 1 H À 90 JOURS SUR LE CONTRAT</span>
+</div>
+</div>
+
+<!-- Jalons -->
+<fieldset style="border: 0; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; min-width: 0">
+<legend style="padding: 0; margin-bottom: 10px; font: 700 12px 'Space Mono', monospace; letter-spacing: .14em; color: #A9A9B2">04 · ESCALES (2 À 5 JALONS, TOTAL 100 %)</legend>
+<div style="display: flex; flex-direction: column; gap: 5px">
+<sc-for list="{{ jalons }}" as="j" hint-placeholder-count="3">
+<div class="db-tile" style="border-radius: 6px; padding: 12px 14px 12px 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; font: 700 18px 'Space Mono', monospace">
+<span style="color: #A9A9B2; flex: 0 0 34px">{{ j.n }}</span>
+<span style="flex: 1 1 150px; letter-spacing: .04em">ESCALE {{ j.i }}</span>
+<span style="flex: 0 0 120px; color: #D9D7CF; font-weight: 400">{{ j.eth }} ETH</span>
+<div style="display: flex; align-items: center; gap: 6px">
+<button type="button" class="db-step" onClick="{{ j.minus }}" aria-label="Retirer 5 % à l'escale {{ j.i }}" style="width: 46px; height: 46px; border-radius: 6px; border: 1.5px solid #5A5A62; background: #09090A; color: #F2F0E8; font: 700 22px 'Space Mono', monospace; cursor: pointer">−</button>
+<span style="width: 84px; text-align: center; font-size: 26px; color: #FFB800">{{ j.pct }} %</span>
+<button type="button" class="db-step" onClick="{{ j.plus }}" aria-label="Ajouter 5 % à l'escale {{ j.i }}" style="width: 46px; height: 46px; border-radius: 6px; border: 1.5px solid #5A5A62; background: #09090A; color: #F2F0E8; font: 700 22px 'Space Mono', monospace; cursor: pointer">+</button>
+</div>
+<sc-if value="{{ j.canRemove }}" hint-placeholder-val="{{ true }}">
+<button type="button" class="db-ghost" onClick="{{ j.remove }}" aria-label="Supprimer l'escale {{ j.i }}" style="width: 46px; height: 46px; border-radius: 6px; border: 1.5px solid #5A5A62; background: transparent; color: #A9A9B2; cursor: pointer; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="square" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+</sc-if>
+</div>
+</sc-for>
+</div>
+<sc-if value="{{ canAdd }}" hint-placeholder-val="{{ true }}">
+<button type="button" class="db-ghost" onClick="{{ add }}" style="align-self: flex-start; min-height: 48px; padding: 0 20px; border-radius: 6px; border: 1.5px dashed #5A5A62; background: transparent; color: #F2F0E8; font: 700 13px 'Space Mono', monospace; letter-spacing: .1em; cursor: pointer">+ AJOUTER UNE ESCALE</button>
+</sc-if>
+</fieldset>
+
+<!-- Preview + sum -->
+<div style="border: 1.5px solid {{ sumFg }}; border-radius: 10px; background: #0E0E10; padding: 24px; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px">
+<span style="font: 700 12px 'Space Mono', monospace; letter-spacing: .14em; color: #A9A9B2">ITINÉRAIRE DES TRANCHES</span>
+<span style="display: inline-flex; align-items: center; gap: 10px; font: 700 14px 'Space Mono', monospace; letter-spacing: .08em; color: {{ sumFg }}"><span style="width: 12px; height: 12px; border-radius: 50%; background: {{ sumFg }}; box-shadow: 0 0 12px {{ sumFg }}"></span>TOTAL {{ sum }} % · {{ sumMsg }}</span>
+</div>
+<div style="display: flex; gap: 4px; height: 60px">
+<sc-for list="{{ jalons }}" as="j" hint-placeholder-count="3">
+<div class="db-seg" style="flex: {{ j.pct }} 1 0; min-width: 0; background: #FFB800; color: #09090A; border-radius: 4px; display: flex; align-items: center; justify-content: center; font: 700 15px 'Space Mono', monospace; overflow: hidden; white-space: nowrap">{{ j.pct }} %</div>
+</sc-for>
+</div>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px">
+<button type="button" class="db-btn" onClick="{{ publish }}" aria-disabled="{{ invalid }}" style="min-height: 68px; padding: 0 34px; border: 0; border-radius: 6px; background: {{ pubBg }}; color: {{ pubFg }}; font: 700 16px 'Space Mono', monospace; letter-spacing: .08em; cursor: pointer">{{ pubLabel }}</button>
+<span style="flex: 1 1 280px; font-size: 15px; color: #C9C7C0">{{ pubNote }}</span>
+</div>
+</form>
+
+<!-- MY FLIGHTS -->
+<aside style="flex: 1 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+<h2 style="margin: 0; font: 900 52px/.86 Archivo, system-ui, sans-serif; font-stretch: 68%; text-transform: uppercase">Mes vols <span style="color: #FFB800">en cours</span></h2>
+<div style="background: #F2F0E8; color: #09090A; border-radius: 14px; overflow: hidden">
+<div style="background: #FFB800; padding: 12px 22px; display: flex; justify-content: space-between; font: 700 12px 'Space Mono', monospace; letter-spacing: .14em"><span>VOL CF 03 · EXEMPLE</span><span>FINANCÉE</span></div>
+<div style="padding: 22px; display: flex; flex-direction: column; gap: 16px">
+<div style="font: 900 38px/.92 Archivo, system-ui, sans-serif; font-stretch: 72%; text-transform: uppercase">Capture The Flag inter-écoles</div>
+<div style="display: flex; gap: 4px; height: 16px"><div style="flex: 50 1 0; background: #09090A; border-radius: 3px"></div><div style="flex: 30 1 0; border: 2px solid #09090A; box-sizing: border-box; border-radius: 3px"></div><div style="flex: 20 1 0; border: 2px solid #09090A; box-sizing: border-box; border-radius: 3px"></div></div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; font: 700 15px 'Space Mono', monospace">
+<div><div style="font: 400 11px 'Space Mono', monospace; letter-spacing: .14em; color: #55554F">COLLECTÉ</div>2,50 ETH</div>
+<div><div style="font: 400 11px 'Space Mono', monospace; letter-spacing: .14em; color: #55554F">REÇU</div>1,225 ETH</div>
+<div><div style="font: 400 11px 'Space Mono', monospace; letter-spacing: .14em; color: #55554F">ESCALE 1 · 50 %</div>VERSÉE</div>
+<div><div style="font: 400 11px 'Space Mono', monospace; letter-spacing: .14em; color: #55554F">ESCALE 2 · 30 %</div>{{ reqState }}</div>
+</div>
+<sc-if value="{{ canRequest }}" hint-placeholder-val="{{ true }}">
+<button type="button" class="db-btn" onClick="{{ request }}" style="min-height: 56px; border: 0; border-radius: 6px; background: #09090A; color: #F2F0E8; font: 700 13px 'Space Mono', monospace; letter-spacing: .08em; cursor: pointer">DEMANDER LE DÉBLOCAGE DU JALON 2</button>
+</sc-if>
+<sc-if value="{{ requested }}" hint-placeholder-val="{{ false }}">
+<a href="Governance.dc.html" style="display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 56px; border-radius: 6px; border: 2px solid #09090A; color: #09090A; font: 700 13px 'Space Mono', monospace; letter-spacing: .08em; text-decoration: none"><span class="db-blink" style="width: 10px; height: 10px; border-radius: 50%; background: #09090A"></span>PROPOSITION OUVERTE · SUIVRE LE VOTE</a>
+</sc-if>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 5px; font-size: 15px">
+<div class="db-tile" style="border-radius: 6px; padding: 16px 18px"><strong style="font: 700 12px 'Space Mono', monospace; letter-spacing: .12em; color: #FFB800">ORDRE DES ESCALES</strong><br>Les jalons sont approuvés dans l'ordre. Le dernier récupère la poussière d'arrondi.</div>
+<div class="db-tile" style="border-radius: 6px; padding: 16px 18px"><strong style="font: 700 12px 'Space Mono', monospace; letter-spacing: .12em; color: #FFB800">FRAIS</strong><br>2 % prélevés sur chaque tranche au moment du déblocage, rien à la contribution.</div>
+<div class="db-tile" style="border-radius: 6px; padding: 16px 18px"><strong style="font: 700 12px 'Space Mono', monospace; letter-spacing: .12em; color: #FFB800">90 JOURS SANS APPROBATION</strong><br>N'importe qui peut annuler la campagne : les contributeurs sont remboursés.</div>
+</div>
+</aside>
+
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2000}}'>
+class Component extends DCLogic {
+renderVals() {
+var self = this;
+var s = this.state || {};
+var title = s.title != null ? s.title : '';
+var goal = s.goal != null ? s.goal : '4';
+var days = s.days != null ? s.days : '30';
+var list = s.jalons || [40, 35, 25];
+var g = parseFloat(String(goal).replace(',', '.')); if (!isFinite(g) || g < 0) g = 0;
+var d = parseFloat(days); if (!isFinite(d)) d = 0;
+var fr = function (x) { return x.toLocaleString('fr-FR', { maximumFractionDigits: 3 }); };
+var setJ = function (arr) { self.setState({ jalons: arr, published: false }); };
+var sum = list.reduce(function (a, b) { return a + b; }, 0);
+var jalons = list.map(function (pct, i) {
+return {
+n: '0' + (i + 1), i: i + 1, pct: pct, eth: fr(g * pct / 100),
+canRemove: list.length > 2,
+minus: function () { var a = list.slice(); a[i] = Math.max(5, a[i] - 5); setJ(a); },
+plus: function () { var a = list.slice(); a[i] = Math.min(95, a[i] + 5); setJ(a); },
+remove: function () { var a = list.slice(); a.splice(i, 1); setJ(a); }
+};
+});
+var okSum = sum === 100;
+var okRest = g > 0 && d >= 1 && d <= 90 && String(title).trim().length > 0;
+var valid = okSum && okRest;
+var published = !!s.published && valid;
+var G = '#4CD964', R = '#FF9B7A';
+var sumMsg = okSum ? 'EXACT' : (sum < 100 ? 'IL MANQUE ' + (100 - sum) + ' %' : (sum - 100) + ' % EN TROP');
+var pubNote = published ? 'Exemple : sur la plateforme réelle, MetaMask demande ici la signature de la transaction.' : (valid ? 'Tout est en ordre. La campagne sera créée sur la chaîne après signature dans MetaMask.' : (!okSum ? 'La somme des escales doit faire exactement 100 %.' : 'Renseignez un nom, un objectif supérieur à 0 et une durée de 1 à 90 jours.'));
+return {
+title: title, goal: goal, days: days,
+onTitle: function (e) { self.setState({ title: e.target.value, published: false }); },
+onGoal: function (e) { self.setState({ goal: e.target.value, published: false }); },
+onDays: function (e) { self.setState({ days: e.target.value, published: false }); },
+jalons: jalons,
+canAdd: list.length < 5,
+add: function () { setJ(list.concat([5])); },
+sum: sum, sumMsg: sumMsg, sumFg: okSum ? G : R,
+invalid: !valid,
+publish: function () { if (valid) self.setState({ published: true }); },
+pubBg: published ? '#4CD964' : (valid ? '#FFB800' : '#2A2A2E'),
+pubFg: valid ? '#09090A' : '#A9A9B2',
+pubLabel: published ? 'PLAN DE VOL DÉPOSÉ' : 'PUBLIER LA CAMPAGNE',
+pubNote: pubNote,
+canRequest: !s.requested, requested: !!s.requested,
+reqState: s.requested ? 'VOTE EN COURS' : 'VERROUILLÉE',
+request: function () { self.setState({ requested: true }); }
+};
+}
+}
+</script>
+</body>
+</html>

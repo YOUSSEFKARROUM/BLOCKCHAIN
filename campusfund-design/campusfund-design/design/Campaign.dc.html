@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>CampusFund — Fiche d'une campagne</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Archivo:wdth,wght@62..125,400..900&display=swap">
+<style>
+body{margin:0;background:#09090A}
+a{color:#F2F0E8}a:hover{color:#FFB800}
+.db-tile{background:linear-gradient(#2A2A2E 0,#232326 48.5%,#050506 48.5%,#050506 51.5%,#1C1C1F 51.5%,#17171A 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 6px 14px rgba(0,0,0,.6)}
+.db-blink{animation:dbblink 1s steps(2,jump-none) infinite}
+.db-btn{transition:transform .15s ease,background .15s ease}
+.db-btn:hover{transform:translateY(-3px);background:#FFD04A !important}
+.db-ghost:hover{border-color:#FFB800 !important;color:#FFB800 !important}
+.db-chip:hover{filter:brightness(1.3)}
+.db-bob{animation:dbbob 2.4s ease-in-out infinite}
+.db-pass{animation:dbpass .9s cubic-bezier(.2,.8,.2,1) both}
+.db-in:focus{outline:3px solid #FFB800;outline-offset:2px}
+@keyframes dbblink{0%{opacity:1}100%{opacity:.2}}
+@keyframes dbbob{0%,100%{transform:translate(-50%,-4px)}50%{transform:translate(-50%,4px)}}
+@keyframes dbpass{from{opacity:0;transform:translateY(40px) rotate(-1.5deg)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.db-blink,.db-bob,.db-pass{animation:none}}
+</style>
+</helmet>
+<div style="background-color: #09090A; background-image: radial-gradient(rgba(255,255,255,.05) 1px, transparent 1px); background-size: 14px 14px; color: #F2F0E8; font-family: Archivo, system-ui, sans-serif; font-size: 17px; line-height: 1.5; overflow-x: hidden">
+
+<header style="max-width: 1328px; margin: 0 auto; padding: 26px 28px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<a href="Main.dc.html" aria-label="CampusFund, accueil" style="display: flex; align-items: center; gap: 14px; text-decoration: none; color: #F2F0E8">
+<span aria-hidden="true" style="display: flex; gap: 4px">
+<span style="width: 38px; height: 50px; border-radius: 5px; background: linear-gradient(#FFC42E 0, #FFC42E 48%, #09090A 48%, #09090A 52%, #F0A800 52%); color: #09090A; font: 700 34px 'Space Mono', monospace; display: flex; align-items: center; justify-content: center">C</span>
+<span style="width: 38px; height: 50px; border-radius: 5px; background: linear-gradient(#2A2A2E 0, #2A2A2E 48%, #09090A 48%, #09090A 52%, #1D1D20 52%); color: #FFB800; font: 700 34px 'Space Mono', monospace; display: flex; align-items: center; justify-content: center">F</span>
+</span>
+<span aria-hidden="true" style="font: 700 18px 'Space Mono', monospace; letter-spacing: .22em">CAMPUSFUND</span>
+</a>
+<nav aria-label="Navigation principale" style="display: flex; flex-wrap: wrap; gap: 8px 34px; font: 400 14px 'Space Mono', monospace; letter-spacing: .1em">
+<a href="Main.dc.html" style="text-decoration: none; padding: 14px 0; color: #FFB800">DÉPARTS</a>
+<a href="Governance.dc.html" style="text-decoration: none; padding: 14px 0">TOUR DE CONTRÔLE</a>
+<a href="Creator.dc.html" style="text-decoration: none; padding: 14px 0">PLAN DE VOL</a>
+</nav>
+<button type="button" class="db-ghost" style="min-height: 48px; padding: 0 20px; border-radius: 6px; border: 1.5px solid #5A5A62; background: transparent; color: #F2F0E8; font: 700 13px 'Space Mono', monospace; letter-spacing: .1em; cursor: pointer">CONNECTER METAMASK</button>
+</header>
+
+<main style="max-width: 1328px; margin: 0 auto; padding: 20px 28px 112px; display: flex; flex-direction: column; gap: 44px">
+
+<div style="display: flex; flex-direction: column; gap: 14px">
+<a href="Main.dc.html" style="align-self: flex-start; display: inline-flex; align-items: center; gap: 10px; min-height: 44px; font: 400 13px 'Space Mono', monospace; letter-spacing: .1em; text-decoration: none; color: #A9A9B2">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="square" aria-hidden="true"><path d="M20 12H5M11 18l-6-6 6-6"/></svg>TOUS LES DÉPARTS</a>
+<h1 style="margin: 0; font: 900 clamp(56px, 9.6vw, 156px)/.82 Archivo, system-ui, sans-serif; font-stretch: 66%; text-transform: uppercase">Hackathon <span style="color: #FFB800">IA 24 h</span></h1>
+<p style="margin: 6px 0 0; max-width: 700px; font-size: 19px; color: #D9D7CF">[Description de la campagne, lue depuis les métadonnées IPFS du porteur.]</p>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 36px; align-items: flex-start">
+
+<div style="flex: 999 1 600px; min-width: 0; display: flex; flex-direction: column; gap: 56px">
+
+<!-- BOARDING PASS -->
+<section class="db-pass" aria-label="Carte d'embarquement de la campagne" style="background: #F2F0E8; color: #09090A; border-radius: 18px; overflow: hidden; display: flex; flex-wrap: wrap; box-shadow: 0 30px 80px rgba(0,0,0,.7)">
+<div style="flex: 999 1 420px; min-width: 0; display: flex; flex-direction: column">
+<div style="background: #FFB800; padding: 14px 28px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; font: 700 13px 'Space Mono', monospace; letter-spacing: .14em"><span>CARTE D'EMBARQUEMENT</span><span>VOL CF 02 · EXEMPLE</span></div>
+<div style="padding: 26px 28px 30px; display: flex; flex-direction: column; gap: 26px">
+<div style="display: flex; align-items: center; gap: 18px">
+<div><div style="font: 400 11px 'Space Mono', monospace; letter-spacing: .14em; color: #55554F">COLLECTÉ</div><div style="font: 900 clamp(48px, 6vw, 84px)/.85 Archivo, system-ui, sans-serif; font-stretch: 70%">6,00</div></div>
+<div style="flex: 1; display: flex; align-items: center; gap: 8px; min-width: 60px" aria-hidden="true"><span style="flex: 1; border-top: 2px dashed #09090A"></span><svg width="34" height="34" viewBox="0 0 24 24" fill="#09090A"><path d="M2 13l20-9-7 18-3.500-7.500z"/></svg><span style="flex: 1; border-top: 2px dashed #09090A"></span></div>
+<div style="text-align: right"><div style="font: 400 11px 'Space Mono', monospace; letter-spacing: .14em; color: #55554F">OBJECTIF</div><div style="font: 900 clamp(48px, 6vw, 84px)/.85 Archivo, system-ui, sans-serif; font-stretch: 70%">6 ETH</div></div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(130px, 100%), 1fr)); gap: 18px 16px; font: 700 16px 'Space Mono', monospace">
+<div><div style="font: 400 11px 'Space Mono', monospace; letter-spacing: .14em; color: #55554F">CLUB</div>CLUB IA</div>
+<div><div style="font: 400 11px 'Space Mono', monospace; letter-spacing: .14em; color: #55554F">STATUT</div>FINANCÉE</div>
+<div><div style="font: 400 11px 'Space Mono', monospace; letter-spacing: .14em; color: #55554F">VERSÉ AU CLUB</div>1,47 ETH</div>
+<div><div style="font: 400 11px 'Space Mono', monospace; letter-spacing: .14em; color: #55554F">EN SÉQUESTRE</div>4,50 ETH</div>
+</div>
+<!-- itinerary -->
+<div style="position: relative; padding: 34px 0 0" role="img" aria-label="Quatre escales : la première versée, la deuxième en cours de vote, les deux dernières verrouillées">
+<div style="position: absolute; left: 12.5%; right: 12.5%; top: 45px; border-top: 3px solid #09090A"></div>
+<div style="position: absolute; left: 37.5%; right: 12.5%; top: 45px; border-top: 3px dashed #F2F0E8"></div>
+<svg class="db-bob" width="30" height="30" viewBox="0 0 24 24" fill="#09090A" style="position: absolute; left: 37.5%; top: 0" aria-hidden="true"><path d="M2 13l20-9-7 18-3.500-7.500z"/></svg>
+<div style="position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); text-align: center; font: 400 12px 'Space Mono', monospace">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px"><span style="width: 24px; height: 24px; border-radius: 50%; background: #09090A; border: 3px solid #09090A; box-sizing: border-box"></span><strong style="font-size: 14px">ESCALE 1</strong><span>25 % · 1,50 ETH</span><span style="font-weight: 700; color: #0B6B2A">VERSÉE</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px"><span class="db-blink" style="width: 24px; height: 24px; border-radius: 50%; background: #FFB800; border: 3px solid #09090A; box-sizing: border-box"></span><strong style="font-size: 14px">ESCALE 2</strong><span>25 % · 1,50 ETH</span><span style="font-weight: 700; background: #FFB800; padding: 0 6px">VOTE EN COURS</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px"><span style="width: 24px; height: 24px; border-radius: 50%; background: #F2F0E8; border: 3px solid #09090A; box-sizing: border-box"></span><strong style="font-size: 14px">ESCALE 3</strong><span>30 % · 1,80 ETH</span><span style="color: #55554F">VERROUILLÉE</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px"><span style="width: 24px; height: 24px; border-radius: 50%; background: #F2F0E8; border: 3px solid #09090A; box-sizing: border-box"></span><strong style="font-size: 14px">ESCALE 4</strong><span>20 % · 1,20 ETH</span><span style="color: #55554F">VERROUILLÉE</span></div>
+</div>
+</div>
+</div>
+</div>
+<div style="flex: 1 1 190px; border-left: 3px dashed #09090A; padding: 26px 24px; display: flex; flex-direction: column; gap: 16px; justify-content: space-between">
+<div><div style="font: 400 11px 'Space Mono', monospace; letter-spacing: .14em; color: #55554F">SCANNER IA</div><div style="display: flex; align-items: baseline; gap: 10px"><span style="font: 900 96px/.85 Archivo, system-ui, sans-serif; font-stretch: 70%">18</span><span style="font: 700 14px 'Space Mono', monospace; color: #0B6B2A">FAIBLE</span></div></div>
+<div aria-hidden="true" style="height: 74px; background-image: repeating-linear-gradient(90deg, #09090A 0, #09090A 3px, transparent 3px, transparent 5px, #09090A 5px, #09090A 6px, transparent 6px, transparent 10px, #09090A 10px, #09090A 14px, transparent 14px, transparent 16px)"></div>
+<div style="font: 400 11px 'Space Mono', monospace; letter-spacing: .08em; color: #55554F">CONTRAT 0xf209…5E7D<br>STATUT ON-CHAIN : SUCCESSFUL</div>
+</div>
+</section>
+
+<!-- ESCALES -->
+<section style="display: flex; flex-direction: column; gap: 20px">
+<h2 style="margin: 0; font: 900 clamp(40px, 5.4vw, 76px)/.9 Archivo, system-ui, sans-serif; font-stretch: 70%; text-transform: uppercase">Escales <span style="color: #FFB800">du vol</span></h2>
+<div style="display: flex; flex-direction: column; gap: 5px">
+
+<div class="db-tile" style="border-radius: 6px; padding: 18px 20px; display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: center; font: 700 17px 'Space Mono', monospace; letter-spacing: .04em">
+<span style="color: #A9A9B2; flex: 0 0 40px">01</span><span style="flex: 1 1 240px">[INTITULÉ DU JALON 1]</span><span style="flex: 0 0 60px">25 %</span><span style="flex: 0 0 110px">1,50 ETH</span>
+<span style="flex: 0 0 200px; display: flex; align-items: center; gap: 12px; color: #4CD964"><span style="width: 12px; height: 12px; border-radius: 50%; background: #4CD964; box-shadow: 0 0 12px #4CD964"></span>VERSÉE</span>
+</div>
+
+<div style="border: 1.5px solid #FFB800; border-radius: 6px; background: #121008; padding: 20px; display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: center; font: 700 17px 'Space Mono', monospace; letter-spacing: .04em">
+<span style="color: #A9A9B2; flex: 0 0 40px">02</span><span style="flex: 1 1 240px">[INTITULÉ DU JALON 2]</span><span style="flex: 0 0 60px">25 %</span><span style="flex: 0 0 110px">1,50 ETH</span>
+<span style="flex: 0 0 200px; display: flex; align-items: center; gap: 12px; color: #FFB800"><span class="db-blink" style="width: 12px; height: 12px; border-radius: 50%; background: #FFB800; box-shadow: 0 0 12px #FFB800"></span>VOTE EN COURS</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; height: 16px; border-radius: 3px; overflow: hidden; background: #2A2A2E"><div style="width: 77.5%; background: #FFB800"></div><div style="width: 22.5%; background: #6E6E78"></div></div>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; font: 400 13px 'Space Mono', monospace; color: #D9D7CF"><span>POUR 3 720 CFD · CONTRE 1 080 CFD</span><span>QUORUM ATTEINT</span></div>
+</div>
+<a href="Governance.dc.html" class="db-btn" style="align-self: flex-start; display: inline-flex; align-items: center; gap: 12px; min-height: 52px; padding: 0 24px; border-radius: 6px; background: #FFB800; color: #09090A; font: 700 14px 'Space Mono', monospace; letter-spacing: .08em; text-decoration: none">VOTER À LA TOUR DE CONTRÔLE
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="square" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+</div>
+
+<div class="db-tile" style="border-radius: 6px; padding: 18px 20px; display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: center; font: 700 17px 'Space Mono', monospace; letter-spacing: .04em">
+<span style="color: #A9A9B2; flex: 0 0 40px">03</span><span style="flex: 1 1 240px">[INTITULÉ DU JALON 3]</span><span style="flex: 0 0 60px">30 %</span><span style="flex: 0 0 110px">1,80 ETH</span>
+<span style="flex: 0 0 200px; display: flex; align-items: center; gap: 12px; color: #A9A9B2"><span style="width: 12px; height: 12px; border-radius: 50%; border: 2px solid #A9A9B2; box-sizing: border-box"></span>VERROUILLÉE</span>
+</div>
+<div class="db-tile" style="border-radius: 6px; padding: 18px 20px; display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: center; font: 700 17px 'Space Mono', monospace; letter-spacing: .04em">
+<span style="color: #A9A9B2; flex: 0 0 40px">04</span><span style="flex: 1 1 240px">[INTITULÉ DU JALON 4]</span><span style="flex: 0 0 60px">20 %</span><span style="flex: 0 0 110px">1,20 ETH</span>
+<span style="flex: 0 0 200px; display: flex; align-items: center; gap: 12px; color: #A9A9B2"><span style="width: 12px; height: 12px; border-radius: 50%; border: 2px solid #A9A9B2; box-sizing: border-box"></span>VERROUILLÉE</span>
+</div>
+</div>
+<p style="margin: 0; font-size: 15px; color: #C9C7C0">Les jalons sont approuvés dans l'ordre, et le dernier récupère la poussière d'arrondi. Les 2 % de frais sont prélevés à chaque déblocage : 1,50 ETH débloqués, 1,47 ETH reçus par le club. Sans approbation pendant 90 jours, n'importe qui peut annuler la campagne et ouvrir les remboursements.</p>
+</section>
+
+<!-- SCANNER -->
+<section style="border: 1.5px solid #3A3A40; border-radius: 10px; background: #0E0E10; padding: clamp(22px, 3vw, 36px); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 32px; align-items: center">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span style="font: 400 12px 'Space Mono', monospace; letter-spacing: .14em; color: #A9A9B2">SCANNER IA · SCORE DE RISQUE</span>
+<div style="display: flex; align-items: center; gap: 16px"><span class="db-tile" style="border-radius: 8px; padding: 6px 18px; font: 700 96px/1.05 'Space Mono', monospace; color: #4CD964">18</span><span style="font: 900 36px/1 Archivo, system-ui, sans-serif; font-stretch: 72%; text-transform: uppercase">Faible</span></div>
+<span style="font-size: 14px; color: #C9C7C0">60 % règles + 40 % Isolation Forest, calculé hors chaîne.</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 14px">
+<div style="position: relative; padding-top: 20px">
+<div style="position: absolute; top: 0; left: 18%; transform: translateX(-50%); width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 12px solid #F2F0E8" aria-hidden="true"></div>
+<div style="display: flex; gap: 4px; height: 24px"><div style="flex: 35 1 0; background: #4CD964; border-radius: 4px 2px 2px 4px"></div><div style="flex: 15 1 0; background: #FFB800; border-radius: 2px"></div><div style="flex: 50 1 0; background: #FF6A3D; border-radius: 2px 4px 4px 2px"></div></div>
+</div>
+<div style="position: relative; height: 18px; font: 400 12px 'Space Mono', monospace; color: #A9A9B2"><span style="position: absolute; left: 0">0</span><span style="position: absolute; left: 35%; transform: translateX(-50%)">35</span><span style="position: absolute; left: 50%; transform: translateX(-50%)">50</span><span style="position: absolute; right: 0">100</span></div>
+<p style="margin: 0; font-size: 15px; color: #D9D7CF">Le score est un signal. Geler une campagne reste une décision de la DAO, proposée par tout détenteur d'au moins 100 CFD.</p>
+</div>
+</section>
+</div>
+
+<!-- TICKET OFFICE -->
+<aside style="flex: 1 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 24px">
+<div style="background: #FFB800; color: #09090A; border-radius: 18px; padding: 30px 28px; display: flex; flex-direction: column; gap: 22px">
+<h2 style="margin: 0; font: 900 64px/.85 Archivo, system-ui, sans-serif; font-stretch: 68%; text-transform: uppercase">Monter<br>à bord</h2>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<label for="cf-amt" style="font: 700 12px 'Space Mono', monospace; letter-spacing: .14em">MONTANT EN ETH</label>
+<div style="display: flex; align-items: center; gap: 12px; background: #09090A; border-radius: 8px; padding: 4px 16px">
+<input id="cf-amt" class="db-in" type="number" min="0" step="0.01" inputmode="decimal" value="{{ amt }}" onChange="{{ onAmt }}" style="flex: 1 1 0; min-width: 0; height: 68px; border: 0; background: transparent; font: 700 44px 'Space Mono', monospace; color: #FFB800">
+<span style="font: 700 16px 'Space Mono', monospace; color: #F2F0E8">ETH</span>
+</div>
+<div role="group" aria-label="Montants rapides" style="display: flex; flex-wrap: wrap; gap: 6px">
+<sc-for list="{{ quick }}" as="q" hint-placeholder-count="4">
+<button type="button" class="db-chip" onClick="{{ q.pick }}" style="min-height: 46px; flex: 1 1 60px; border-radius: 6px; border: 2px solid #09090A; background: {{ q.bg }}; color: {{ q.fg }}; font: 700 15px 'Space Mono', monospace; cursor: pointer">{{ q.label }}</button>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px; border-top: 2px dashed #09090A; padding-top: 18px">
+<span style="font: 700 12px 'Space Mono', monospace; letter-spacing: .14em">VOUS RECEVEZ · DROITS DE VOTE</span>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 4px" role="img" aria-label="{{ cfdLabel }}">
+<sc-for list="{{ digits }}" as="g" hint-placeholder-count="3">
+<span aria-hidden="true" class="db-tile" style="width: 40px; height: 56px; border-radius: 5px; color: #FFB800; font: 700 34px 'Space Mono', monospace; display: flex; align-items: center; justify-content: center">{{ g.ch }}</span>
+</sc-for>
+<span aria-hidden="true" style="font: 700 18px 'Space Mono', monospace; margin-left: 8px">CFD</span>
+</div>
+<div style="display: flex; justify-content: space-between; gap: 12px; font: 400 13px 'Space Mono', monospace"><span>TAUX FIXE</span><span>1 ETH = 1000 CFD</span></div>
+<div style="display: flex; justify-content: space-between; gap: 12px; font: 400 13px 'Space Mono', monospace"><span>FRAIS À LA CONTRIBUTION</span><span>0 %</span></div>
+</div>
+<button type="button" class="db-chip" style="min-height: 64px; border: 0; border-radius: 8px; background: #09090A; color: #F2F0E8; font: 700 16px 'Space Mono', monospace; letter-spacing: .08em; cursor: pointer">CONTRIBUER {{ amtLabel }} ETH</button>
+<p style="margin: 0; font-size: 14px; font-weight: 500">Vos CFD sont vos droits de vote sur chaque tranche. Si la campagne échoue ou est gelée, vous récupérez 100 % de votre mise.</p>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 5px; font: 400 13px 'Space Mono', monospace; letter-spacing: .04em">
+<div class="db-tile" style="border-radius: 6px; padding: 14px 18px; display: flex; justify-content: space-between; gap: 12px"><span style="color: #A9A9B2">PORTEUR</span><span>[0x… ADRESSE DU CLUB]</span></div>
+<div class="db-tile" style="border-radius: 6px; padding: 14px 18px; display: flex; justify-content: space-between; gap: 12px"><span style="color: #A9A9B2">MÉTADONNÉES</span><span>IPFS · [CID]</span></div>
+<div class="db-tile" style="border-radius: 6px; padding: 14px 18px; display: flex; justify-content: space-between; gap: 12px"><span style="color: #A9A9B2">RÉSEAU</span><span>SEPOLIA</span></div>
+</div>
+</aside>
+
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2300}}'>
+class Component extends DCLogic {
+renderVals() {
+var self = this;
+var amt = (this.state && this.state.amt != null) ? this.state.amt : '0.5';
+var n = parseFloat(String(amt).replace(',', '.'));
+if (!isFinite(n) || n < 0) n = 0;
+var fr = function (x, d) { return x.toLocaleString('fr-FR', { maximumFractionDigits: d }); };
+var cfd = String(Math.round(n * 1000 * 100) / 100).replace('.', ',');
+var quick = ['0.1', '0.5', '1', '2'].map(function (v) {
+var on = parseFloat(v) === n;
+return { label: v.replace('.', ','), bg: on ? '#09090A' : 'transparent', fg: on ? '#FFB800' : '#09090A', pick: function () { self.setState({ amt: v }); } };
+});
+return {
+amt: amt,
+onAmt: function (e) { self.setState({ amt: e.target.value }); },
+digits: cfd.split('').slice(0, 10).map(function (ch) { return { ch: ch }; }),
+cfdLabel: cfd + ' CFD',
+amtLabel: fr(n, 4),
+quick: quick
+};
+}
+}
+</script>
+</body>
+</html>
