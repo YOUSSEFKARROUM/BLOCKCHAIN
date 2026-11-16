@@ -199,6 +199,52 @@ contract GovernanceTest is GovernanceBase {
         assertEq(governance.getProposal(pid).forVotes, 10_000 ether);
     }
 
+    /// @dev Le porteur et le bénéficiaire ne votent pas le déblocage de leurs propres fonds, même s'ils
+    ///      ont contribué (sinon 10 % de mise suffiraient à se débloquer seul quand les autres s'abstiennent).
+    function test_ReleaseVote_RevertsForCreatorAndBeneficiary() public {
+        uint256 id = _createCampaign();
+        vm.deal(creator, 2 ether);
+        vm.deal(beneficiary, 2 ether);
+        vm.prank(creator);
+        fund.contribute{value: 2 ether}(id);
+        vm.prank(beneficiary);
+        fund.contribute{value: 2 ether}(id);
+        vm.prank(alice);
+        fund.contribute{value: 6 ether}(id);
+        vm.warp(block.timestamp + DURATION);
+        fund.finalize(id);
+        uint256 pid = _proposeRelease(id);
+
+        assertEq(governance.votingPower(pid, creator), 0);
+        assertEq(governance.votingPower(pid, beneficiary), 0);
+        vm.prank(creator);
+        vm.expectRevert(Governance.NoVotingPower.selector);
+        governance.castVote(pid, true);
+        vm.prank(beneficiary);
+        vm.expectRevert(Governance.NoVotingPower.selector);
+        governance.castVote(pid, true);
+        // le quorum reste calculé sur toute la collecte (10 ETH -> 1000 CFD)
+        assertEq(governance.getProposal(pid).quorum, 1_000 ether);
+    }
+
+    /// @dev La règle ne concerne que les déblocages : le porteur vote un gel comme tout détenteur de CFD.
+    function test_FreezeVote_AllowsCreator() public {
+        uint256 id = _createCampaign();
+        vm.deal(creator, 2 ether);
+        vm.prank(creator);
+        fund.contribute{value: 2 ether}(id);
+        vm.prank(creator);
+        token.delegate(creator);
+        vm.prank(alice);
+        fund.contribute{value: 1 ether}(id);
+        _nextBlock();
+        vm.prank(alice);
+        uint256 pid = governance.proposeFreeze(id, "Suspicion");
+        vm.prank(creator);
+        governance.castVote(pid, false);
+        assertEq(governance.getProposal(pid).againstVotes, 2_000 ether);
+    }
+
     /// @dev Gel : vote de toute la communauté, il faut des CFD délégués au snapshot.
     function test_FreezeVote_RevertsWithoutDelegation() public {
         uint256 id = _createCampaign();

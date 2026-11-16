@@ -11,6 +11,7 @@ import {IVoting} from "./interfaces/IVoting.sol";
 /// @notice Deux types de décisions :
 ///         - MilestoneRelease : débloquer la prochaine tranche d'une campagne réussie. Seuls les
 ///           contributeurs de CETTE campagne votent, avec un poids = leur contribution x 1000.
+///           Le porteur et le bénéficiaire en sont exclus (ils ne valident pas leurs propres fonds).
 ///           Quorum = 10 % des CFD émis par la campagne.
 ///         - FreezeCampaign : geler une campagne suspecte (elle passe en Annulée, remboursements ouverts).
 ///           Toute la communauté vote, avec ses CFD délégués au snapshot. Quorum = 10 % de l'offre au snapshot.
@@ -228,8 +229,12 @@ contract Governance is IVoting, AccessControl {
     }
 
     /// @dev Déblocage : contribution figée à la campagne x taux. Gel : CFD délégués au snapshot.
+    ///      Le porteur et le bénéficiaire ne votent pas le déblocage de leurs propres fonds : sans cela,
+    ///      contribuer 10 % à sa campagne suffirait à atteindre seul le quorum si les autres s'abstiennent.
     function _votingPower(Proposal storage p, address voter) private view returns (uint256) {
         if (p.ptype == ProposalType.MilestoneRelease) {
+            (address creator, address beneficiary) = fund.campaignParties(p.campaignId);
+            if (voter == creator || voter == beneficiary) return 0;
             return fund.contributionOf(p.campaignId, voter) * token.RATE();
         }
         return token.getPastVotes(voter, p.snapshotBlock);
