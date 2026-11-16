@@ -80,7 +80,7 @@ export function Escales({ campaign: c, proposals, metadata, feePercent }: { camp
             );
           }
           return (
-            <li key={i} className="db-tile rounded-md px-5 py-[18px]">
+            <li key={i} className="db-panel rounded-md px-5 py-[18px]">
               <EscaleLine index={i} title={title} bps={c.milestonesBps[i]} amount={amount} state={state} />
               {metadata?.milestones[i]?.description && <p className="m-0 mt-2 pl-0 text-[14px] text-gray sm:pl-16">Preuve attendue : {metadata.milestones[i].description}</p>}
             </li>

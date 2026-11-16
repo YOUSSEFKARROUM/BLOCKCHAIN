@@ -39,7 +39,7 @@ export function FreezeForm({ campaigns, thresholdCfd }: { campaigns: Campaign[];
           <label htmlFor="freeze-campaign" className="tag-b text-gray">
             Campagne
           </label>
-          <select id="freeze-campaign" value={campaignId} onChange={(e) => setCampaignId(e.target.value)} className="field db-tile">
+          <select id="freeze-campaign" value={campaignId} onChange={(e) => setCampaignId(e.target.value)} className="field db-panel">
             <option value="">Choisir…</option>
             {campaigns.map((c) => (
               <option key={c.id} value={c.id}>
@@ -58,7 +58,7 @@ export function FreezeForm({ campaigns, thresholdCfd }: { campaigns: Campaign[];
             maxLength={MAX_REASON}
             onChange={(e) => setReason(e.target.value)}
             placeholder="Ex. : adresses toutes financées par le même compte"
-            className="field db-tile !font-normal"
+            className="field db-panel !font-normal"
           />
         </div>
       </div>

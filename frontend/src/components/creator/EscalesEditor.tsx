@@ -32,7 +32,7 @@ export function EscalesEditor({ escales, goalEth, onChange }: EscalesEditorProps
       <legend className="tag-b mb-2.5 p-0 text-gray">04 · Jalons (2 à 5, total 100 %)</legend>
       <ol className="m-0 flex list-none flex-col gap-[5px] p-0">
         {escales.map((e, i) => (
-          <li key={i} className="db-tile flex flex-col gap-3 rounded-md py-3 pl-5 pr-3.5">
+          <li key={i} className="db-panel flex flex-col gap-3 rounded-md py-3 pl-5 pr-3.5">
             <div className="mono flex flex-wrap items-center gap-x-5 gap-y-2.5 text-[18px] font-bold">
               <span className="flex-[0_0_34px] text-gray">{String(i + 1).padStart(2, "0")}</span>
               <span className="flex-[1_1_150px] tracking-[.04em]">JALON {i + 1}</span>

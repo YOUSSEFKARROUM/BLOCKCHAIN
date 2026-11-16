@@ -203,7 +203,7 @@ export function ProposalCard({ proposal: p, campaign, now, quorumPercent, feePer
           <span className="text-gray">Proposition #{p.id}</span>
           {p.quadratic && <span className="text-gray">Vote quadratique</span>}
         </div>
-        <h3 className="display display-s">{title}</h3>
+        <h3 className="m-0 font-display text-[22px] font-extrabold leading-[1.2]">{title}</h3>
         <p className="m-0 text-[16px] text-soft">{p.description}</p>
         {p.proof && <ProofLink proof={p.proof} />}
         <div className="tag mt-auto flex flex-wrap gap-x-5 gap-y-1.5 pt-2">

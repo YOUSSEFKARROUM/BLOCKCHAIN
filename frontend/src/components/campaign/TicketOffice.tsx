@@ -230,7 +230,7 @@ export function FlightInfo({ campaign: c }: { campaign: Campaign }) {
   return (
     <dl className="mono m-0 flex flex-col gap-[5px] text-[13px] tracking-[.04em]">
       {rows.map((r) => (
-        <div key={r.label} className="db-tile flex justify-between gap-3 rounded-md px-[18px] py-3.5">
+        <div key={r.label} className="db-panel flex justify-between gap-3 rounded-md px-[18px] py-3.5">
           <dt className="font-display text-[14px] text-gray">{r.label}</dt>
           <dd className="m-0 truncate" title={r.title}>
             {r.value}

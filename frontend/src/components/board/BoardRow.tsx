@@ -2,7 +2,7 @@ import Link from "next/link";
 import { StatusLamp } from "./StatusLamp";
 
 /** Grille commune à l'en-tête et aux lignes du tableau des départs (maquette Main). */
-export const BOARD_GRID = "84px 2.2fr 1fr 110px 170px 230px";
+export const BOARD_GRID = "84px 2.6fr 1fr 100px 150px 220px";
 export const BOARD_ROW_BG =
   "linear-gradient(#1E1E21 0, #1A1A1D 48.5%, #050506 48.5%, #050506 51.5%, #161618 51.5%, #121214 100%)";
 
@@ -30,8 +30,8 @@ export function BoardRow({ row, delay }: { row: BoardRowData; delay: number }) {
       aria-label={`Vol ${row.flight}, ${row.name}, ${row.club}, ${row.status}`}
     >
       <span className="text-gray">{row.flight}</span>
-      <span className="truncate uppercase">{row.name}</span>
-      <span className="truncate font-normal uppercase text-soft">{row.club}</span>
+      <span className="truncate font-display text-[18px] tracking-normal">{row.name}</span>
+      <span className="truncate font-display text-[15px] font-medium tracking-normal text-soft">{row.club}</span>
       <span>{row.tranche}</span>
       <span>{row.amount}</span>
       <span className="flex items-center gap-3 uppercase" style={{ color: row.color }}>

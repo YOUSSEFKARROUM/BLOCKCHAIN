@@ -40,7 +40,7 @@ export function VotingPower({ rate }: { rate: number }) {
     return (
       <div className="flex flex-col items-start gap-3">
         <span className="tag">Votre pouvoir de vote</span>
-        <FlapText text="----" label="Pouvoir de vote inconnu : portefeuille non connecté" size="lg" color="var(--gray)" />
+        <p className="m-0 max-w-[420px] text-[16px] text-soft">Connectez un portefeuille pour voir votre pouvoir de vote.</p>
         {hasWallet && (
           <button type="button" onClick={connect} className="btn btn-ghost btn-sm">
             Connecter MetaMask pour voter

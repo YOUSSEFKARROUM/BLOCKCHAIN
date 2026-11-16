@@ -82,7 +82,7 @@ export default function CampaignPage() {
 
       <div className="flex flex-wrap items-start gap-9">
         <div className="flex min-w-0 flex-[999_1_600px] flex-col gap-14">
-          <BoardingPass campaign={c} proposals={proposals ?? []} metadata={metadata} risk={risk} now={now} feePercent={rules.feePercent} />
+          <BoardingPass campaign={c} proposals={proposals ?? []} metadata={metadata} now={now} feePercent={rules.feePercent} />
           <Escales campaign={c} proposals={proposals ?? []} metadata={metadata} feePercent={rules.feePercent} />
           <ScannerPanel risk={risk} thresholdCfd={rules.proposalThresholdCfd} />
         </div>

@@ -129,6 +129,11 @@ input[type="number"]::-webkit-inner-spin-button {
     background: linear-gradient(#2a2a2e 0, #232326 48.5%, #050506 48.5%, #050506 51.5%, #1c1c1f 51.5%, #17171a 100%);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 6px 14px rgba(0, 0, 0, 0.6);
   }
+  /* Fond uni, sans charnière : pour tout bloc dont le texte tient sur plusieurs lignes. */
+  .db-panel {
+    background: #1c1c1f;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 6px 14px rgba(0, 0, 0, 0.6);
+  }
   .db-flap {
     display: flex;
     align-items: center;

@@ -152,7 +152,7 @@ export function MyFlights({ campaigns, proposals, now, feePercent }: { campaigns
       ))}
       <ul className="m-0 flex list-none flex-col gap-[5px] p-0 text-[15px]">
         {protocolRules(feePercent).map((r) => (
-          <li key={r.title} className="db-tile rounded-md px-[18px] py-4">
+          <li key={r.title} className="db-panel rounded-md px-[18px] py-4">
             <strong className="tag-b text-amber">{r.title}</strong>
             <br />
             {r.text}

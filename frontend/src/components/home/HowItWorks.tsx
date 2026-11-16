@@ -71,7 +71,7 @@ export function HowItWorks({ rules }: { rules: ProtocolRules }) {
         <div className="flex flex-wrap items-center gap-x-7 gap-y-[18px] rounded-[10px] bg-night px-[30px] py-[26px] text-ticket">
           <span className="tag-b text-[15px] text-alert">Vol annulé ?</span>
           <p className="m-0 flex-[1_1_420px] text-[19px]">
-            Objectif manqué ou gel : <strong className="text-amber">100 % de la mise</strong> rendue.
+            Objectif manqué : <strong className="text-amber">100 % de la mise</strong> rendue. Gel : tout ce qui n&apos;a pas encore été versé.
           </p>
         </div>
       </div>

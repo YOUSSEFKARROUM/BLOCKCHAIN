@@ -1,22 +1,21 @@
 import { PlaneIcon } from "@/components/board/Icons";
 import { deployment } from "@/lib/contracts";
 import { boardStatus, ESCALE_LABELS, type EscaleState, escaleStates, flightCode } from "@/lib/campaignView";
-import { type Campaign, type Proposal, trancheAmounts } from "@/lib/data";
+import { type Campaign, type Proposal, STATUS_LABELS, trancheAmounts } from "@/lib/data";
 import { dateTime, eth, relative, shortAddress } from "@/lib/format";
-import type { RiskEntry } from "@/lib/hooks";
 import type { CampaignMetadata } from "@/lib/metadata";
 
-const ONCHAIN_STATUS = ["Active", "Successful", "Failed", "Cancelled"];
 const INK_SOFT = "#55554F"; // gris sur billet : contraste 6,6:1
 const INK_OK = "#0B6B2A";
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+/** `isRaw` : valeur affichée telle quelle (une adresse Ethereum ne se met pas en capitales). */
+function Field({ label, children, isRaw = false }: { label: string; children: React.ReactNode; isRaw?: boolean }) {
   return (
     <div className="min-w-0">
       <div className="font-display text-[13px] font-medium" style={{ color: INK_SOFT }}>
         {label}
       </div>
-      <div className="break-words uppercase">{children}</div>
+      <div className={`break-words ${isRaw ? "" : "uppercase"}`}>{children}</div>
     </div>
   );
 }
@@ -72,13 +71,12 @@ interface BoardingPassProps {
   campaign: Campaign;
   proposals: Proposal[];
   metadata: CampaignMetadata | null;
-  risk: RiskEntry | undefined;
   now: number;
   feePercent: number;
 }
 
 /** Carte d'embarquement : la campagne résumée sur un billet (maquette Campaign). */
-export function BoardingPass({ campaign: c, proposals, metadata, risk, now, feePercent }: BoardingPassProps) {
+export function BoardingPass({ campaign: c, proposals, metadata, now, feePercent }: BoardingPassProps) {
   const status = boardStatus(c, proposals, now);
   const states = escaleStates(c, proposals);
   const toClub = (c.released * BigInt(10_000 - Math.round(feePercent * 100))) / 10_000n;
@@ -115,27 +113,18 @@ export function BoardingPass({ campaign: c, proposals, metadata, risk, now, feeP
             <Field label="Statut">{status.label}</Field>
             <Field label="Versé au club">{eth(toClub, 3)} ETH</Field>
             <Field label="En séquestre">{eth(escrow > 0n ? escrow : 0n, 3)} ETH</Field>
-            <Field label="Échéance">
+            <Field label={c.deadline <= now ? "Collecte close" : "Fin de la collecte"}>
               <span title={dateTime(c.deadline)}>{relative(c.deadline, now)}</span>
             </Field>
-            <Field label="Bénéficiaire">{shortAddress(c.beneficiary)}</Field>
+            <Field label="Bénéficiaire" isRaw>{shortAddress(c.beneficiary)}</Field>
           </div>
           <Itinerary campaign={c} states={states} metadata={metadata} />
         </div>
       </div>
       <div className="flex flex-[1_1_190px] flex-col justify-between gap-4 border-l-[3px] border-dashed border-night px-6 py-[26px]">
         <div>
-          <div className="font-display text-[13px] font-medium" style={{ color: INK_SOFT }}>Scanner IA</div>
-          {risk ? (
-            <div className="flex flex-wrap items-baseline gap-x-2.5">
-              <span className="display whitespace-nowrap text-[96px]" style={{ fontStretch: "70%", lineHeight: 0.85, overflowWrap: "normal" }}>{Math.round(risk.score)}</span>
-              <span className="mono text-[14px] font-bold uppercase" style={{ color: risk.level === "Faible" ? INK_OK : "#9A2A00" }}>
-                {risk.level}
-              </span>
-            </div>
-          ) : (
-            <p className="mono m-0 mt-2 text-[13px] font-bold">NON CALCULÉ</p>
-          )}
+          <div className="font-display text-[13px] font-medium" style={{ color: INK_SOFT }}>Vol</div>
+          <span className="display whitespace-nowrap text-[64px]" style={{ fontStretch: "70%", lineHeight: 0.9, overflowWrap: "normal" }}>{flightCode(c.id)}</span>
         </div>
         <div
           aria-hidden="true"
@@ -148,7 +137,7 @@ export function BoardingPass({ campaign: c, proposals, metadata, risk, now, feeP
         <div className="mono text-[12px]" style={{ color: INK_SOFT }}>
           CONTRAT {deployment ? shortAddress(deployment.CampusFund) : "—"}
           <br />
-          STATUT ON-CHAIN : {ONCHAIN_STATUS[c.status].toUpperCase()}
+          STATUT SUR LA CHAÎNE : {STATUS_LABELS[c.status].toUpperCase()}
         </div>
       </div>
     </section>

@@ -147,11 +147,11 @@ export function FlightPlanForm() {
       <div className="grid gap-5" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(240px, 100%), 1fr))" }}>
         <div className="flex flex-col gap-2.5">
           <label htmlFor="cf-club" className={LABEL}>05 · Club</label>
-          <input id="cf-club" maxLength={120} value={form.club} onChange={(e) => set({ club: e.target.value })} placeholder="Ex. Club IA" className="field db-tile" />
+          <input id="cf-club" maxLength={120} value={form.club} onChange={(e) => set({ club: e.target.value })} placeholder="Ex. Club IA" className="field db-panel" />
         </div>
         <div className="flex flex-col gap-2.5">
           <label htmlFor="cf-cat" className={LABEL}>06 · Catégorie</label>
-          <select id="cf-cat" value={form.category} onChange={(e) => set({ category: e.target.value })} className="field db-tile">
+          <select id="cf-cat" value={form.category} onChange={(e) => set({ category: e.target.value })} className="field db-panel">
             {CATEGORIES.map((c) => (
               <option key={c}>{c}</option>
             ))}
@@ -164,7 +164,7 @@ export function FlightPlanForm() {
       </div>
       <div className="flex flex-col gap-2.5">
         <label htmlFor="cf-ben" className={LABEL}>08 · Bénéficiaire (wallet du club)</label>
-        <input id="cf-ben" value={form.beneficiary} onChange={(e) => set({ beneficiary: e.target.value })} placeholder={account ?? "0x…"} className="field db-tile !text-[14px]" />
+        <input id="cf-ben" value={form.beneficiary} onChange={(e) => set({ beneficiary: e.target.value })} placeholder={account ?? "0x…"} className="field db-panel !text-[14px]" />
         <span className="mono text-[12px] text-gray">VIDE = VOTRE ADRESSE CONNECTÉE</span>
       </div>
 
