@@ -10,7 +10,8 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "e2e": "node e2e/flows.mjs"
+    "e2e": "node e2e/flows.mjs",
+    "demo:video": "node e2e/demo-video.mjs && python e2e/assemble_video.py"
   },
   "dependencies": {
     "ethers": "6.17.0",
