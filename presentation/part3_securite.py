@@ -53,7 +53,7 @@ def panel(title: str, steps: str, color: str, width: float = 6.0, height: float 
 
 
 class S08Reentrance(CampusSlide):
-    index = 9
+    index = 10
     section = SECURITE
 
     def construct(self) -> None:
@@ -94,7 +94,7 @@ class S08Reentrance(CampusSlide):
 
 
 class S09FlashLoan(CampusSlide):
-    index = 10
+    index = 11
     section = SECURITE
 
     def construct(self) -> None:
@@ -138,7 +138,7 @@ class S09FlashLoan(CampusSlide):
 
 
 class S10GardeFous(CampusSlide):
-    index = 11
+    index = 12
     section = SECURITE
 
     def construct(self) -> None:

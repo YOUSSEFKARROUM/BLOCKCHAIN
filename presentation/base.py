@@ -5,17 +5,16 @@ from manim_slides import Slide
 
 from theme import LINE, NIGHT, footer
 
-TOTAL_SLIDES = 16  # page de garde comprise
+TOTAL_SLIDES = 14  # page de garde comprise
 config.background_color = NIGHT
 
 # Sections annoncées dans le sommaire (numéro, nom)
 PROBLEME = "01 · Problème et idée"
 ARCHITECTURE = "02 · Architecture"
 CYCLE = "03 · Cycle d'une campagne"
-SECURITE = "04 · Sécurité"
-PREUVES = "05 · Preuves et IA"
-DEMO = "06 · Démonstration"
-FIN = "07 · Limites et conclusion"
+DEMO = "04 · Démonstration"
+SECURITE = "05 · Sécurité"
+FIN = "06 · Limites et conclusion"
 
 
 def dot_grid() -> VGroup:
@@ -58,4 +57,4 @@ class CampusSlide(Slide):
         self.next_slide(notes=notes)
 
 
-__all__ = ["ARCHITECTURE", "CYCLE", "CampusSlide", "DEMO", "FIN", "PREUVES", "PROBLEME", "SECURITE", "TOTAL_SLIDES"]
+__all__ = ["ARCHITECTURE", "CYCLE", "CampusSlide", "DEMO", "FIN", "PROBLEME", "SECURITE", "TOTAL_SLIDES"]

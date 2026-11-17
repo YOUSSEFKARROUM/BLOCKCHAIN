@@ -71,10 +71,9 @@ AGENDA = [
     ("01", "Le problème et l'idée", "Pourquoi un club ne doit pas tout recevoir d'un coup"),
     ("02", "Architecture", "Quatre contrats, IPFS, le site et l'IA"),
     ("03", "Le cycle d'une campagne", "Créer, contribuer, prouver, voter, retirer"),
-    ("04", "Sécurité", "The DAO et Beanstalk rejouées, puis bloquées"),
-    ("05", "Preuves et IA", "159 tests et un score de risque honnête"),
-    ("06", "Démonstration", "Le site en ligne sur Sepolia"),
-    ("07", "Limites et conclusion", "Ce qui reste à améliorer"),
+    ("04", "Démonstration", "Le site en ligne sur Sepolia"),
+    ("05", "Sécurité", "The DAO et Beanstalk rejouées, puis bloquées"),
+    ("06", "Limites et conclusion", "Ce qui reste à améliorer"),
 ]
 
 
@@ -89,12 +88,12 @@ class S01Sommaire(CampusSlide):
     index = 2
 
     def construct(self) -> None:
-        title = page_heading("Sommaire", "Le plan", "en sept étapes.")
+        title = page_heading("Sommaire", "Le plan", "en six étapes.")
         self.play(FadeIn(title, shift=DOWN * 0.2))
 
         rows = [agenda_row(*item) for item in AGENDA]
-        left = VGroup(*rows[:4]).arrange(DOWN, aligned_edge=LEFT, buff=0.5)
-        right = VGroup(*rows[4:]).arrange(DOWN, aligned_edge=LEFT, buff=0.5)
+        left = VGroup(*rows[:3]).arrange(DOWN, aligned_edge=LEFT, buff=0.5)
+        right = VGroup(*rows[3:]).arrange(DOWN, aligned_edge=LEFT, buff=0.5)
         columns = VGroup(left, right).arrange(RIGHT, buff=0.9, aligned_edge=UP)
         if columns.width > 12.8:
             columns.scale_to_fit_width(12.8)
@@ -108,7 +107,7 @@ class S01Sommaire(CampusSlide):
             self.play(flip_in(VGroup(*row[0]), lag=0.1), FadeIn(row[1], shift=RIGHT * 0.2), run_time=0.55)
         self.pause(
             "Voici notre plan : le problème et l'idée, l'architecture, le cycle d'une campagne sur un exemple, la "
-            "sécurité avec deux attaques rejouées, nos preuves et l'IA, la démonstration, puis les limites."
+            "la démonstration en direct, la sécurité avec deux attaques rejouées, puis les limites."
         )
 
 
