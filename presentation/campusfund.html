@@ -424,5 +424,20 @@
         }
       );
     </script>
+  <!-- touche E : fin de l'animation -->
+    <script>
+      // Touche E : amène la vidéo de l'étape affichée à sa dernière image. Rien n'est affiché à l'écran.
+      Reveal.addKeyBinding({ keyCode: 69, key: "E", description: "Fin de l'animation" }, () => {
+        const background = Reveal.getSlideBackground(Reveal.getCurrentSlide());
+        const video = background && background.querySelector("video");
+        if (!video) return;
+        const jump = () => {
+          video.pause();
+          video.currentTime = Math.max(0, video.duration - 0.05);
+        };
+        if (Number.isFinite(video.duration)) jump();
+        else video.addEventListener("loadedmetadata", jump, { once: true });
+      });
+    </script>
   </body>
 </html>
