@@ -39,7 +39,18 @@ Export HTML (présentation dans un navigateur, sans Python le jour J) :
 
 ```bash
 python -m manim_slides convert S00PageDeGarde S01Sommaire S02Probleme S03Idee S04Architecture S05Cycle S06Vote S07Garanties S13Demo S08Reentrance S09FlashLoan S10GardeFous S14Limites S15Conclusion campusfund.html --open
+python add_skip_key.py
 ```
+
+Touches utiles dans la version HTML :
+
+| Touche | Effet |
+|---|---|
+| Flèche droite / gauche | Étape suivante / précédente. |
+| **E** | Va directement à la fin de l'animation en cours (rien ne s'affiche à l'écran). |
+| F | Plein écran. |
+
+`add_skip_key.py` ajoute la touche **E** : à relancer après chaque `convert`, qui réécrit le fichier.
 
 ## Minutage (10 minutes)
 
