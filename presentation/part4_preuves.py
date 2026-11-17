@@ -54,7 +54,7 @@ class S13Demo(CampusSlide):
         qr = qr_code(SITE_URL, size=3.0)
         qr_caption = body("Scannez pour ouvrir le site", 24, color=GRAY, weight="BOLD").next_to(qr, DOWN, buff=0.2)
         right = VGroup(qr, qr_caption)
-        layout = VGroup(left, right).arrange(RIGHT, buff=1.0).move_to(UP * 0.15)
+        VGroup(left, right).arrange(RIGHT, buff=1.0).move_to(UP * 0.15)
 
         self.play(flip_in(tiles))
         self.play(FadeIn(url, shift=UP * 0.2), FadeIn(network))

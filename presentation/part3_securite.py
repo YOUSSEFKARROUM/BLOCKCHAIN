@@ -130,7 +130,7 @@ class S09FlashLoan(CampusSlide):
 
         weight_label = body("Poids de l'attaquant", 26, color=INK, weight="BOLD")
         zero = display("0", 140, color=OK)
-        verdict = VGroup(weight_label, zero).arrange(DOWN, buff=0.15).next_to(blocks, RIGHT, buff=0.55)
+        VGroup(weight_label, zero).arrange(DOWN, buff=0.15).next_to(blocks, RIGHT, buff=0.55)
         self.play(FadeIn(weight_label), FadeIn(zero, scale=1.6))
         ours = pill("CampusFund : poids lu au bloc précédent, l'attaque échoue", color=OK, text_color=WHITE, size=24).move_to(naive)
         self.play(Transform(naive, ours))

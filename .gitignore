@@ -40,3 +40,7 @@ broadcast/**/*.lock
 presentation/media/
 presentation/__pycache__/
 frontend/e2e/demo-video/frames/
+
+# Notes de travail internes (consignes données à l'assistant), hors livrable
+PROMPT_*.md
+campusfund-design/campusfund-design/PROMPT_INTEGRATION.md
