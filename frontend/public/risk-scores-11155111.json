@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-16T16:53:38+00:00",
+  "generatedAt": "2026-11-17T00:48:22+00:00",
   "chainId": 11155111,
   "campusFund": "0x9ED175d941378C899576CE5B71103E6185B4a6Ee",
   "method": {
@@ -37,18 +37,18 @@
       "reasons": []
     },
     "1": {
-      "score": 4.5,
+      "score": 8.9,
       "level": "Faible",
       "rulesScore": 0.0,
-      "forestScore": 11.1,
+      "forestScore": 22.3,
       "features": {
         "repeated": 0.0,
         "linked": 0.0,
         "fresh": 0.0,
         "burst": 0.0,
         "top_share": 0.0,
-        "log_n": 0.6931,
-        "n": 1,
+        "log_n": 1.0986,
+        "n": 2,
         "creator_linked": 0.0
       },
       "reasons": []
@@ -88,6 +88,25 @@
       "reasons": []
     },
     "4": {
+      "score": 10.8,
+      "level": "Faible",
+      "rulesScore": 1.9,
+      "forestScore": 24.2,
+      "features": {
+        "repeated": 0.0,
+        "linked": 0.0,
+        "fresh": 0.5,
+        "burst": 0.0,
+        "top_share": 0.0,
+        "log_n": 1.0986,
+        "n": 2,
+        "creator_linked": 0.0
+      },
+      "reasons": [
+        "50% des contributions viennent d'adresses neuves"
+      ]
+    },
+    "5": {
       "score": 0.0,
       "level": "Faible",
       "rulesScore": 0.0,
@@ -104,7 +123,24 @@
       },
       "reasons": []
     },
-    "5": {
+    "6": {
+      "score": 4.5,
+      "level": "Faible",
+      "rulesScore": 0.0,
+      "forestScore": 11.1,
+      "features": {
+        "repeated": 0.0,
+        "linked": 0.0,
+        "fresh": 0.0,
+        "burst": 0.0,
+        "top_share": 0.0,
+        "log_n": 0.6931,
+        "n": 1,
+        "creator_linked": 0.0
+      },
+      "reasons": []
+    },
+    "7": {
       "score": 0.0,
       "level": "Faible",
       "rulesScore": 0.0,
@@ -117,6 +153,57 @@
         "top_share": 0.0,
         "log_n": 0.0,
         "n": 0,
+        "creator_linked": 0.0
+      },
+      "reasons": []
+    },
+    "8": {
+      "score": 4.5,
+      "level": "Faible",
+      "rulesScore": 0.0,
+      "forestScore": 11.1,
+      "features": {
+        "repeated": 0.0,
+        "linked": 0.0,
+        "fresh": 0.0,
+        "burst": 0.0,
+        "top_share": 0.0,
+        "log_n": 0.6931,
+        "n": 1,
+        "creator_linked": 0.0
+      },
+      "reasons": []
+    },
+    "9": {
+      "score": 4.5,
+      "level": "Faible",
+      "rulesScore": 0.0,
+      "forestScore": 11.1,
+      "features": {
+        "repeated": 0.0,
+        "linked": 0.0,
+        "fresh": 0.0,
+        "burst": 0.0,
+        "top_share": 0.0,
+        "log_n": 0.6931,
+        "n": 1,
+        "creator_linked": 0.0
+      },
+      "reasons": []
+    },
+    "10": {
+      "score": 4.5,
+      "level": "Faible",
+      "rulesScore": 0.0,
+      "forestScore": 11.1,
+      "features": {
+        "repeated": 0.0,
+        "linked": 0.0,
+        "fresh": 0.0,
+        "burst": 0.0,
+        "top_share": 0.0,
+        "log_n": 0.6931,
+        "n": 1,
         "creator_linked": 0.0
       },
       "reasons": []
